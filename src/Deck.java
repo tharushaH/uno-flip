@@ -10,5 +10,9 @@ public class Deck {
 
     public void putCard(Card card){}
 
+    public int size() {
+        return deck.size();
+    }
+
     private void resetDeck(){}
 }
