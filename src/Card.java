@@ -23,7 +23,13 @@ public class Card {
     }
 
     public String toString(){
-        return "";
+        if (this.rank == Rank.WILD_DRAW_2)
+            return this.colour + " DRAW 2";
+        if (this.rank == Rank.DRAW_ONE)
+            return this.colour + " DRAW 1";
+        if (this.rank == Rank.WILD)
+            return this.colour + " CARD";
+        return this.colour + " " + this.rank;
     }
 
 }
