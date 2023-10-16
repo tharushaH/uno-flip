@@ -6,7 +6,7 @@ public class Hand {
 
     public Hand() {}
 
-    public void addCard() {}
+    public void addCard(Card card) {}
 
     public Card popCard(int index) {return null;}
 
