@@ -14,10 +14,16 @@ public class Card {
         return this.rank == Rank.WILD;
     }
 
-    public Colour getColour() {return null;}
+    public Colour getColour() {
+        return this.colour;
+    }
 
-    public Rank getRank(){return null;};
+    public Rank getRank(){
+        return this.rank;
+    }
 
-    public String toString(){return null;}
+    public String toString(){
+        return "";
+    }
 
 }
