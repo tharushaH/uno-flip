@@ -5,7 +5,7 @@ public class Card {
     private Rank rank;
     private Colour colour;
 
-    public Card(Rank rank, Card card){}
+    public Card(Rank rank, Colour colour){}
 
     public boolean isWild(){return false;}
 
