@@ -5,9 +5,14 @@ public class Card {
     private Rank rank;
     private Colour colour;
 
-    public Card(Rank rank, Colour colour){}
+    public Card(Rank rank, Colour colour){
+        this.rank = rank;
+        this.colour = colour;
+    }
 
-    public boolean isWild(){return false;}
+    public boolean isWild(){
+        return this.rank == Rank.WILD;
+    }
 
     public Colour getColour() {return null;}
 
