@@ -19,9 +19,8 @@ public class PlayerTest extends junit.framework.TestCase{
     @Before
     public void setUp(){
         p1 = new Player("Kramer");
-
-        c1 = new Card(Card.Rank.TWO, Card.Colour.BLUE);
-        c2 = new Card(Card.Rank.FIVE, Card.Colour.RED);
+        //c1 = new Card(Card.Rank.TWO, Card.Colour.BLUE);
+        //c2 = new Card(Card.Rank.FIVE, Card.Colour.RED);
 
     }
 
@@ -32,60 +31,62 @@ public class PlayerTest extends junit.framework.TestCase{
     public void testConstructor(){
         //Make sure the name given matches the one in the object
         assertEquals("Kramer", p1.getName());
+
+        //make sure that each player is initialized with the right amount of cards
+        assertEquals(7,p1.getHandSize());
     }
 
     @Test
     public void testAddCardToHand(){
-        //Test to make sure that the hand should be empty
-        assertTrue(p1.hasZeroCards());
+        //Test to check make sure the player starts off with 7 cards
+        assertEquals(7,p1.getHandSize());
 
         //Add the Card to the players hand.
         p1.addCardToHand(1);
 
         //Make sure that there a card in the hand
-        assertFalse(p1.hasZeroCards());
+        assertEquals(8,p1.getHandSize());
 
     }
 
     @Test
     public void testPlayCard(){
-
-        //Test to make sure that the hand should be empty
-        assertTrue(p1.hasZeroCards());
-
-        //add 1 cards to the hand
-        p1.addCardToHand(1);
+        //Test to check make sure the player starts off with 7 cards
+        assertEquals(7,p1.getHandSize());
 
         //Play a card
         Card playedCard = p1.playCard(0);
 
-        //Test to see player has no cards
-        assertTrue(p1.hasZeroCards());
+        //Test to see that there are 6 cards now in hand
+        assertEquals(6, p1.getHandSize());
     }
 
     @Test
-    public void testHasZeroCards(){
+    public void testGetHandSize(){
 
-        //Test to make sure that the hand should be empty
-        assertTrue(p1.hasZeroCards());
-
-        //add 1 cards to the hand
-        p1.addCardToHand(1);
+        //Test to check make sure the player starts off with 7 cards
+        assertEquals(7,p1.getHandSize());
 
         //Play a card
         Card playedCard = p1.playCard(0);
 
-        /*****/
-        //Test to see player has no cards again
-        assertTrue(p1.hasZeroCards());
-
-        //add 1 cards to the hand
-        p1.addCardToHand(2);
-
-        //Test to see player has no cards again
-        assertFalse(p1.hasZeroCards());
+        //Test to see that there are 6 cards now in hand
+        assertEquals(6, p1.getHandSize());
 
     }
+    @Test
+    public void testGetName(){
+        //test to see that the name given to the player matches the name that is initialized
+        assertEquals("Kramer", p1.getName());
+
+    }
+
+    @Test
+    public void testPrintHand(){
+
+
+    }
+
 
 
     @Test
@@ -93,10 +94,7 @@ public class PlayerTest extends junit.framework.TestCase{
 
     }
 
-    @Test
-    public void testGetName(){
 
-    }
 
 
 

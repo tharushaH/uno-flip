@@ -9,7 +9,13 @@ public class Player {
 
 
     public Player(String name){
+
         this.name = name;
+        hand = new Hand();
+
+        addCardToHand(7); // Initialize 7 cards for each player
+
+
     }
 
     public int getHandSize(){
@@ -25,8 +31,6 @@ public class Player {
 
     public void printHand(){
     }
-
-    //public Hand getHand(){ return null;}
 
     public String toString(){
         return null;
