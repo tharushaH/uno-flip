@@ -3,8 +3,10 @@ public class Player {
 
     private Deck deck;
 
+    private final String name;
 
-    public Player(){
+
+    public Player(String name){
     }
 
     public boolean hasZeroCards(){
@@ -15,13 +17,17 @@ public class Player {
         return null;
     }
 
-    public void addCardToHand(Card card){
+    public void addCardToHand(int numCards, Card card){
     }
 
     public void printHand(){
     }
 
     public String toString(){
+        return null;
+    }
+
+    public String getName(){
         return null;
     }
 }

@@ -6,7 +6,7 @@ public class Deck {
 
     public Deck() {}
 
-    public Card takeCard(int numCards) {return null;}
+    public Card takeCard() {return null;}
 
     public void putCard(Card card){}
 
