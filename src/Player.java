@@ -10,8 +10,8 @@ public class Player {
         this.name = name;
     }
 
-    public boolean hasZeroCards(){
-        return true;
+    public int getHandSize(){
+        return hand.size();
     }
 
     public Card playCard(int handIndex){

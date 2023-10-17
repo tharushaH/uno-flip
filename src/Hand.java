@@ -10,7 +10,9 @@ public class Hand {
 
     public Card popCard(int index) {return null;}
 
-    public boolean isEmpty() {return true;}
+    public int size() {
+        return cards.size();
+    }
 
     @Override
     public String toString() {return null;}
