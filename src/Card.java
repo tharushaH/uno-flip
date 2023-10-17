@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Card {
     public enum Colour {RED, BLUE, YELLOW, GREEN, WILD};
     public enum Rank {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, DRAW_ONE, REVERSE, SKIP, WILD, WILD_DRAW_2};
@@ -6,6 +8,10 @@ public class Card {
     private final Colour colour;
 
     public Card(Rank rank, Colour colour){
+        if ((rank == Rank.WILD || rank == Rank.WILD_DRAW_2) && !(colour == Colour.WILD))
+            throw new IllegalArgumentException("ERROR: Invalid Card Creation.");
+        if (colour == Colour.WILD && !(rank == Rank.WILD || rank == Rank.WILD_DRAW_2))
+            throw new IllegalArgumentException("ERROR: Invalid Card Creation.");
         this.rank = rank;
         this.colour = colour;
     }
