@@ -9,6 +9,7 @@ public class PlayerTest extends junit.framework.TestCase{
     private Player p1;
     private Player p2;
     private Card c1;
+    private Card c2;
 
 
     /**
@@ -17,10 +18,10 @@ public class PlayerTest extends junit.framework.TestCase{
      */
     @Before
     public void setUp(){
-        p1 = new Player("Jerry");
-        p2 = new Player("Kramer");
+        p1 = new Player("Kramer");
 
         c1 = new Card(Card.Rank.TWO, Card.Colour.BLUE);
+        c2 = new Card(Card.Rank.FIVE, Card.Colour.RED);
 
     }
 
@@ -30,7 +31,7 @@ public class PlayerTest extends junit.framework.TestCase{
     @Test
     public void testConstructor(){
         //Make sure the name given matches the one in the object
-        assertEquals("Jerry", p1.getName());
+        assertEquals("Kramer", p1.getName());
     }
 
     @Test
@@ -39,27 +40,53 @@ public class PlayerTest extends junit.framework.TestCase{
         assertTrue(p1.hasZeroCards());
 
         //Add the Card to the players hand.
-        p1.addCardToHand(1, c1);
+        p1.addCardToHand(1);
 
-        // Test to make sure the player has 1 card in hand
-        /*********assertEquals(1,p1.hand);
-         *
-         */
+        //Make sure that there a card in the hand
+        assertFalse(p1.hasZeroCards());
+
     }
 
     @Test
     public void testPlayCard(){
 
+        //Test to make sure that the hand should be empty
+        assertTrue(p1.hasZeroCards());
+
+        //add 1 cards to the hand
+        p1.addCardToHand(1);
+
+        //Play a card
+        Card playedCard = p1.playCard(0);
+
+        //Test to see player has no cards
+        assertTrue(p1.hasZeroCards());
     }
 
     @Test
     public void testHasZeroCards(){
+
+        //Test to make sure that the hand should be empty
+        assertTrue(p1.hasZeroCards());
+
+        //add 1 cards to the hand
+        p1.addCardToHand(1);
+
+        //Play a card
+        Card playedCard = p1.playCard(0);
+
+        /*****/
+        //Test to see player has no cards again
+        assertTrue(p1.hasZeroCards());
+
+        //add 1 cards to the hand
+        p1.addCardToHand(2);
+
+        //Test to see player has no cards again
+        assertFalse(p1.hasZeroCards());
+
     }
 
-    @Test
-    public void testPrintHand(){
-
-    }
 
     @Test
     public void testToString(){

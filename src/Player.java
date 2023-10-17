@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Player {
     private Hand hand;
 
@@ -18,11 +20,13 @@ public class Player {
         return null;
     }
 
-    public void addCardToHand(int numCards, Card card){
+    public void addCardToHand(int numCards){
     }
 
     public void printHand(){
     }
+
+    //public Hand getHand(){ return null;}
 
     public String toString(){
         return null;
