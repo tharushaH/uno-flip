@@ -7,8 +7,6 @@ import static org.junit.Assert.*;
 
 public class CardTest {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     private Card regularCard;
     private Card drawOneCard;
     private Card wildCard;
