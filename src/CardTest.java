@@ -1,9 +1,14 @@
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import static org.junit.Assert.*;
 
 public class CardTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     private Card regularCard;
     private Card drawOneCard;
     private Card wildCard;
@@ -15,6 +20,16 @@ public class CardTest {
         drawOneCard = new Card(Card.Rank.DRAW_ONE, Card.Colour.BLUE);
         wildCard = new Card(Card.Rank.WILD, Card.Colour.WILD);
         wildDrawTwoCard = new Card(Card.Rank.WILD_DRAW_2, Card.Colour.WILD);
+    }
+
+    @Test
+    public void createWrongCards(){
+        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.WILD, Card.Colour.RED));
+        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.WILD_DRAW_2, Card.Colour.RED));
+        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.REVERSE, Card.Colour.WILD));
+        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.SKIP, Card.Colour.WILD));
+        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.DRAW_ONE, Card.Colour.WILD));
+        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.ONE, Card.Colour.WILD));
     }
 
     @Test
