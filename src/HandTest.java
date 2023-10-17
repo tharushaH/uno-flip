@@ -21,10 +21,13 @@ public class HandTest {
     @Test
     public void testAddCard() {
         hand.addCard(testCard1);
-        assertFalse(hand.isEmpty());
-        assertEquals(1, hand.getCards().size());
+        assertEquals(1, hand.size());
         hand.addCard(testCard2);
-        assertEquals(2, hand.getCards().size());
+        assertEquals(2, hand.size());
+        hand.popCard(1);
+        assertEquals(1, hand.size());
+        hand.addCard(testCard2);
+        assertEquals(2, hand.size());
     }
 
     @Test
@@ -36,25 +39,27 @@ public class HandTest {
 
         poppedCard = hand.popCard(1);
         assertEquals(testCard2, poppedCard);
+        assertEquals(1, hand.size());
+
         assertThrows(IndexOutOfBoundsException.class,() -> hand.popCard(99));
-        assertFalse(hand.isEmpty());
+
 
         poppedCard = hand.popCard(0);
-        assertEquals(testCard2, poppedCard);
-        assertTrue(hand.isEmpty());
-        assertThrows(IndexOutOfBoundsException.class,() -> hand.popCard(0));
+        assertEquals(testCard1, poppedCard);
+        assertEquals(0, hand.size());
 
+        assertThrows(IndexOutOfBoundsException.class,() -> hand.popCard(0));
     }
 
     @Test
-    public void testIsEmpty() {
-        assertTrue(hand.isEmpty());
+    public void testSize() {
+        assertEquals(0, hand.size());
 
         hand.addCard(testCard1);
-        assertFalse(hand.isEmpty());
+        assertEquals(1, hand.size());
 
         hand.popCard(0);
-        assertTrue(hand.isEmpty());
+        assertEquals(0, hand.size());
     }
 
     @Test
@@ -63,9 +68,12 @@ public class HandTest {
         assertEquals("", hand.toString());
 
         hand.addCard(testCard1);
-        assertEquals("1. RED ONE", hand.toString());
+        assertEquals("1. RED ONE\n", hand.toString());
         hand.addCard(testCard2);
-        assertEquals("1. RED ONE\n2. WILD CARD", hand.toString());
+        assertEquals("1. RED ONE\n2. WILD CARD\n", hand.toString());
+        hand.popCard(0);
+        assertEquals("1. WILD CARD\n", hand.toString());
+
     }
 
     @Test
