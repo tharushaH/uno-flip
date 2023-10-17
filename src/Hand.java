@@ -14,4 +14,6 @@ public class Hand {
 
     @Override
     public String toString() {return null;}
+
+    public ArrayList<Card> getCards(){return null;}
 }
