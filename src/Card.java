@@ -11,7 +11,7 @@ public class Card {
     }
 
     public boolean isWild(){
-        return this.rank == Rank.WILD;
+        return this.colour == Colour.WILD;
     }
 
     public Colour getColour() {
