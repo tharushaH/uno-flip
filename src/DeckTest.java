@@ -3,13 +3,17 @@ import static org.junit.Assert.*;
 
 public class DeckTest {
     private Deck deck;
-    final static int MAX_SIZE = 108;
+    final static int MAX_SIZE = 104;    // should be 112, but not including the 8 flip cards yet
 
     @Before
     public void setUp() {
         deck = new Deck();
     }
 
+    @Test
+    public void testDeckConstructor() {
+        assertEquals(MAX_SIZE, deck.size());
+    }
     @Test
     public void testTakeCard() {
         // should return a Card and size should decrease
@@ -41,14 +45,16 @@ public class DeckTest {
         Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE);
         Card card2 = new Card(Card.Rank.REVERSE, Card.Colour.RED);
 
-        // empty out the deck
+        // take cards until only 3 left in deck
         for (int i = 0; i < (MAX_SIZE - 3); i++) {
             deck.takeCard();
         }
+
+        // size should still be 3 after putting card, because putting card goes to discard
         deck.putCard(card1);
-        assertEquals(1, deck.size());
+        assertEquals(3, deck.size());
         deck.putCard(card2);
-        assertEquals(2, deck.size());
+        assertEquals(3, deck.size());
     }
 
     @Test
