@@ -6,8 +6,9 @@ public abstract class TurnSequence {
 
     /**
      * Executes the appropriate game sequence according to the card played by changing the game state.
+     * @param card The card that was played
      */
-    public abstract void executeSequence();
+    public abstract void executeSequence(Card card);
 
     /**
      * Checks if the card to play is a valid card to play according to Uno Flip! rules.
