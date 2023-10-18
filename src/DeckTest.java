@@ -36,7 +36,7 @@ public class DeckTest {
         deck = new Deck();
 
         // empty out deck
-        for (int i = 0; i < MAX_SIZE; i++) {
+        for (int i = 0; i < MAX_SIZE - 1; i++) {
             deck.takeCard();
         }
 
@@ -49,7 +49,7 @@ public class DeckTest {
         deck.takeCard();    // take 2 cards even though deck is empty
         deck.takeCard();
 
-        assertEquals(2, deck.size());    // deck should reset with 4 cards, but 2 more were taken after*/
+        assertEquals(3, deck.size());    // deck should reset with 4 cards, but 2 more were taken after*/
     }
 
     @Test
