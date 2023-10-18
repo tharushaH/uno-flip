@@ -28,16 +28,25 @@ public class DeckTest {
     @Test
     public void testTakeCardFromEmptyDeck() {
         // empty out the deck by taking all the cards
-        for (int i = 0; i < (MAX_SIZE - 3); i++) {
-            assertNotNull(deck.takeCard());
+        for (int i = 0; i < (MAX_SIZE ); i++) {
+            deck.takeCard();
         }
-        assertEquals(MAX_SIZE, deck.size());    // should have reset back to MAX_SIZE after being emptied
+        assertEquals(0, deck.size());    // discard pile has nothing to make new deck with, should be 0
+
+        deck = new Deck();
 
         // deck is max size now, take more cards than the deck has
-        for (int i = 0; i < (MAX_SIZE + 5); i++) {
-            assertNotNull(deck.takeCard());
+        for (int i = 0; i < (MAX_SIZE + 2); i++) {
+            deck.takeCard();
         }
-        assertEquals(MAX_SIZE - 5, deck.size());    // deck should reset back to MAX_SIZE after being emptied
+
+        // put some cards in discard to make a new deck with
+        deck.putCard(new Card(Card.Rank.REVERSE, Card.Colour.RED));
+        deck.putCard(new Card(Card.Rank.THREE, Card.Colour.BLUE));
+        deck.putCard(new Card(Card.Rank.THREE, Card.Colour.BLUE));
+        deck.putCard(new Card(Card.Rank.WILD, Card.Colour.WILD));
+
+        assertEquals(2, deck.size());    // deck should reset with 4 cards, but 2 more were taken after
     }
 
     @Test
