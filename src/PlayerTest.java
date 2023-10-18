@@ -7,10 +7,6 @@ import static org.junit.Assert.assertTrue;
 public class PlayerTest extends junit.framework.TestCase{
 
     private Player p1;
-    private Player p2;
-    private Card c1;
-    private Card c2;
-
 
     /**
      *  Sets up the Player objects.
@@ -19,8 +15,7 @@ public class PlayerTest extends junit.framework.TestCase{
     @Before
     public void setUp(){
         p1 = new Player("Kramer");
-        //c1 = new Card(Card.Rank.TWO, Card.Colour.BLUE);
-        //c2 = new Card(Card.Rank.FIVE, Card.Colour.RED);
+
 
     }
 
@@ -47,10 +42,25 @@ public class PlayerTest extends junit.framework.TestCase{
         //Make sure that there a card in the hand
         assertEquals(8,p1.getHandSize());
 
+        /*
+             POSSIBLE TEST
+             - REMOVE ALL CARDS FROM HAND
+             - ADD ONE CARD TO DECK
+             - CHECK HANDSIZE
+
+             *** POSSIBLE CONFLICT SINCE WHEN USING PLAYCARD(),
+             IT MIGHT ONLY ALLOW SPECIFIC CARDS TO BE PLACES AND NOT ALL CARDS IN HAND
+         */
+
     }
 
     @Test
     public void testPlayCard(){
+
+        /*
+                TESTING THE FIRST CARD THE PLAYER PLAYS
+         */
+
         //Test to check make sure the player starts off with 7 cards
         assertEquals(7,p1.getHandSize());
 
@@ -59,6 +69,14 @@ public class PlayerTest extends junit.framework.TestCase{
 
         //Test to see that there are 6 cards now in hand
         assertEquals(6, p1.getHandSize());
+
+
+        //Play each of the cards in the hand, and check the number of cards in the hand
+        for(int i=0; i < 6; i++){
+            p1.playCard(0);
+            assertEquals(i%6, p1.getHandSize());
+        }
+
     }
 
     @Test
@@ -70,8 +88,11 @@ public class PlayerTest extends junit.framework.TestCase{
         //Play a card
         Card playedCard = p1.playCard(0);
 
-        //Test to see that there are 6 cards now in hand
-        assertEquals(6, p1.getHandSize());
+        //Play each of the cards in the hand, and check the number of cards in the hand
+        for(int i=0; i < 6; i++){
+            p1.playCard(0);
+            assertEquals(i%6, p1.getHandSize());
+        }
 
     }
     @Test
@@ -81,17 +102,16 @@ public class PlayerTest extends junit.framework.TestCase{
 
     }
 
-    @Test
-    public void testPrintHand(){
-
-
-    }
-
-
 
     @Test
     public void testToString(){
 
+        // Play all cards, there should not be nay cards left in the player's hand
+        for(int i=0; i<7; i++){
+            p1.playCard(0);
+        }
+
+        assertEquals("YourCards:", p1.toString());
     }
 
 
