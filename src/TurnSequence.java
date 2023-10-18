@@ -2,7 +2,7 @@
  * TurnSequence is an abstract class to be extended in order to handle game sequences based on the card played.
  */
 public abstract class TurnSequence {
-    protected static Game game;
+    protected static Game game = new Game();
 
     /**
      * Executes the appropriate game sequence according to the card played by changing the game state.
