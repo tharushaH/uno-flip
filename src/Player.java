@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Player {
     private Hand hand;
 
-    private Deck deck;
+    private static Deck deck;
 
     private final String name;
 
@@ -21,24 +21,37 @@ public class Player {
     }
 
     /**
-     * Class getHandSize prints the current hand size of the player
+     * Method getHandSize prints the current hand size of the player
+     * @return - the number of cards in the player's hand
      */
     public int getHandSize(){
         return hand.size();
     }
 
     /**
-     * Class playCard, plays and removes a card from the players hand specified by the handIndex,
+     * Method playCard, plays and removes a card from the player's hand specified by handIndex.
      * Cards that was removed will be put back into the deck's discard pile.
      * @param handIndex - Index of the card which the player wants to play
      * @return - the cards that was just played
      */
     public Card playCard(int handIndex){
-        Card cardPopped = hand.popCard(handIndex);
-        deck.putCard(cardPopped);
-        return cardPopped;
+
+        //Make sure that the user selects a valid index in the hand
+        if ( (handIndex <= getHandSize()) && (handIndex > 0) ){
+            Card cardPopped = hand.popCard(handIndex);
+            deck.putCard(cardPopped);
+            return cardPopped;
+        } else {
+            return null;
+        }
+
     }
 
+    /**
+     *  Method addCardToHand, adds a specified number of cards to the player's hand specified by numCards.
+     *  Cards will be taken from the static deck and placed into the hand of the player
+     * @param numCards - The number of cards that the user will add to their deck
+     */
     public void addCardToHand(int numCards){
         for(int i=0; i <numCards; i++){
             Card newCard = deck.takeCard();
@@ -46,11 +59,19 @@ public class Player {
         }
     }
 
+    /**
+     * Method toString(), returns the player's hand of cards.
+     * @return a String containing the player's hand
+     */
 
     public String toString(){
         return "Your Cards: \n" + hand.toString();
     }
 
+    /**
+     * Method getName returns the name of the player
+     * @return - the name of the player
+     */
     public String getName(){
         return name;
     }
