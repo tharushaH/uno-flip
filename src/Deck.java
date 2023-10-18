@@ -52,7 +52,11 @@ public class Deck {
      * @return The card at the top of the deck.
      */
     public Card takeCard() {
-        return deck.pop();
+        Card cardToTake = deck.pop();
+        if (size() == 0) {
+            resetDeck();
+        }
+        return cardToTake;
     }
 
 
@@ -93,6 +97,7 @@ public class Deck {
 
     /**
      * Resets the deck by shuffling discard and making it the new deck to draw from, and making a new, empty discard.
+     * Cards being held by players will not be a part of the new deck to draw from.
      */
     private void resetDeck() {
         Collections.shuffle(discard);
