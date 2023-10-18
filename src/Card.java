@@ -28,6 +28,7 @@ public class Card {
         return this.rank;
     }
 
+    @Override
     public String toString(){
         if (this.rank == Rank.WILD_DRAW_2)
             return this.colour + " DRAW 2";
@@ -36,6 +37,16 @@ public class Card {
         if (this.rank == Rank.WILD)
             return this.colour + " CARD";
         return this.colour + " " + this.rank;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj == null)
+            return false;
+        if (obj.getClass() != this.getClass())
+            return false;
+        Card other = (Card) obj;
+        return this.rank == other.rank && this.colour == other.colour;
     }
 
 }

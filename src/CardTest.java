@@ -60,4 +60,17 @@ public class CardTest {
         assertEquals("WILD CARD", wildCard.toString());
         assertEquals("WILD DRAW 2", wildDrawTwoCard.toString());
     }
+
+    @Test
+    public void testEquals(){
+        Card sameAsRegular =  new Card(Card.Rank.FIVE, Card.Colour.GREEN);
+        Card sameAsWild =  new Card(Card.Rank.WILD, Card.Colour.WILD);
+
+        assertEquals(sameAsRegular, regularCard);
+        assertEquals(sameAsWild, wildCard);
+
+        assertFalse(regularCard.equals(wildCard));
+        assertFalse(regularCard.equals(drawOneCard));
+        assertFalse(wildCard.equals(wildDrawTwoCard));
+    }
 }
