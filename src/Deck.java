@@ -8,6 +8,7 @@ import java.util.*;
 public class Deck {
     private Stack<Card> deck;
     private Stack<Card> discard;
+    private Stack<Card> inPlay;
     private static final int MAX_SIZE = 104;    // should be 112, but not including the 8 flip cards yet
 
     /**
@@ -16,6 +17,7 @@ public class Deck {
     public Deck() {
         deck = new Stack<Card>();
         discard = new Stack<Card>();
+        inPlay = new Stack<Card>();
 
         // get array of card colours and ranks
         Card.Colour[] colours = Card.Colour.values();
@@ -53,6 +55,7 @@ public class Deck {
      */
     public Card takeCard() {
         Card cardToTake = deck.pop();
+        inPlay.push(cardToTake);
         if (size() == 0) {
             resetDeck();
         }
@@ -107,7 +110,7 @@ public class Deck {
 
 
     /**
-     * Gets the number of occurences of card in the deck (including discard).
+     * Gets the number of occurences of card in the deck (including discard) and in play.
      * @param card The card to get the frequency of
      * @return The frequency of the card
      */
@@ -122,6 +125,12 @@ public class Deck {
 
         for (Card c: discard) {
             if (c.equals(card)) {
+                count++;
+            }
+        }
+
+        for (Card c: inPlay) {
+            if (c.equals((card))) {
                 count++;
             }
         }
