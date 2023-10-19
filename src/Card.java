@@ -6,8 +6,8 @@ import java.awt.*;
  * It provides methods for checking wild, getting the rank and colour of the card, and generating a string
  * representation of the hand.
  *
- * Author: Tharusha Herath
  * Date: 2023-10-18
+ * @author  Tharusha Herath
  */
 
 public class Card {
@@ -43,17 +43,16 @@ public class Card {
     }
 
     /**
-     * Returns a Colour, for the colour of the card.
-     * @return returns the colour of the Card.
+     * Returns the colour of the card.
+     * @return the colour of the Card.
      */
     public Colour getColour() {
         return this.colour;
     }
 
     /**
-     * Checks if the card is a wild card.
-     *
-     * @return true if the card is a wild card, false otherwise
+     * Returns the rank of the card.
+     * @return the rank of the Card.
      */
     public Rank getRank(){
         return this.rank;
@@ -83,6 +82,8 @@ public class Card {
      */
     @Override
     public boolean equals(Object obj){
+        if (this == obj)
+            return true;
         if (obj == null)
             return false;
         if (obj.getClass() != this.getClass())
