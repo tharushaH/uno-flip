@@ -14,6 +14,7 @@ public class DeckTest {
     public void testDeckConstructor() {
         assertEquals(MAX_SIZE, deck.size());
     }
+
     @Test
     public void testTakeCard() {
         // should return a Card and size should decrease
@@ -36,15 +37,15 @@ public class DeckTest {
         deck = new Deck();
 
         // empty out deck
-        for (int i = 0; i < MAX_SIZE - 1; i++) {
+        for (int i = 0; i < MAX_SIZE - 5; i++) {
             deck.takeCard();
         }
 
         // put some cards in discard
-        deck.putCard(new Card(Card.Rank.REVERSE, Card.Colour.RED));
-        deck.putCard(new Card(Card.Rank.THREE, Card.Colour.BLUE));
-        deck.putCard(new Card(Card.Rank.THREE, Card.Colour.BLUE));
-        deck.putCard(new Card(Card.Rank.WILD, Card.Colour.WILD));
+        deck.putCard(deck.takeCard());
+        deck.putCard(deck.takeCard());
+        deck.putCard(deck.takeCard());
+        deck.putCard(deck.takeCard());
 
         deck.takeCard();    // take 2 cards even though deck is empty
         deck.takeCard();
@@ -82,33 +83,20 @@ public class DeckTest {
 
     @Test
     public void testPutCardWithCardAlreadyInDeck() {
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE);
-        Card card2 = new Card(Card.Rank.REVERSE, Card.Colour.RED);
-
-        // a card cannot be added if all the cards of the same colour and rank are already in the deck
-        for (int i = 0; i < (MAX_SIZE - 3); i++) {
-            deck.takeCard();    // empty out the deck
-        }
+        Card card1 = deck.takeCard();
         deck.putCard(card1);
-        deck.putCard(card1);    // only 2 blue/eight cards, both are in deck now
-        assertThrows(IllegalArgumentException.class, () -> {
-            deck.putCard(card2);
-        });
-        assertEquals(2, deck.size());
+        assertThrows(IllegalArgumentException.class, () -> {deck.putCard(card1);});
+        assertEquals(MAX_SIZE - 1, deck.size());
 
+        Card card2 = deck.takeCard();
         deck.putCard(card2);
-        deck.putCard(card2);    // only 2 yellow/reverse cards, both are in deck now
-        assertThrows(IllegalArgumentException.class, () -> {
-            deck.putCard(card2);
-        });
-        assertEquals(4, deck.size());
+        assertThrows(IllegalArgumentException.class, () -> {deck.putCard(card2);});
+        assertEquals(MAX_SIZE - 2, deck.size());
     }
 
     @Test
     public void testPutCardWithNull() {
-        assertThrows(NullPointerException.class, () -> {
-            deck.putCard(null);
-        });  // cannot put null in deck
+        assertThrows(NullPointerException.class, () -> {deck.putCard(null);});  // cannot put null in deck
         assertEquals(MAX_SIZE, deck.size());
     }
 }
