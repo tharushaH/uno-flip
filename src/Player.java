@@ -75,4 +75,12 @@ public class Player {
     public String getName(){
         return name;
     }
+
+
+    public boolean colourInHand(Card.Colour colour){
+        return hand.hasColour(colour);
+
+    }
+
+
 }
