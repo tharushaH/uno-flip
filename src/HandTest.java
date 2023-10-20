@@ -83,4 +83,21 @@ public class HandTest {
         assertEquals(1, cards.size());
         assertEquals(testCard1, cards.get(0));
     }
+
+    @Test
+    public void testColourInHand(){
+        hand.addCard(testCard1);
+        hand.addCard(testCard2);
+        assertTrue(hand.colourInHand(Card.Colour.RED));
+        assertFalse(hand.colourInHand(Card.Colour.BLUE));
+        assertFalse(hand.colourInHand(Card.Colour.YELLOW));
+        assertFalse(hand.colourInHand(Card.Colour.GREEN));
+
+        hand.popCard(0);
+        assertFalse(hand.colourInHand(Card.Colour.RED));
+        assertFalse(hand.colourInHand(Card.Colour.BLUE));
+        assertFalse(hand.colourInHand(Card.Colour.YELLOW));
+        assertFalse(hand.colourInHand(Card.Colour.GREEN));
+
+    }
 }
