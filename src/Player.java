@@ -37,7 +37,7 @@ public class Player {
     public Card playCard(int handIndex){
 
         //Make sure that the user selects a valid index in the hand
-        if ( (handIndex <= getHandSize()) && (handIndex > 0) ){
+        if ( (handIndex <= this.getHandSize()) && (handIndex > 0) ){
             Card cardPopped = this.hand.popCard(handIndex);
             deck.putCard(cardPopped);
             return cardPopped;
