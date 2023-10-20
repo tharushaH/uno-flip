@@ -1,5 +1,13 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+/**
+ * The Game class represent a game of Uno Flip. This class initializes
+ * and manages a game of Uno Flip by managing player turns, the deck
+ * and game logic based on what cards were played.
+ *
+ * Date: 2023-10-20
+ * @author  Amilesh Nanthakumaran
+ */
 public class Game {
     private ArrayList<Player> players;
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
@@ -20,9 +28,11 @@ public class Game {
     private ArrayList<TurnSequence> turnSeqs;
 
     private TurnSequence turnSequence;
-    private Hand playerhand = new Hand();
 
 
+    /**
+     * Constructs a new game of Uno by initializing fields with default settings.
+     */
     public Game(){
         players = new ArrayList<Player>(); //empty player list
         turnDirection = true; //initialize to clockwise
@@ -34,62 +44,89 @@ public class Game {
         userInput = new Scanner(System.in); //scanner used for user input
         numPlayers = 0; // initialize to 0
         chosenCardIndex = -1;
-        turnSeqs = new ArrayList<turnSequence>();
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new Number());
-        turnSeqs.add(new DrawOne());
-        turnSeqs.add(new Reverse());
-        turnSeqs.add(new Skip());
-        turnSeqs.add(new Wild());
-        turnSeqs.add(new WildDrawTwo());
+        turnSeqs = new ArrayList<TurnSequence>();
+        for(int i =0;i<=13;i++){
+            turnSeqs.add(new Number()); //Number
+        }
+        turnSeqs.add(new DrawOne()); //Draw_One
+        turnSeqs.add(new Reverse()); //Reverse
+        turnSeqs.add(new Skip()); //Skip
+        turnSeqs.add(new Wild()); //Wild
+        turnSeqs.add(new WildDrawTwo()); //Wild Draw Two
+        turnSeqs.add(new SelfDrawOne()); //Self Draw One
 
 
     }
 
+    /**
+     * Gets the current colour of the game.
+     *
+     * @return The current colour
+     */
     public Card.Colour getCurrentColour() {
         return currentColour;
     }
 
+    /**
+     * Gets the current rank of the game.
+     *
+     * @return The current rank
+     */
     public Card.Rank getCurrentRank() {
         return currentRank;
     }
 
+    /**
+     * Sets the current rank of the game.
+     *
+     * @param currentRank The rank to be set
+     */
     public void setCurrentRank(Card.Rank currentRank) {
         this.currentRank = currentRank;
     }
 
+    /**
+     * Gets the index of the player whose turn it is.
+     *
+     * @return The inde of the current player.
+     */
     public int getCurrentTurn() {
         return currentTurn;
     }
 
-    public void setCurrentTurn(int currentTurn) {
-        this.currentTurn = currentTurn;
-    }
-
+    /**
+     * Sets the top card of the game.
+     *
+     * @param topCard The card to be set as the top card.
+     */
     public void setTopCard(Card topCard) {
         this.topCard = topCard;
     }
-
-    public Card.Colour getColourSetByWild() {
-        return colourSetByWild;
-    }
+    /**
+     * Gets the current player.
+     *
+     * @return The current player.
+     */
     public Player getCurrentPlayer(){
         return players.get(currentTurn);
     }
+    /**
+     * Flips the direction of the game.
+     */
     public void flipTurnDirection(){
         turnDirection = !turnDirection;
     }
-
+    /**
+     * Gets the index of the next player.
+     *
+     * @return The index of the next player.
+     */
     public int getNextTurn(){
         return nextPlayerIndex;
     }
+    /**
+     * Starts and manages the Uno game including getting user input.
+     */
     public void playGame(){
         System.out.println("Welcome to UNO");
         //get number of players
@@ -116,7 +153,7 @@ public class Game {
         }
         System.out.println("Game will now begin");
         //draw the first card from deck
-        topCard = new Card(Card.Rank.EIGHT, Card.Colour.RED); //deck.takeCard()
+        topCard = deck.takeCard();
         currentColour = topCard.getColour();
         currentRank = topCard.getRank();
 
@@ -131,7 +168,11 @@ public class Game {
 
 
             //if the player is not a winner then move to the next player
-            nextTurn();
+            if(isWinner(getCurrentPlayer())){
+                System.out.println(getCurrentPlayer().getName()+" has won the game!");
+                break;
+            }
+            //nextTurn();
 
 
 
@@ -142,11 +183,19 @@ public class Game {
         }
 
     }
+
+    /**
+     * Adds a player to the game.
+     *
+     * @param player The player to be added
+     */
     private void addPlayer(Player player){
-        player.addCardToHand(7); // add 7 cards to hand might not need this bc Player()
         players.add(player);
     }
 
+    /**
+     * Manages a player's turn by validating their card placement and handling the card.
+     */
     private void playTurn(){
         //player chose to draw a card
         boolean turnFinished = false;
@@ -154,19 +203,18 @@ public class Game {
             try{
                 System.out.println("Enter card index to play or 0 to draw a card");
                 chosenCardIndex = Integer.parseInt(userInput.nextLine());
-                if(chosenCardIndex < 0 || chosenCardIndex > 7){//players.get(currentTurn).getHandSize()
+                if(chosenCardIndex < 0 || chosenCardIndex > players.get(currentTurn).getHandSize()){
                     System.out.println("Invalid index");
                 }
                 else{
                     if(chosenCardIndex == 0){
-                        turnSeqs.get(indexfordrawone).executeSequence();
+                        turnSeqs.get(14).executeSequence(null);
                         break;
                     }
                     if(turnSequence.isValid(getCurrentPlayer().getCard(chosenCardIndex-1))){
-                        System.out.println("Played: "+getCurrentPlayer().getCard(chosenCardIndex-1).toString());
+                        System.out.println("Played: "+getCurrentPlayer().getCard(chosenCardIndex-1));
                         getCurrentPlayer().playCard(getCurrentPlayer().getCard(chosenCardIndex-1));
                         if(isWinner(getCurrentPlayer())){
-                            System.out.println(getCurrentPlayer().getName()+" has won the game!");
                             break;
                         }
                         int index = getCurrentPlayer().getCard(chosenCardIndex-1).getRank().ordinal();
@@ -183,6 +231,12 @@ public class Game {
         }
 
     }
+
+    /**
+     * Gets colour from player to handle the wild cards
+     *
+     * @return The colour that was selected
+     */
     public Card.Colour getColourSelectedByWild(){
         boolean colourSet = false;
         while(!colourSet){
@@ -201,23 +255,25 @@ public class Game {
             }
 
         }
-
+        return null;
 
 
 
     }
 
-
-
-
-
-
-
-
+    /**
+     * Check if the player has no cards remaining
+     *
+     * @param player The player that is checked
+     * @return True if the player has no cards, false otherwise
+     */
     private boolean isWinner(Player player){
         return player.getHandSize()==0;
     }
 
+    /**
+     * Go to the turn of the next player based on turn direction
+     */
     public void nextTurn(){
         //clockwise
         if(turnDirection){
@@ -236,11 +292,19 @@ public class Game {
         }
     }
 
+    /**
+     * Skip the turn of the next player
+     */
     public void skipTurn(){
         nextTurn();
         nextTurn();
     }
 
+    /**
+     * Draw the amount of cards(n) based on which player(index) will be receiving them
+     * @param n The amount of cards to be added to the hand of the player
+     * @param index The index of the player that will be receiving cards
+     */
     public void drawNCards(int n,int index){
         players.get(index).addCardToHand(n);
         if(index==currentTurn){
@@ -251,20 +315,11 @@ public class Game {
         }
     }
 
-    public void reverse(){
-        //CW -> CCW
-        if(turnDirection){
-            turnDirection = false;
-            System.out.println("Going counterclockwise");
-        }
-        //CCW -> CW
-        else{
-            turnDirection = true;
-            System.out.println("Going clockwise");
 
-        }
-    }
-
+    /**
+     * Set the current colour of the game
+     * @param colour The colour to be set as the current colour
+     */
     public void setCurrentColour(Card.Colour colour){
         currentColour = colour;
         System.out.println("The colour is now "+currentColour.toString());
