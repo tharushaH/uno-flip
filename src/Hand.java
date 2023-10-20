@@ -75,4 +75,9 @@ public class Hand {
     public ArrayList<Card> getCards(){
         return this.cards;
     }
+
+    public boolean colourInHand(Card.Colour colour){
+        return false;
+    }
+
 }
