@@ -11,6 +11,5 @@ public class Skip extends TurnSequence {
         game.setCurrentColour(card.getColour());
         game.setCurrentRank(card.getRank());
         game.skipTurn();
-        game.nextTurn();
     }
 }
