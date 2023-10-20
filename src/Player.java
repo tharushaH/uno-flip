@@ -61,7 +61,7 @@ public class Player {
 
     /**
      * Method toString(), returns the player's hand of cards.
-     * @return a String containing the player's hand
+     * @return - a String containing the player's hand
      */
 
     public String toString(){
@@ -76,7 +76,11 @@ public class Player {
         return name;
     }
 
-
+    /**
+     * Method colourInHand shows whether a specilc colour of cards appears in the player's hand
+     * @param colour - the colour that is being checking for in the hand
+     * @return - a boolean describing whether the colour appears in the player's hand
+     */
     public boolean colourInHand(Card.Colour colour){
         return hand.hasColour(colour);
 

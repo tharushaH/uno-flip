@@ -17,6 +17,7 @@ public class PlayerTest extends junit.framework.TestCase{
         p1 = new Player("Kramer");
 
 
+
     }
 
     /**
@@ -115,6 +116,19 @@ public class PlayerTest extends junit.framework.TestCase{
     }
 
 
+    @Test
+    public void testColourInHand(){
+
+        // Play all cards, there should not be nay cards left in the player's hand
+        for(int i=0; i<7; i++){
+            p1.playCard(0);
+        }
+
+        assertFalse(p1.colourInHand(Card.Colour.RED));
+
+
+
+    }
 
 
 
