@@ -84,7 +84,7 @@ public class Hand {
      */
     public boolean colourInHand(Card.Colour colour){
         for (Card card: cards){
-            if (card.getColour() == Card.Colour.WILD || card.getColour() == colour){
+            if (card.getColour() == colour){
                 return true;
             }
         }

@@ -89,12 +89,12 @@ public class HandTest {
         hand.addCard(testCard1);
         hand.addCard(testCard2);
         assertTrue(hand.colourInHand(Card.Colour.RED));
-        assertTrue(hand.colourInHand(Card.Colour.BLUE));
-        assertTrue(hand.colourInHand(Card.Colour.YELLOW));
-        assertTrue(hand.colourInHand(Card.Colour.GREEN));
+        assertFalse(hand.colourInHand(Card.Colour.BLUE));
+        assertFalse(hand.colourInHand(Card.Colour.YELLOW));
+        assertFalse(hand.colourInHand(Card.Colour.GREEN));
 
-        hand.popCard(1);
-        assertTrue(hand.colourInHand(Card.Colour.RED));
+        hand.popCard(0);
+        assertFalse(hand.colourInHand(Card.Colour.RED));
         assertFalse(hand.colourInHand(Card.Colour.BLUE));
         assertFalse(hand.colourInHand(Card.Colour.YELLOW));
         assertFalse(hand.colourInHand(Card.Colour.GREEN));
