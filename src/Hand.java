@@ -76,7 +76,18 @@ public class Hand {
         return this.cards;
     }
 
+    /**
+     * Checks hand if the cards has a matching colour/wild or not.
+     *
+     * @param colour
+     * @return returns true if the colour exists in the hand or the hand has a wild, false otherwise.
+     */
     public boolean colourInHand(Card.Colour colour){
+        for (Card card: cards){
+            if (card.getColour() == Card.Colour.WILD || card.getColour() == colour){
+                return true;
+            }
+        }
         return false;
     }
 
