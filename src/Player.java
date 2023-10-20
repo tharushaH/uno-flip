@@ -14,7 +14,7 @@ public class Player {
      */
     public Player(String name){
         this.name = name;
-        hand = new Hand();
+        this.hand = new Hand();
         deck = new Deck();
         addCardToHand(7); // Initialize 7 cards for each player
 
@@ -25,7 +25,7 @@ public class Player {
      * @return - the number of cards in the player's hand
      */
     public int getHandSize(){
-        return hand.size();
+        return this.hand.size();
     }
 
     /**
@@ -38,7 +38,7 @@ public class Player {
 
         //Make sure that the user selects a valid index in the hand
         if ( (handIndex <= getHandSize()) && (handIndex > 0) ){
-            Card cardPopped = hand.popCard(handIndex);
+            Card cardPopped = this.hand.popCard(handIndex);
             deck.putCard(cardPopped);
             return cardPopped;
         } else {
@@ -55,7 +55,7 @@ public class Player {
     public void addCardToHand(int numCards){
         for(int i=0; i <numCards; i++){
             Card newCard = deck.takeCard();
-            hand.addCard(newCard);
+            this.hand.addCard(newCard);
         }
     }
 
@@ -65,7 +65,7 @@ public class Player {
      */
 
     public String toString(){
-        return "Your Cards: \n" + hand.toString();
+        return "Your Cards: \n" + this.hand;
     }
 
     /**
@@ -73,7 +73,7 @@ public class Player {
      * @return - the name of the player
      */
     public String getName(){
-        return name;
+        return this.name;
     }
 
     /**
@@ -82,9 +82,12 @@ public class Player {
      * @return - a boolean describing whether the colour appears in the player's hand
      */
     public boolean colourInHand(Card.Colour colour){
-        return hand.hasColour(colour);
+        return this.hand.colourInHand(colour);
 
     }
+
+
+
 
 
 }
