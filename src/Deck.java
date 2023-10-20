@@ -8,7 +8,7 @@ import java.util.*;
 public class Deck {
     private Stack<Card> deck;
     private Stack<Card> discard;
-    private Stack<Card> inPlay;
+    private ArrayList<Card> inPlay;
     private static final int MAX_SIZE = 104;    // should be 112, but not including the 8 flip cards yet
 
     /**
@@ -17,7 +17,7 @@ public class Deck {
     public Deck() {
         deck = new Stack<Card>();
         discard = new Stack<Card>();
-        inPlay = new Stack<Card>();
+        inPlay = new ArrayList<Card>();
 
         // get array of card colours and ranks
         Card.Colour[] colours = Card.Colour.values();
@@ -55,7 +55,7 @@ public class Deck {
      */
     public Card takeCard() {
         Card cardToTake = deck.pop();
-        inPlay.push(cardToTake);
+        inPlay.add(cardToTake);
         if (size() == 0) {
             resetDeck();
         }
@@ -85,6 +85,7 @@ public class Deck {
                 throw new IllegalArgumentException("The card object passed already has its max amount in the deck.");
             }
         }
+        inPlay.remove(card);
         discard.push(card);
     }
 
