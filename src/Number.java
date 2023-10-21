@@ -5,6 +5,10 @@
  */
 public class Number extends TurnSequence{
 
+    public Number(Game game) {
+        super(game);
+    }
+
     /**
      * Executes the appropriate game sequence according to the card played by changing the game state.
      *
