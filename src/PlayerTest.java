@@ -130,6 +130,14 @@ public class PlayerTest extends junit.framework.TestCase{
 
     }
 
+    @Test
+    public void testGetCard(){
+        assertEquals(p1.playCard(0), p1.getCard(0));
+        assertEquals(p1.playCard(0), p1.getCard(0));
+        assertEquals(p1.playCard(0), p1.getCard(0));
+        assertEquals(p1.playCard(0), p1.getCard(0));
+        assertEquals(p1.playCard(0), p1.getCard(0));
+    }
 
 
 
