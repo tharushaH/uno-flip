@@ -125,9 +125,6 @@ public class PlayerTest extends junit.framework.TestCase{
         }
 
         assertFalse(p1.colourInHand(Card.Colour.RED));
-
-
-
     }
 
     @Test
@@ -139,7 +136,34 @@ public class PlayerTest extends junit.framework.TestCase{
         assertEquals(p1.playCard(0), p1.getCard(0));
     }
 
+    @Test
+    public void testGetHandScore(){
+        //Initially Player has 7 cards, score should not be 0
+        assertNotEquals(0,p1.getHandScore());
 
+        // Play all cards, there should not be nay cards left in the player's hand
+        for(int i=0; i<7; i++){
+            p1.playCard(0);
+        }
+        //Once playing all cards, score should be zero
+        assertEquals(0, p1.getHandScore());
+
+        //Add card to hand
+        p1.addCardToHand(1);
+        assertNotEquals(0,p1.getHandScore());
+    }
+
+
+
+    @Test
+    public void TestSetPlayerScore(){
+
+        //Initally Player should have no score
+        assertEquals(0, p1.getPlayerScore());
+
+        p1.setPlayerScore(500);
+        assertEquals(500, p1.getPlayerScore());
+    }
 
 
 
