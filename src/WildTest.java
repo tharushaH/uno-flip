@@ -3,7 +3,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class SelfDrawOneTest {
+public class WildTest {
     private SelfDrawOne selfDrawOne;
     private Game game;
     private Card testCard;
@@ -19,12 +19,14 @@ public class SelfDrawOneTest {
 
     @Test
     public void testExecuteSequence(){
-        game.getTurnSeqs().get(14).executeSequence(testCard);
+        game.getTurnSeqs().get(12).executeSequence(testCard);
         assertTrue(game.getTurnDirection());
-        assertEquals(1, game.getCurrentTurn());
-        assertEquals(0, game.getNextPlayerIndex());
-        assertEquals(8, game.getPlayers().get(0).getHandSize());
-
+        assertEquals(testCard, game.getTopCard());
+        assertEquals(Card.Colour.RED, game.getCurrentColour());
+        assertEquals(Card.Rank.ONE, game.getCurrentRank());
+        assertEquals(0, game.getCurrentTurn());
+        assertEquals(1, game.getNextPlayerIndex());
     }
 
 }
+

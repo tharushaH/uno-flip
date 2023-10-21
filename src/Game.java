@@ -348,6 +348,30 @@ public class Game {
 
     }
 
+    public int getNextPlayerIndex() {
+        return nextPlayerIndex;
+    }
+
+    public Card getTopCard() {
+        return topCard;
+    }
+
+    public ArrayList<TurnSequence> getTurnSeqs() {
+        return turnSeqs;
+    }
+
+    public boolean getTurnDirection(){
+        return this.turnDirection;
+    }
+
+    public ArrayList<Player> getPlayers(){
+        return this.players;
+    }
+
+    public void setPlayers(int numPlayers){
+        this.numPlayers = numPlayers;
+    }
+
     public static void main(String[] args) {
         Game game = new Game();
         game.playGame();
