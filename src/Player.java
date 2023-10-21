@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Player {
     private Hand hand;
 
-    private static Deck deck;
+    private static Deck deck = new Deck();
 
     private final String name;
 
@@ -15,7 +15,6 @@ public class Player {
     public Player(String name){
         this.name = name;
         this.hand = new Hand();
-        deck = new Deck();
         addCardToHand(7); // Initialize 7 cards for each player
 
     }
@@ -83,7 +82,15 @@ public class Player {
      */
     public boolean colourInHand(Card.Colour colour){
         return this.hand.colourInHand(colour);
+    }
 
+    /**
+     * Returns the card at the given index.
+     * @param index
+     * @return returns a Card in the Hand at the index.
+     */
+    public Card getCard(int index){
+        return this.hand.getCards().get(index);
     }
 
 
