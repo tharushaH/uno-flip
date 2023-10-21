@@ -9,25 +9,25 @@ import java.util.Scanner;
  * @author  Amilesh Nanthakumaran
  */
 public class Game {
-    private ArrayList<Player> players;
+    private ArrayList<Player> players; //arraylist of players
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
     private int currentTurn; // 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4
     private int nextPlayerIndex; //index of next player
-    private Deck deck;
-    private Card.Colour currentColour;
+    private Deck deck; //deck that will be used for the game
+    private Card.Colour currentColour; //current colour of the game
 
-    private Card.Rank currentRank;
-    private Scanner userInput;
-    private int numPlayers;
-    private int chosenCardIndex;
+    private Card.Rank currentRank; //current rank of the game
+    private Scanner userInput; //scanner object for user input
+    private int numPlayers; //number of players in the game
+    private int chosenCardIndex; //user inputted card index
 
-    private Card topCard;
+    private Card topCard;//top card that is in play
 
-    private Card.Colour colourSetByWild;
+    private Card.Colour colourSetByWild; //colour chosen by the user
 
-    private ArrayList<TurnSequence> turnSeqs;
+    private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
 
-    private TurnSequence turnSequence;
+
 
 
     /**
@@ -43,17 +43,18 @@ public class Game {
         currentRank = null; //set rank to null
         userInput = new Scanner(System.in); //scanner used for user input
         numPlayers = 0; // initialize to 0
-        chosenCardIndex = -1;
-        turnSeqs = new ArrayList<TurnSequence>();
-        for(int i =0;i<=13;i++){
-            turnSeqs.add(new Number()); //Number
+        chosenCardIndex = -1; //initialize to -1
+        turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
+        for(int i =0;i<=8;i++){
+            turnSeqs.add(new Number(this)); //Number
         }
-        turnSeqs.add(new DrawOne()); //Draw_One
-        turnSeqs.add(new Reverse()); //Reverse
-        turnSeqs.add(new Skip()); //Skip
-        turnSeqs.add(new Wild()); //Wild
-        turnSeqs.add(new WildDrawTwo()); //Wild Draw Two
-        turnSeqs.add(new SelfDrawOne()); //Self Draw One
+        turnSeqs.add(new DrawOne(this)); //Draw_One
+        turnSeqs.add(new Reverse(this)); //Reverse
+        turnSeqs.add(new Skip(this)); //Skip
+        turnSeqs.add(new Wild(this)); //Wild
+        turnSeqs.add(new WildDrawTwo(this)); //Wild Draw Two
+        turnSeqs.add(new SelfDrawOne(this)); //Self Draw One
+
 
 
     }
@@ -138,6 +139,9 @@ public class Game {
                 if(numPlayers < 2 || numPlayers > 4){
                     System.out.println("Invalid number of players");
                 }
+                else{
+                    System.out.println("Number of players is: "+numPlayers);
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid integer input");
             }
@@ -152,16 +156,27 @@ public class Game {
 
         }
         System.out.println("Game will now begin");
+
         //draw the first card from deck
         topCard = deck.takeCard();
+        while(topCard.getRank().ordinal()==13){
+            //return card back to deck and get a new one
+            deck.putCard(topCard);
+            topCard = deck.takeCard();
+        }
+        if(topCard.getRank().ordinal()>8){
+            //only execute sequence if action card, if number don't do anything
+            turnSeqs.get(topCard.getRank().ordinal()).executeSequence(topCard);
+        }
         currentColour = topCard.getColour();
         currentRank = topCard.getRank();
+
 
         while(true){
             System.out.println("Top card:"+topCard.toString());
             System.out.println(getCurrentPlayer().getName() + "'s turn: ");
             //display player's hand using the printHand()
-            getCurrentPlayer().toString();
+            System.out.println(getCurrentPlayer().toString());
             //use the player's chosen index to play their turn
             playTurn();
             //check if they have 0 cards
@@ -172,7 +187,7 @@ public class Game {
                 System.out.println(getCurrentPlayer().getName()+" has won the game!");
                 break;
             }
-            //nextTurn();
+
 
 
 
@@ -211,14 +226,22 @@ public class Game {
                         turnSeqs.get(14).executeSequence(null);
                         break;
                     }
-                    if(turnSequence.isValid(getCurrentPlayer().getCard(chosenCardIndex-1))){
-                        System.out.println("Played: "+getCurrentPlayer().getCard(chosenCardIndex-1));
-                        getCurrentPlayer().playCard(getCurrentPlayer().getCard(chosenCardIndex-1));
+
+                    int index = getCurrentPlayer().getCard(chosenCardIndex-1).getRank().ordinal();
+                    if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex-1))){
+                        Card playCard = getCurrentPlayer().playCard(chosenCardIndex-1);
+                        System.out.println("Played: "+playCard.toString());
+
                         if(isWinner(getCurrentPlayer())){
                             break;
                         }
-                        int index = getCurrentPlayer().getCard(chosenCardIndex-1).getRank().ordinal();
-                        turnSeqs.get(index).executeSequence(getCurrentPlayer().getCard(chosenCardIndex-1));
+
+                        turnSeqs.get(index).executeSequence(playCard);
+                        turnFinished=true;
+
+                    }
+                    else{
+                        System.out.println("You tried to play "+getCurrentPlayer().getCard(chosenCardIndex-1)+" but that card does not match the top card. Try again.");
 
                     }
 
@@ -247,6 +270,7 @@ public class Game {
                     continue;
                 }
                 if(input.toString().equals(c.toString())){
+                    System.out.println("The colour is now "+c);
                     return c;
                 }
             }
@@ -276,21 +300,20 @@ public class Game {
      */
     public void nextTurn(){
         //clockwise
-        if(turnDirection){
-            currentTurn = (currentTurn+1) % numPlayers;
-            nextPlayerIndex = currentTurn + 1;
+        if(turnDirection){ //0->1
+            currentTurn = (currentTurn+1) % numPlayers; //next person playing
+            nextPlayerIndex = (currentTurn+1) % numPlayers; // for giving cards
         }
         //counterclockwise
-        else{
-            if(currentTurn == 0){
-                currentTurn = numPlayers-1;
+        else{ //0->3->2->1   a=0 b=1
+            currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
+            nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
+
             }
-            else{
-                currentTurn -= 1;
-            }
-            nextPlayerIndex = currentTurn - 1;
+
+
         }
-    }
+
 
     /**
      * Skip the turn of the next player
@@ -308,10 +331,10 @@ public class Game {
     public void drawNCards(int n,int index){
         players.get(index).addCardToHand(n);
         if(index==currentTurn){
-            System.out.println(players.get(index).getName()+" has drawn a card: ");
+            System.out.println(players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1));
         }
         else{
-            System.out.println(players.get(index).getName()+" has to draw "+n+" cards due to "+topCard.toString());
+            System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard.toString());
         }
     }
 
@@ -322,7 +345,7 @@ public class Game {
      */
     public void setCurrentColour(Card.Colour colour){
         currentColour = colour;
-        System.out.println("The colour is now "+currentColour.toString());
+
     }
 
     public static void main(String[] args) {

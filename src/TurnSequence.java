@@ -3,7 +3,11 @@
  * @author Hubert Dang
  */
 public abstract class TurnSequence {
-    protected static Game game = new Game();
+    protected static Game game;
+
+    public TurnSequence(Game game){
+        this.game = game;
+    }
 
     /**
      * Executes the appropriate game sequence according to the card played by changing the game state.
