@@ -13,7 +13,7 @@ public class SelfDrawOneTest {
         game = new Game();
         game.getPlayers().add(new Player("test1"));
         game.getPlayers().add(new Player("test2"));
-        game.setPlayers(2);
+        game.setNumPlayers(2);
         testCard = new Card(Card.Rank.ONE, Card.Colour.RED);
     }
 

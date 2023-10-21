@@ -348,27 +348,57 @@ public class Game {
 
     }
 
+    /**
+     * Return the index of the next player, for testing.
+     *
+     * @return the int of the next player.
+     */
     public int getNextPlayerIndex() {
         return nextPlayerIndex;
     }
 
+    /**
+     * Return Card of the current top Card, for testing.
+     *
+     * @return returns the current top Card.
+     */
     public Card getTopCard() {
         return topCard;
     }
 
+    /**
+     * Return the ArrayList of sequences, for testing.
+     *
+     * @return return a list of the sequences.
+     */
     public ArrayList<TurnSequence> getTurnSeqs() {
         return turnSeqs;
     }
 
+    /**
+     * Return the boolean of the current direction of the game, for testing.
+     *
+     * @return return true if clockwise, false for counter-clockwise.
+     */
     public boolean getTurnDirection(){
         return this.turnDirection;
     }
 
+    /**
+     * Return ArrayList of Player for the current players.
+     *
+     * @return current list of players.
+     */
     public ArrayList<Player> getPlayers(){
         return this.players;
     }
 
-    public void setPlayers(int numPlayers){
+    /**
+     * Set number of player in the game manually, for testing.
+     *
+     * @param numPlayers
+     */
+    public void setNumPlayers(int numPlayers){
         this.numPlayers = numPlayers;
     }
 
