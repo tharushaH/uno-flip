@@ -86,11 +86,20 @@ public class Player {
 
     /**
      * Returns the card at the given index.
-     * @param index
+     * @param index - the index of the card in the hand
      * @return returns a Card in the Hand at the index.
      */
     public Card getCard(int index){
         return this.hand.getCards().get(index);
+    }
+
+
+    /**
+     * Method getHandScore returns the amount of points a player's hand is worth
+     * @return the value of the player's hand
+     */
+    public int getHandScore(){
+        return hand.getScore();
     }
 
 
