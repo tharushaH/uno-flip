@@ -186,7 +186,10 @@ public class Game {
 
             //if the player is not a winner then move to the next player
             if(isWinner(getCurrentPlayer())){
+                getCurrentPlayer().setPlayerScore(getWinnerScore());
                 System.out.println(getCurrentPlayer().getName()+" has won the game!");
+                System.out.println(getCurrentPlayer().getName()+"'s score: "+getCurrentPlayer().getPlayerScore());
+
                 break;
             }
 
@@ -237,7 +240,6 @@ public class Game {
                         if(isWinner(getCurrentPlayer())){
                             break;
                         }
-
                         turnSeqs.get(index).executeSequence(playCard);
                         turnFinished=true;
 
@@ -267,7 +269,7 @@ public class Game {
         while(!colourSet){
             System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
             String input = userInput.nextLine().toUpperCase();
-            for(Card.Colour c:Card.Colour.values()){;
+            for(Card.Colour c:Card.Colour.values()){
                 if (c.toString().equals(Card.Colour.WILD.toString())){
                     continue;
                 }
@@ -303,8 +305,8 @@ public class Game {
     public void nextTurn(){
         //clockwise
         if(turnDirection){ //0->1
-            currentTurn = (currentTurn+1) % numPlayers; //next person playing
-            nextPlayerIndex = (currentTurn+1) % numPlayers; // for giving cards
+            currentTurn = (currentTurn+1) % numPlayers;
+            nextPlayerIndex = (currentTurn+1) % numPlayers;
         }
         //counterclockwise
         else{ //0->3->2->1   a=0 b=1
@@ -348,6 +350,21 @@ public class Game {
     public void setCurrentColour(Card.Colour colour){
         currentColour = colour;
 
+    }
+    public int getWinnerScore(){
+        int winnerScore = 0;
+        if(topCard.getRank().ordinal() == 8){
+            drawNCards(1,nextPlayerIndex);
+
+        }else if(topCard.getRank().ordinal() == 13){
+            //wild draw two is on top
+            drawNCards(2,nextPlayerIndex);
+        }
+
+        for(Player p: players){
+            winnerScore += p.getHandScore();
+        }
+        return winnerScore;
     }
 
     public static void main(String[] args) {
