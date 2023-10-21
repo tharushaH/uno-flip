@@ -7,6 +7,8 @@ public class Player {
 
     private final String name;
 
+    private int playerScore;
+
 
     /**
      *  Contractor for the Player Class, initialize the player's name, deck, and hand (giving them the standard 7 cards to start)
@@ -15,6 +17,7 @@ public class Player {
     public Player(String name){
         this.name = name;
         this.hand = new Hand();
+        this.playerScore = 0;
         addCardToHand(7); // Initialize 7 cards for each player
 
     }
@@ -86,7 +89,7 @@ public class Player {
 
     /**
      * Returns the card at the given index.
-     * @param index
+     * @param index - the index of the card in the hand
      * @return returns a Card in the Hand at the index.
      */
     public Card getCard(int index){
@@ -94,7 +97,29 @@ public class Player {
     }
 
 
+    /**
+     * Method getHandScore returns the amount of points a player's hand is worth
+     * @return the value of the player's hand
+     */
+    public int getHandScore(){
+        return hand.getScore();
+    }
 
 
+    /**
+     * Method setPlayerScore sets or adds to the player score
+     * @param calculatedScore - score the player has won that round
+     */
+    public void setPlayerScore(int calculatedScore){
+        this.playerScore += calculatedScore;
+    }
+
+    /**
+     * Method getPlayerScore returns the player's score
+     * @return the score of the player
+     */
+    public int getPlayerScore(){
+        return this.playerScore;
+    }
 
 }
