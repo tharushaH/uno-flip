@@ -164,12 +164,14 @@ public class Game {
             deck.putCard(topCard);
             topCard = deck.takeCard();
         }
-        if(topCard.getRank().ordinal()>8){
+        if(topCard.getRank().ordinal()>8) {
             //only execute sequence if action card, if number don't do anything
             turnSeqs.get(topCard.getRank().ordinal()).executeSequence(topCard);
         }
-        currentColour = topCard.getColour();
-        currentRank = topCard.getRank();
+        else{
+                currentColour = topCard.getColour();
+                currentRank = topCard.getRank();
+            }
 
 
         while(true){
