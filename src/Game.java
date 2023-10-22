@@ -279,6 +279,9 @@ public class Game {
 
                     }
                     else{
+                        if(index== Card.Rank.WILD_DRAW_2.ordinal()){
+                            System.out.println("You tried to play "+getCurrentPlayer().getCard(chosenCardIndex-1)+" but you have a card of the current colour. Try again.");
+                        }
                         System.out.println("You tried to play "+getCurrentPlayer().getCard(chosenCardIndex-1)+" but that card does not match the top card. Try again.");
 
                     }
