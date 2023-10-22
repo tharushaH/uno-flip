@@ -55,5 +55,5 @@ This project is developed and maintained by the following individuals:
 This UNO game in Java is licensed under the MIT License.
 
 ## Acknowledgments
-Special thanks to ![UNO](https://www.mattelgames.com/en-us/cards/uno/) for the awesome game.
+Special thanks to [UNO](https://www.mattelgames.com/en-us/cards/uno/) for the awesome game.
 
