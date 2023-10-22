@@ -22,6 +22,11 @@ public abstract class TurnSequence {
      */
     public boolean isValid(Card card) {
         if (card.isWild()) {
+            if (card.getRank() == Card.Rank.WILD_DRAW_2) {
+                if (game.getCurrentPlayer().colourInHand(game.getCurrentColour())) {
+                    return false;   // can only play wild draw 2 if player doesn't have current colour
+                }
+            }
             return true;
         }
         return game.getCurrentRank() == card.getRank() || game.getCurrentColour() == card.getColour();
