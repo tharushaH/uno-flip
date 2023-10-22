@@ -407,6 +407,15 @@ public class Game {
         return winnerScore;
     }
 
+    /**
+     * Return the ArrayList of sequences, for testing.
+     *
+     * @return return a list of the sequences.
+     */
+    public ArrayList<TurnSequence> getTurnSeqs() {
+        return turnSeqs;
+    }
+
     public static void main(String[] args) {
         Game game = new Game();
         game.playGame();

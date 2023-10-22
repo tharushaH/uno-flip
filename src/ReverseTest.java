@@ -24,7 +24,7 @@ public class ReverseTest {
         assertEquals(Card.Colour.RED, game.getCurrentColour());
         assertEquals(Card.Rank.ONE, game.getCurrentRank());
         assertEquals(1, game.getCurrentTurn());
-        assertEquals(0, game.getNextPlayerIndex());
+        assertEquals(0, game.getNextTurn());
         assertEquals(7, game.getPlayers().get(1).getHandSize());
 
     }

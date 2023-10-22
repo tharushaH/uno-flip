@@ -24,7 +24,7 @@ public class WildDrawTwoTest {
         assertEquals(Card.Colour.RED, game.getCurrentColour());
         assertEquals(Card.Rank.ONE, game.getCurrentRank());
         assertEquals(0, game.getCurrentTurn());
-        assertEquals(1, game.getNextPlayerIndex());
+        assertEquals(1, game.getNextTurn());
         assertEquals(9, game.getPlayers().get(1).getHandSize());
 
     }
