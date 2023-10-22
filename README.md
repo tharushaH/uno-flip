@@ -32,7 +32,7 @@ Follow the on-screen instructions to play the game. The game rules closely follo
 
 ## Requirements
 
-- Java Development Kit (JDK) 8 or higher
+- Java Development Kit (JDK) 21
 - A terminal or command prompt to run the game
 
 ## Installation
