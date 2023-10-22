@@ -26,11 +26,6 @@ Follow the on-screen instructions to play the game. The game rules closely follo
 - Easily extensible and modifiable code for future enhancements.
 - Handles 2-4 players
 
-## Requirements
-
-- Java Development Kit (JDK) 8 or higher
-- A terminal or command prompt to run the game
-
 ## Installation
 
 1. Clone the repository to your local machine using Git:
