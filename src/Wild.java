@@ -1,4 +1,8 @@
 public class Wild extends TurnSequence {
+    public Wild(Game game) {
+        super(game);
+    }
+
     /**
      * Executes the appropriate game sequence according to the card played by changing the game state.
      *
