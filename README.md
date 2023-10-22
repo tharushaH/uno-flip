@@ -12,9 +12,9 @@ UNO Flip is a variation of the traditional UNO card game with additional "Flip" 
 ## How to Play
 
 1. Clone or download this repository.
-2. Run the game using:
+2. Run the game using the location your project is plus:
 ```shell
-  java -jar ..\UnoFlip.jar
+  java -jar ..\artifacts\unoflip_jar\UnoFlip.jar
 ```
 
 Follow the on-screen instructions to play the game. The game rules closely follow the official UNO Flip rules.
