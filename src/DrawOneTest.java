@@ -24,7 +24,7 @@ public class DrawOneTest {
         assertEquals(Card.Colour.RED, game.getCurrentColour());
         assertEquals(Card.Rank.ONE, game.getCurrentRank());
         assertEquals(0, game.getCurrentTurn());
-        assertEquals(1, game.getNextPlayerIndex());
+        assertEquals(1, game.getNextTurn());
         assertEquals(8, game.getPlayers().get(1).getHandSize());
     }
 

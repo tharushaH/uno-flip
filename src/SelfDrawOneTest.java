@@ -21,7 +21,7 @@ public class SelfDrawOneTest {
         game.getTurnSeqs().get(14).executeSequence(testCard);
         assertTrue(game.getTurnDirection());
         assertEquals(1, game.getCurrentTurn());
-        assertEquals(0, game.getNextPlayerIndex());
+        assertEquals(0, game.getNextTurn());
         assertEquals(8, game.getPlayers().get(0).getHandSize());
 
     }
