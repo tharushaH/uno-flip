@@ -18,6 +18,8 @@ public class HandTest {
         testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD);
     }
 
+
+
     @Test
     public void testAddCard() {
         hand.addCard(testCard1);
@@ -99,5 +101,23 @@ public class HandTest {
         assertFalse(hand.colourInHand(Card.Colour.YELLOW));
         assertFalse(hand.colourInHand(Card.Colour.GREEN));
 
+    }
+
+    @Test
+    public void  testGetScore(){
+
+        //No cards in hand currently, score should be 0
+        assertEquals(0, hand.getScore());
+
+        //add two cards to the hand
+        hand.addCard(testCard1); // RED ONE
+        hand.addCard(testCard2); // WILD
+
+        assertEquals(51, hand.getScore());
+
+        //Remove card, so there is only one card in hand (Wild card in hand)
+        hand.popCard(0);
+
+        assertEquals(50, hand.getScore());
     }
 }

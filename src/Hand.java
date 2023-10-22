@@ -91,4 +91,27 @@ public class Hand {
         return false;
     }
 
+    /**
+     * Method getScore returns the score of the player's hand based on Uno game wiki scoring system.
+     * Scoring:
+     *      Number card are counted as their face value.
+     *      Action cards are counted as 20 points
+     *      Wild and Wild Draw Four cards are counted as 50 points
+     * @return the total score of the hand
+     */
+    public int getScore(){
+        int score =0;
+        for(Card card: cards){
+            if( card.getRank().ordinal() < 9){ //If a number card 1->9
+                score += card.getRank().ordinal() + 1;
+            } else if (card.getRank().ordinal() >=9 && card.getRank().ordinal() < 12) { // If Action Card
+                score += 20;
+            } else if (card.getRank().ordinal() > 11){ //If a Wild or Wild Draw Four
+                score +=50;
+            }
+        }
+        return score;
+
+    }
+
 }

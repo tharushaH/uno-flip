@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 /**
- * The Game class represent a game of Uno Flip. This class initializes
- * and manages a game of Uno Flip by managing player turns, the deck
- * and game logic based on what cards were played.
+ * The Game class represent a game of Uno Flip. Uno Flip can be played with 2-4 players.
+ * This class initializes and manages a game of Uno Flip by managing player turns, displaying
+ * the player's cards, validating card placement, scoring and game logic based on what cards were played.
+ *
  *
  * Date: 2023-10-20
  * @author  Amilesh Nanthakumaran
@@ -26,8 +27,6 @@ public class Game {
     private Card.Colour colourSetByWild; //colour chosen by the user
 
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
-
-
 
 
     /**
@@ -125,6 +124,55 @@ public class Game {
     public int getNextTurn(){
         return nextPlayerIndex;
     }
+
+    /**
+     * Returns an ArrayList of players in the current game,used for testing only
+     * @return The ArrayList of players
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Returns the turn direction,used for testing only
+     * @return The turn direction
+     */
+    public boolean getTurnDirection() {
+        return turnDirection;
+    }
+
+    /**
+     * Returns the number of players,used for testing only
+     * @return The number of players
+     */
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    /**
+     * Returns the chosen card index of the user,used for testing only
+     * @return The card index chosen by the user
+     */
+    public int getChosenCardIndex(){
+        return chosenCardIndex;
+    }
+
+    /**
+     * Returns the top card in play,used for testing only
+     * @return The top card
+     */
+    public Card getTopCard(){
+        return topCard;
+    }
+
+    /**
+     * Returns the number of players, used for testing only
+     * @param numPlayers The number of players
+     */
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
     /**
      * Starts and manages the Uno game including getting user input.
      */
@@ -164,12 +212,14 @@ public class Game {
             deck.putCard(topCard);
             topCard = deck.takeCard();
         }
-        if(topCard.getRank().ordinal()>8){
+        if(topCard.getRank().ordinal()>8) {
             //only execute sequence if action card, if number don't do anything
             turnSeqs.get(topCard.getRank().ordinal()).executeSequence(topCard);
         }
-        currentColour = topCard.getColour();
-        currentRank = topCard.getRank();
+        else{
+                currentColour = topCard.getColour();
+                currentRank = topCard.getRank();
+            }
 
 
         while(true){
@@ -177,24 +227,15 @@ public class Game {
             System.out.println(getCurrentPlayer().getName() + "'s turn: ");
             //display player's hand using the printHand()
             System.out.println(getCurrentPlayer().toString());
-            //use the player's chosen index to play their turn
+            //prompt user for card index and play turn
             playTurn();
-            //check if they have 0 cards
-
-
-            //if the player is not a winner then move to the next player
+            //Check if player is the winner, handle if winner
             if(isWinner(getCurrentPlayer())){
+                getCurrentPlayer().setPlayerScore(getWinnerScore());
                 System.out.println(getCurrentPlayer().getName()+" has won the game!");
+                System.out.println(getCurrentPlayer().getName()+"'s score: "+getCurrentPlayer().getPlayerScore());
                 break;
             }
-
-
-
-
-
-
-
-
         }
 
     }
@@ -204,7 +245,7 @@ public class Game {
      *
      * @param player The player to be added
      */
-    private void addPlayer(Player player){
+    public void addPlayer(Player player){
         players.add(player);
     }
 
@@ -226,16 +267,13 @@ public class Game {
                         turnSeqs.get(14).executeSequence(null);
                         break;
                     }
-
                     int index = getCurrentPlayer().getCard(chosenCardIndex-1).getRank().ordinal();
                     if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex-1))){
                         Card playCard = getCurrentPlayer().playCard(chosenCardIndex-1);
                         System.out.println("Played: "+playCard.toString());
-
                         if(isWinner(getCurrentPlayer())){
                             break;
                         }
-
                         turnSeqs.get(index).executeSequence(playCard);
                         turnFinished=true;
 
@@ -265,7 +303,7 @@ public class Game {
         while(!colourSet){
             System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
             String input = userInput.nextLine().toUpperCase();
-            for(Card.Colour c:Card.Colour.values()){;
+            for(Card.Colour c:Card.Colour.values()){
                 if (c.toString().equals(Card.Colour.WILD.toString())){
                     continue;
                 }
@@ -301,11 +339,11 @@ public class Game {
     public void nextTurn(){
         //clockwise
         if(turnDirection){ //0->1
-            currentTurn = (currentTurn+1) % numPlayers; //next person playing
-            nextPlayerIndex = (currentTurn+1) % numPlayers; // for giving cards
+            currentTurn = (currentTurn+1) % numPlayers;
+            nextPlayerIndex = (currentTurn+1) % numPlayers;
         }
         //counterclockwise
-        else{ //0->3->2->1   a=0 b=1
+        else{ //0->3->2->1
             currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
             nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
 
@@ -348,7 +386,26 @@ public class Game {
 
     }
 
+    /**
+     * Returns the score of the winner
+     *
+     * @return The score of the winner
+     */
+    private int getWinnerScore(){
+        int winnerScore = 0;
+        if(topCard.getRank().ordinal() == 8){
+            drawNCards(1,nextPlayerIndex);
 
+        }else if(topCard.getRank().ordinal() == 13){
+            //wild draw two is on top
+            drawNCards(2,nextPlayerIndex);
+        }
+
+        for(Player p: players){
+            winnerScore += p.getHandScore();
+        }
+        return winnerScore;
+    }
 
     public static void main(String[] args) {
         Game game = new Game();
