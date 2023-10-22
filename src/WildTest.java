@@ -4,7 +4,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class WildTest {
-    private SelfDrawOne selfDrawOne;
     private Game game;
     private Card testCard;
 
