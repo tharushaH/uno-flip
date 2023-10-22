@@ -225,11 +225,11 @@ public class Game {
         while(true){
             System.out.println("Top card:"+topCard.toString());
             System.out.println(getCurrentPlayer().getName() + "'s turn: ");
-            //display player's hand using the printHand()
+            //display player's hand
             System.out.println(getCurrentPlayer().toString());
-            //prompt user for card index and play turn
+            //prompt user for card index and play turn with that index
             playTurn();
-            //Check if player is the winner, handle if winner
+            //Check if player is the winner, handle if winner, ending the game and displaying the score
             if(isWinner(getCurrentPlayer())){
                 getCurrentPlayer().setPlayerScore(getWinnerScore());
                 System.out.println(getCurrentPlayer().getName()+" has won the game!");
@@ -338,7 +338,7 @@ public class Game {
      */
     public void nextTurn(){
         //clockwise
-        if(turnDirection){ //0->1
+        if(turnDirection){ //0->1->2->3
             currentTurn = (currentTurn+1) % numPlayers;
             nextPlayerIndex = (currentTurn+1) % numPlayers;
         }
@@ -372,7 +372,7 @@ public class Game {
             System.out.println(players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1));
         }
         else{
-            System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard.toString());
+            System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard);
         }
     }
 
@@ -394,11 +394,11 @@ public class Game {
     private int getWinnerScore(){
         int winnerScore = 0;
         if(topCard.getRank().ordinal() == 8){
-            drawNCards(1,nextPlayerIndex);
+            drawNCards(1,nextPlayerIndex); //handle if draw one was last card
 
         }else if(topCard.getRank().ordinal() == 13){
             //wild draw two is on top
-            drawNCards(2,nextPlayerIndex);
+            drawNCards(2,nextPlayerIndex); //handle if wild draw two was last card
         }
 
         for(Player p: players){
