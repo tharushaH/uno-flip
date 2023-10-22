@@ -24,6 +24,7 @@ Follow the on-screen instructions to play the game. The game rules closely follo
 - Classic UNO gameplay with UNO Flip rules.
 - Interactive text-based interface.
 - Easily extensible and modifiable code for future enhancements.
+- Handles 2-4 players
 
 ## Requirements
 
@@ -46,4 +47,3 @@ This project is developed and maintained by the following individuals:
 - [Hubert Dang](https://github.com/hubertdang)
 - [Tharusha Herath](https://github.com/tharushaH)
 
-Special thanks to all the contributors who have helped improve this project!
