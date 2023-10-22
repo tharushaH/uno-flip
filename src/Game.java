@@ -372,7 +372,7 @@ public class Game {
             System.out.println(players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1));
         }
         else{
-            System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard.toString());
+            System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard);
         }
     }
 
