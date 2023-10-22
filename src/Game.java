@@ -125,6 +125,55 @@ public class Game {
     public int getNextTurn(){
         return nextPlayerIndex;
     }
+
+    /**
+     * Returns an ArrayList of players in the current game,used for testing only
+     * @return The ArrayList of players
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Returns the turn direction,used for testing only
+     * @return The turn direction
+     */
+    public boolean getTurnDirection() {
+        return turnDirection;
+    }
+
+    /**
+     * Returns the number of players,used for testing only
+     * @return The number of players
+     */
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    /**
+     * Returns the chosen card index of the user,used for testing only
+     * @return The card index chosen by the user
+     */
+    public int getChosenCardIndex(){
+        return chosenCardIndex;
+    }
+
+    /**
+     * Returns the top card in play,used for testing only
+     * @return The top card
+     */
+    public Card getTopCard(){
+        return topCard;
+    }
+
+    /**
+     * Returns the number of players, used for testing only
+     * @param numPlayers The number of players
+     */
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
     /**
      * Starts and manages the Uno game including getting user input.
      */
@@ -209,7 +258,7 @@ public class Game {
      *
      * @param player The player to be added
      */
-    private void addPlayer(Player player){
+    public void addPlayer(Player player){
         players.add(player);
     }
 
@@ -309,7 +358,7 @@ public class Game {
             nextPlayerIndex = (currentTurn+1) % numPlayers;
         }
         //counterclockwise
-        else{ //0->3->2->1   a=0 b=1
+        else{ //0->3->2->1
             currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
             nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
 
@@ -351,7 +400,13 @@ public class Game {
         currentColour = colour;
 
     }
-    public int getWinnerScore(){
+
+    /**
+     * Returns the score of the winner
+     *
+     * @return The score of the winner
+     */
+    private int getWinnerScore(){
         int winnerScore = 0;
         if(topCard.getRank().ordinal() == 8){
             drawNCards(1,nextPlayerIndex);
