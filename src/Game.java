@@ -6,8 +6,8 @@ import java.util.Scanner;
  * the player's cards, validating card placement, scoring and game logic based on what cards were played.
  *
  *
- * Date: 2023-10-20
  * @author  Amilesh Nanthakumaran
+ * Date: 2023-10-20
  */
 public class Game {
     private ArrayList<Player> players; //arraylist of players

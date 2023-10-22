@@ -1,5 +1,15 @@
 import java.util.ArrayList;
 
+/**
+ * The Player class represents the players objects within the Uno Flip game.
+ * The class manages the player's hand by adding cards, playing cards, checking the size of the hand and content of the hand/
+ * The class keeps track of the player's score by allowing the addition of points at the end of each round.
+ * The class also provides information about the player to the game class, such as the player's name, current score, as current hand.
+ * Additionally, the player class interacts with a static Deck object to draw cards during the game.
+ *
+ * @author Ranveer Dhaliwal
+ * Date: 2023-10-18
+ */
 public class Player {
     private Hand hand;
 
