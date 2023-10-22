@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 /**
- * The Game class represent a game of Uno Flip. This class initializes
- * and manages a game of Uno Flip by managing player turns, the deck
- * and game logic based on what cards were played.
+ * The Game class represent a game of Uno Flip. Uno Flip can be played with 2-4 players.
+ * This class initializes and manages a game of Uno Flip by managing player turns, displaying
+ * the player's cards, validating card placement, scoring and game logic based on what cards were played.
+ *
  *
  * Date: 2023-10-20
  * @author  Amilesh Nanthakumaran
@@ -26,8 +27,6 @@ public class Game {
     private Card.Colour colourSetByWild; //colour chosen by the user
 
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
-
-
 
 
     /**
@@ -228,27 +227,15 @@ public class Game {
             System.out.println(getCurrentPlayer().getName() + "'s turn: ");
             //display player's hand using the printHand()
             System.out.println(getCurrentPlayer().toString());
-            //use the player's chosen index to play their turn
+            //prompt user for card index and play turn
             playTurn();
-            //check if they have 0 cards
-
-
-            //if the player is not a winner then move to the next player
+            //Check if player is the winner, handle if winner
             if(isWinner(getCurrentPlayer())){
                 getCurrentPlayer().setPlayerScore(getWinnerScore());
                 System.out.println(getCurrentPlayer().getName()+" has won the game!");
                 System.out.println(getCurrentPlayer().getName()+"'s score: "+getCurrentPlayer().getPlayerScore());
-
                 break;
             }
-
-
-
-
-
-
-
-
         }
 
     }
@@ -280,12 +267,10 @@ public class Game {
                         turnSeqs.get(14).executeSequence(null);
                         break;
                     }
-
                     int index = getCurrentPlayer().getCard(chosenCardIndex-1).getRank().ordinal();
                     if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex-1))){
                         Card playCard = getCurrentPlayer().playCard(chosenCardIndex-1);
                         System.out.println("Played: "+playCard.toString());
-
                         if(isWinner(getCurrentPlayer())){
                             break;
                         }
