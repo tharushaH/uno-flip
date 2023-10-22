@@ -2,6 +2,7 @@
  * Number is a subclass of TurnSequence used to handle the game sequences of numbered cards in the game, Uno Flip! by
  * updating the game's state.
  * @author Hubert Dang
+ * Date: 2023-10-22
  */
 public class Number extends TurnSequence{
 

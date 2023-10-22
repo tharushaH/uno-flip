@@ -5,6 +5,16 @@
 
 import java.util.*;
 
+/**
+ * The Deck class represents the deck of cards used in the game of Uno Flip.
+ * The class provides methods for drawing cards, discarding cards, and resting the deck when needed.
+ * The class draws cards form the deck stack, which can be used by the player during the game.
+ * The class discards cards into the discard stack, handling various rules for card limits.
+ * Class keeps track of the frequency of the specific cards in the deck, including the main deck, discard pile and cards in play.
+ *
+ * @author Hubert Dang
+ * Date: 2023-10-18
+ */
 public class Deck {
     private Stack<Card> deck;
     private Stack<Card> discard;

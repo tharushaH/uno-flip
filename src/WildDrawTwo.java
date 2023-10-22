@@ -1,3 +1,9 @@
+/**
+ * WildDrawTwo is a subclass of TurnSequence used to handle the game sequences of Wild Draw Two cards in the game, Uno Flip! by
+ * updating the game's state.
+ * @author Hubert Dang
+ * Date: 2023-10-22
+ */
 public class WildDrawTwo extends TurnSequence {
 
     public WildDrawTwo(Game game) {

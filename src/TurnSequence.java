@@ -1,6 +1,7 @@
 /**
  * TurnSequence is an abstract class to be extended in order to handle game sequences based on the card played.
  * @author Hubert Dang
+ * Date: 2023-10-22
  */
 public abstract class TurnSequence {
     protected static Game game;
