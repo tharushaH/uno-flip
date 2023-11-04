@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.EventObject;
 
 public class UnoFlipEvent extends EventObject {
-    private String currPlayerName;
-    private String topCard;                 // toString() of the top card
-    private String currHand;                // toString() of the current hand
+    private final String currPlayerName;
+    private final String topCard;                 // toString() of the top card
+    private final String currHand;                // toString() of the current hand
 
     /**
      * Constructs a Uno Flip! Event.
