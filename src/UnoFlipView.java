@@ -1,2 +1,2 @@
-public class UnoFlipView {
+public interface UnoFlipView {
 }
