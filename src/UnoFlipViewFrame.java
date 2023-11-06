@@ -6,7 +6,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JPanel currTurnPanel;
     private JLabel topCardLabel;
     private JLabel currPlayerLabel;
-
+    private JLabel topCardNameLabel;
     private static final ImageIcon YELLOW_REVERSE = new ImageIcon("src\\images\\yellow_reverse.png");
 
     public UnoFlipViewFrame() {
@@ -17,13 +17,21 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         currTurnPanel = new JPanel();
         currTurnPanel.setLayout(new BorderLayout(30,30));
 
+        // Create a layered pane to stack the top card label and text label
+        JLayeredPane layeredPane = new JLayeredPane();
+
         // add sample player name to the current turn panel
-        currPlayerLabel = new JLabel("Hubert");
-        currTurnPanel.add(currPlayerLabel, BorderLayout.WEST);
+        currPlayerLabel = new JLabel("Current player: Hubert");
+        currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+        this.add(currPlayerLabel, BorderLayout.WEST);
 
         // add sample top card to the current turn panel
         topCardLabel = new JLabel(YELLOW_REVERSE);
         currTurnPanel.add(topCardLabel, BorderLayout.CENTER);
+
+        // add sample top card name to the current turn panel
+        topCardNameLabel = new JLabel("The top card");
+        topCardNameLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
 
         // make a panel to display current player's hand
         handPanel = new JPanel();
@@ -41,8 +49,33 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             handPanel.add(card);
         }
 
+        // create button to draw a card and to go to next turn
+        JButton drawCard = new JButton("Draw card");
+        drawCard.setFont(new Font("Dialog", Font.PLAIN, 18));
+        JButton nextTurn = new JButton(("Next turn"));
+        nextTurn.setFont(new Font("Dialog", Font.PLAIN, 18));
+
+        // create a panel for draw card and next turn buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2,1));
+        buttonPanel.add(drawCard);
+        buttonPanel.add(nextTurn);
+
+        // create a panel to hold the cards and the buttons
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0; // Hand panel takes up most of the space
+        gbc.weighty = 1.0;
+        controlPanel.add(scrollPane, gbc);
+
+        gbc.weightx = 0.2; // Button panel takes up less space
+        gbc.weighty = 0.2;
+        controlPanel.add(buttonPanel, gbc);
+
         this.add(currTurnPanel, BorderLayout.CENTER);
-        this.add(scrollPane, BorderLayout.SOUTH);
+        this.add(controlPanel, BorderLayout.SOUTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
