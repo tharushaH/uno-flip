@@ -5,8 +5,8 @@
  * Date: 2023-10-22
  */
 public class Wild extends TurnSequence {
-    public Wild(Game game) {
-        super(game);
+    public Wild(UnoFlipModel unoFlipModel) {
+        super(unoFlipModel);
     }
 
     /**
@@ -16,9 +16,9 @@ public class Wild extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
-        game.setTopCard(card);
-        game.setCurrentColour(game.getColourSelectedByWild());
-        game.setCurrentRank(Card.Rank.WILD);
-        game.nextTurn();
+        unoFlipModel.setTopCard(card);
+        unoFlipModel.setCurrentColour(unoFlipModel.getColourSelectedByWild());
+        unoFlipModel.setCurrentRank(Card.Rank.WILD);
+        unoFlipModel.nextTurn();
     }
 }

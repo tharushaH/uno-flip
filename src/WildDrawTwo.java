@@ -6,8 +6,8 @@
  */
 public class WildDrawTwo extends TurnSequence {
 
-    public WildDrawTwo(Game game) {
-        super(game);
+    public WildDrawTwo(UnoFlipModel unoFlipModel) {
+        super(unoFlipModel);
     }
 
     /**
@@ -17,10 +17,10 @@ public class WildDrawTwo extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
-        game.setTopCard(card);
-        game.setCurrentColour(game.getColourSelectedByWild());
-        game.setCurrentRank(Card.Rank.WILD);
-        game.drawNCards(2,game.getNextTurn());
-        game.skipTurn();
+        unoFlipModel.setTopCard(card);
+        unoFlipModel.setCurrentColour(unoFlipModel.getColourSelectedByWild());
+        unoFlipModel.setCurrentRank(Card.Rank.WILD);
+        unoFlipModel.drawNCards(2, unoFlipModel.getNextTurn());
+        unoFlipModel.skipTurn();
     }
 }

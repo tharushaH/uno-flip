@@ -9,7 +9,7 @@ import java.util.Scanner;
  * @author  Amilesh Nanthakumaran
  * Date: 2023-10-20
  */
-public class Game {
+public class UnoFlipModel {
     private ArrayList<Player> players; //arraylist of players
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
     private int currentTurn; // 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4
@@ -32,7 +32,7 @@ public class Game {
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
      */
-    public Game(){
+    public UnoFlipModel(){
         players = new ArrayList<Player>(); //empty player list
         turnDirection = true; //initialize to clockwise
         currentTurn = 0; // start from player 1
@@ -421,8 +421,8 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
-        game.playGame();
+        UnoFlipModel unoFlipModel = new UnoFlipModel();
+        unoFlipModel.playGame();
 
     }
 
