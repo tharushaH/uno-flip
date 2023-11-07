@@ -11,15 +11,20 @@ public class UnoFlipController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getActionCommand().equals("draw")){
+            model.playTurn(-1);
+        }
+        if(e.getActionCommand().equals("next")) {
+            model.nextTurn();
+        }
+
         try{
             int index = Integer.parseInt(e.getActionCommand());
             if(model.checkValid(Integer.parseInt(e.getActionCommand()))){
                 model.playTurn(Integer.parseInt(e.getActionCommand()));
             }
         } catch (NumberFormatException err){
-            if(e.getActionCommand().equals("draw")){
-                model.playTurn(-1);
-            }
+            System.out.println("Invalid command: " + e.getActionCommand());
         }
 
 
