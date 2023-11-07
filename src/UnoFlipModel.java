@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 /**
  * The Game class represent a game of Uno Flip. Uno Flip can be played with 2-4 players.
@@ -29,6 +30,10 @@ public class UnoFlipModel {
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
 
 
+
+    private List<UnoFlipView> views;
+
+
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
      */
@@ -40,7 +45,7 @@ public class UnoFlipModel {
         deck = new Deck(); //create a new deck
         currentColour = null; //set colour to null
         currentRank = null; //set rank to null
-        userInput = new Scanner(System.in); //scanner used for user input
+        //userInput = new Scanner(System.in); //scanner used for user input
         numPlayers = 0; // initialize to 0
         chosenCardIndex = -1; //initialize to -1
         turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
@@ -55,8 +60,27 @@ public class UnoFlipModel {
         turnSeqs.add(new SelfDrawOne(this)); //Self Draw One
 
 
+        this.views = new ArrayList<UnoFlipView>();
 
     }
+
+
+    /**
+     * Method addUnoFlipView adds a view to the view list
+     * @param view - the view that will be added to the list
+     */
+    public void addUnoFlipView(UnoFlipView view){
+        this.views.add(view);
+    }
+
+    /**
+     * Method removeUnoFlipView removes view from the view list
+     * @param view - the view that will be removed from the list
+     */
+    public void removeUnoFlipView(UnoFlipView view){
+        this.views.remove(view);
+    }
+
 
     /**
      * Gets the current colour of the game.
@@ -88,7 +112,7 @@ public class UnoFlipModel {
     /**
      * Gets the index of the player whose turn it is.
      *
-     * @return The inde of the current player.
+     * @return The index of the current player.
      */
     public int getCurrentTurn() {
         return currentTurn;
@@ -173,38 +197,70 @@ public class UnoFlipModel {
         this.numPlayers = numPlayers;
     }
 
+
+    /**
+     * Method addPlayers is meant to be activated by the UnoFlipModel to initialize the users desired number players
+     */
+    public void addPlayers(){
+        ///notify view to make a joptionpane???
+        String input = "jkcldsakc" ; //==== VALUE
+        try {
+            numPlayers = Integer.parseInt(input);
+
+            if(numPlayers < 2 || numPlayers > 4){
+                ///Notify view that the number is invalid
+            } else {
+                ///
+                for(int i=0;i<numPlayers;i++){
+                    //String name = userInput.nextLine();
+                    /// ASK CONTOLLER FOR ANOTHER INPUT BOX
+                    String name = "JNCASKLJCNAKCALK"
+                    Player p = new Player(name); //create player
+                    addPlayer(p); //add player to arraylist
+                }
+
+            }
+
+        } catch (NumberFormatException e){
+            //notify view on error??????
+
+        }
+
+
+    }
+
+
     /**
      * Starts and manages the Uno game including getting user input.
      */
     public void playGame(){
-        System.out.println("Welcome to UNO");
-        //get number of players
-        while(numPlayers < 2 || numPlayers >4) {
-            try {
-                System.out.println("Enter number of players(2-4): ");
-                String input = userInput.nextLine();
-                numPlayers = Integer.parseInt(input);
-                if(numPlayers < 2 || numPlayers > 4){
-                    System.out.println("Invalid number of players");
-                }
-                else{
-                    System.out.println("Number of players is: "+numPlayers);
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid integer input");
-            }
 
-        }
-        for(int i=0;i<numPlayers;i++){
-            System.out.println("Enter name for Player " + (i + 1)+": ");
-            String name = userInput.nextLine();
-            Player p = new Player(name); //create player
-            addPlayer(p); //add player to arraylist
+//        //get number of players
+//        while(numPlayers < 2 || numPlayers >4) {
+//            try {
+//                System.out.println("Enter number of players(2-4): ");
+//                //String input = userInput.nextLine();
+//                numPlayers = Integer.parseInt(input);
+//                if(numPlayers < 2 || numPlayers > 4){
+//                    //System.out.println("Invalid number of players");
+//                }
+//                else{
+//                   // System.out.println("Number of players is: "+numPlayers);
+//                }
+//            } catch (NumberFormatException e) {
+//               // System.out.println("Invalid integer input");
+//            }
+//
+//        }
+//        for(int i=0;i<numPlayers;i++){
+//           // System.out.println("Enter name for Player " + (i + 1)+": ");
+//            String name = userInput.nextLine();
+//            Player p = new Player(name); //create player
+//            addPlayer(p); //add player to arraylist
+//        }
+        //System.out.println("Game will now begin");
 
-
-        }
-        System.out.println("Game will now begin");
-
+        //*********************************************************
         //draw the first card from deck
         topCard = deck.takeCard();
         while(topCard.getRank().ordinal()==13){
@@ -223,17 +279,17 @@ public class UnoFlipModel {
 
 
         while(true){
-            System.out.println("Top card:"+topCard.toString());
-            System.out.println(getCurrentPlayer().getName() + "'s turn: ");
+           // System.out.println("Top card:"+topCard.toString());
+            //System.out.println(getCurrentPlayer().getName() + "'s turn: ");
             //display player's hand
-            System.out.println(getCurrentPlayer().toString());
+            //System.out.println(getCurrentPlayer().toString());
             //prompt user for card index and play turn with that index
             playTurn();
             //Check if player is the winner, handle if winner, ending the game and displaying the score
             if(isWinner(getCurrentPlayer())){
                 getCurrentPlayer().setPlayerScore(getWinnerScore());
-                System.out.println(getCurrentPlayer().getName()+" has won the game!");
-                System.out.println(getCurrentPlayer().getName()+"'s score: "+getCurrentPlayer().getPlayerScore());
+               // System.out.println(getCurrentPlayer().getName()+" has won the game!");
+                //System.out.println(getCurrentPlayer().getName()+"'s score: "+getCurrentPlayer().getPlayerScore());
                 break;
             }
         }
@@ -252,25 +308,25 @@ public class UnoFlipModel {
     /**
      * Manages a player's turn by validating their card placement and handling the card.
      */
-    private void playTurn(){
+    private void playTurn(){        // add a
         //player chose to draw a card
         boolean turnFinished = false;
         while(!turnFinished){
             try{
-                System.out.println("Enter card index to play or 0 to draw a card");
+                //System.out.println("Enter card index to play or 0 to draw a card");
                 chosenCardIndex = Integer.parseInt(userInput.nextLine());
                 if(chosenCardIndex < 0 || chosenCardIndex > players.get(currentTurn).getHandSize()){
-                    System.out.println("Invalid index");
+                    //System.out.println("Invalid index");
                 }
                 else{
-                    if(chosenCardIndex == 0){
+                    if(chosenCardIndex == -1){
                         turnSeqs.get(14).executeSequence(null);
                         break;
                     }
-                    int index = getCurrentPlayer().getCard(chosenCardIndex-1).getRank().ordinal();
-                    if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex-1))){
-                        Card playCard = getCurrentPlayer().playCard(chosenCardIndex-1);
-                        System.out.println("Played: "+playCard.toString());
+                    int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
+                    if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))){
+                        Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
+                        //System.out.println("Played: "+playCard.toString());
                         if(isWinner(getCurrentPlayer())){
                             break;
                         }
@@ -280,17 +336,17 @@ public class UnoFlipModel {
                     }
                     else{
                         if(index== Card.Rank.WILD_DRAW_2.ordinal()){
-                            System.out.println("You tried to play "+getCurrentPlayer().getCard(chosenCardIndex-1)+" but you have a card of the current colour. Try again.");
+                           // System.out.println("You tried to play "+getCurrentPlayer().getCard(chosenCardIndex)+" but you have a card of the current colour. Try again.");
                         }
                         else {
-                            System.out.println("You tried to play " + getCurrentPlayer().getCard(chosenCardIndex - 1) + " but that card does not match the top card. Try again.");
+                           // System.out.println("You tried to play " + getCurrentPlayer().getCard(chosenCardIndex) + " but that card does not match the top card. Try again.");
                         }
                     }
 
                 }
 
             }catch (NumberFormatException e) {
-                System.out.println("Invalid integer input");
+               // System.out.println("Invalid integer input");
             }
 
         }
@@ -305,19 +361,19 @@ public class UnoFlipModel {
     public Card.Colour getColourSelectedByWild(){
         boolean colourSet = false;
         while(!colourSet){
-            System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
-            String input = userInput.nextLine().toUpperCase();
+            //System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
+            //String input = userInput.nextLine().toUpperCase();
             for(Card.Colour c:Card.Colour.values()){
                 if (c.toString().equals(Card.Colour.WILD.toString())){
                     continue;
                 }
-                if(input.toString().equals(c.toString())){
-                    System.out.println("The colour is now "+c);
+                if(//input.toString().equals(c.toString())){
+                   // System.out.println("The colour is now "+c);
                     return c;
                 }
             }
             if(!colourSet) {
-                System.out.println("Invalid colour");
+               // System.out.println("Invalid colour");
             }
 
         }
@@ -373,10 +429,10 @@ public class UnoFlipModel {
     public void drawNCards(int n,int index){
         players.get(index).addCardToHand(n);
         if(index==currentTurn){
-            System.out.println(players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1));
+           // System.out.println(players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1));
         }
         else{
-            System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard);
+            // System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard);
         }
     }
 
