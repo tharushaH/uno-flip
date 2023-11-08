@@ -237,6 +237,7 @@ public class UnoFlipModel {
         else{
             currentColour = topCard.getColour();
             currentRank = topCard.getRank();
+            notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
 
@@ -285,16 +286,14 @@ public class UnoFlipModel {
                 if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))){ //if valid card
                     Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
 
-                    /**
-                     *  **********UPDATE VIEW
-                     */
                     //Check if winner
                     if(isWinner(getCurrentPlayer())){
                         return;
                     }
                     turnSeqs.get(index).executeSequence(playCard);
 
-
+                    //notify view
+                    notifyViews();
                 }
                 else{ // INVALID CARD OR WILD DRAW 2
 
@@ -310,9 +309,6 @@ public class UnoFlipModel {
                          */
                     }
                 }
-
-
-
     }
 
     /**
