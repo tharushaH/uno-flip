@@ -77,7 +77,7 @@ public class Player {
      */
 
     public String toString(){
-        return "Your Cards: \n" + this.hand;
+        return this.hand.toString();
     }
 
     /**
@@ -131,5 +131,9 @@ public class Player {
     public int getPlayerScore(){
         return this.playerScore;
     }
-
+    
 }
+
+
+
+

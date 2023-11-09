@@ -325,7 +325,7 @@ public class UnoFlipModel {
                 if (c.toString().equals(Card.Colour.WILD.toString())){
                     continue;
                 }
-                if(){//input.toString().equals(c.toString())){
+                if(1== 0){//input.toString().equals(c.toString())){
                    // System.out.println("The colour is now "+c);
                     return c;
                 }
