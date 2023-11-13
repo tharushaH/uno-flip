@@ -4,10 +4,10 @@
  * Date: 2023-10-22
  */
 public abstract class TurnSequence {
-    protected static Game game;
+    protected static UnoFlipModel unoFlipModel;
 
-    public TurnSequence(Game game){
-        this.game = game;
+    public TurnSequence(UnoFlipModel unoFlipModel){
+        this.unoFlipModel = unoFlipModel;
     }
 
     /**
@@ -24,12 +24,12 @@ public abstract class TurnSequence {
     public boolean isValid(Card card) {
         if (card.isWild()) {
             if (card.getRank() == Card.Rank.WILD_DRAW_2) {
-                if (game.getCurrentPlayer().colourInHand(game.getCurrentColour())) {
+                if (unoFlipModel.getCurrentPlayer().colourInHand(unoFlipModel.getCurrentColour())) {
                     return false;   // can only play wild draw 2 if player doesn't have current colour
                 }
             }
             return true;
         }
-        return game.getCurrentRank() == card.getRank() || game.getCurrentColour() == card.getColour();
+        return unoFlipModel.getCurrentRank() == card.getRank() || unoFlipModel.getCurrentColour() == card.getColour();
     }
 }

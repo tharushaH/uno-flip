@@ -6,8 +6,8 @@
  */
 public class Reverse extends TurnSequence {
 
-    public Reverse(Game game) {
-        super(game);
+    public Reverse(UnoFlipModel unoFlipModel) {
+        super(unoFlipModel);
     }
 
     /**
@@ -17,10 +17,10 @@ public class Reverse extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
-        game.setTopCard(card);
-        game.setCurrentColour(card.getColour());
-        game.setCurrentRank(card.getRank());
-        game.flipTurnDirection();
-        game.nextTurn();
+        unoFlipModel.setTopCard(card);
+        unoFlipModel.setCurrentColour(card.getColour());
+        unoFlipModel.setCurrentRank(card.getRank());
+        unoFlipModel.flipTurnDirection();
+        unoFlipModel.nextTurn();
     }
 }

@@ -62,7 +62,7 @@ public class Hand {
     public String toString() {
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < cards.size(); i++){
-            message.append(i + 1).append(". ").append(cards.get(i)).append("\n");
+            message.append(cards.get(i)).append(" ");
         }
         return message.toString();
     }

@@ -6,8 +6,8 @@
  */
 public class SelfDrawOne extends TurnSequence {
 
-    public SelfDrawOne(Game game) {
-        super(game);
+    public SelfDrawOne(UnoFlipModel unoFlipModel) {
+        super(unoFlipModel);
     }
 
     /**
@@ -17,7 +17,6 @@ public class SelfDrawOne extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
-        game.drawNCards(1, game.getCurrentTurn());
-        game.nextTurn();
+        unoFlipModel.drawNCards(1, unoFlipModel.getCurrentTurn());
     }
 }

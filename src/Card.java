@@ -65,13 +65,20 @@ public class Card {
      */
     @Override
     public String toString(){
-        if (this.rank == Rank.WILD_DRAW_2)
-            return this.colour + " DRAW 2";
-        if (this.rank == Rank.DRAW_ONE)
-            return this.colour + " DRAW 1";
-        if (this.rank == Rank.WILD)
-            return this.colour + " CARD";
-        return this.colour + " " + this.rank;
+
+        if (this.rank == Rank.WILD_DRAW_2)  //If a Wild Draw 2
+            return (this.colour + "_draw_2").toLowerCase();
+        if (this.rank == Rank.DRAW_ONE)     //If a Wild Draw 1
+            return (this.colour + "_draw_1").toLowerCase();
+        if (this.rank == Rank.WILD)         //If a Wild Card
+            return (this.colour + "_card").toLowerCase();
+
+        if(this.rank.ordinal() < 9){ //If number card
+            return (this.colour + "_"+ (this.rank.ordinal()+1)).toLowerCase();
+        }
+
+        return (this.colour + "_" + this.rank).toLowerCase();   //If a Colour non-number card
+
     }
 
     /**
