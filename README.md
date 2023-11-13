@@ -1,23 +1,23 @@
-# Uno Flip Game SYSC 3110 - Group 17
+# Uno Flip UnoFlipModel SYSC 3110 - Group 17
 ###### Milestone 1
 
 ![UNO Flip Logo](https://th.bing.com/th/id/OIP.RVQRkbcpUp4QV2O-y_b7ewHaEK?w=324&h=182&c=7&r=0&o=5&pid=1.7)
 
-Welcome to the Uno Flip Game for SYSC 3110! This project implements a text-based version of the popular card game UNO Flip. Enjoy a classic card game experience on your computer.
+Welcome to the Uno Flip UnoFlipModel for SYSC 3110! This project implements a text-based version of the popular card unoFlipModel UNO Flip. Enjoy a classic card unoFlipModel experience on your computer.
 
-## Game Overview
+## UnoFlipModel Overview
 
-UNO Flip is a variation of the traditional UNO card game with additional "Flip" cards that change the gameplay dynamically.
+UNO Flip is a variation of the traditional UNO card unoFlipModel with additional "Flip" cards that change the gameplay dynamically.
 
 ## How to Play
 
 1. Clone or download this repository.
-2. Run the game using the location your project is plus:
+2. Run the unoFlipModel using the location your project is plus:
 ```shell
   java -jar ..\artifacts\unoflip_jar\UnoFlip.jar
 ```
 
-Follow the on-screen instructions to play the game. The game rules closely follow the official UNO Flip rules.
+Follow the on-screen instructions to play the unoFlipModel. The unoFlipModel rules closely follow the official UNO Flip rules.
 
 ## Features
 
@@ -33,7 +33,7 @@ Follow the on-screen instructions to play the game. The game rules closely follo
 ## Requirements
 
 - Java Development Kit (JDK) 21
-- A terminal or command prompt to run the game
+- A terminal or command prompt to run the unoFlipModel
 
 ## Installation
 
@@ -52,8 +52,8 @@ This project is developed and maintained by the following individuals:
 - [Tharusha Herath](https://github.com/tharushaH)
 
 ## License 
-This UNO game in Java is licensed under the MIT License.
+This UNO unoFlipModel in Java is licensed under the MIT License.
 
 ## Acknowledgments
-Special thanks to [UNO](https://www.mattelgames.com/en-us/cards/uno/) for the awesome game.
+Special thanks to [UNO](https://www.mattelgames.com/en-us/cards/uno/) for the awesome unoFlipModel.
 

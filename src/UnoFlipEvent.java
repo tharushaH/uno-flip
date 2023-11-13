@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.EventObject;
 
 public class UnoFlipEvent extends EventObject {
@@ -12,7 +11,7 @@ public class UnoFlipEvent extends EventObject {
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UnoFlipEvent(Game model, String currPlayerName, String topCard, String currHand) {
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand) {
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;
