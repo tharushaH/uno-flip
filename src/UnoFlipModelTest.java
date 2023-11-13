@@ -35,7 +35,7 @@ public class UnoFlipModelTest {
     }
 
     @Test
-    public void testPlayTurnInvalid(){
+    public void testPlayTurnSelfDrawOne(){
         unoFlipModel.setPlayer("Bobby");
         unoFlipModel.setPlayer("Mark");
         unoFlipModel.setNumPlayers(2);
