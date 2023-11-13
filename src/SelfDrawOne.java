@@ -18,6 +18,5 @@ public class SelfDrawOne extends TurnSequence {
     @Override
     public void executeSequence(Card card) {
         unoFlipModel.drawNCards(1, unoFlipModel.getCurrentTurn());
-        unoFlipModel.nextTurn();
     }
 }

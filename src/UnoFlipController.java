@@ -29,9 +29,9 @@ public class UnoFlipController implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand(UnoFlipView.START_CMD)){
+        if (e.getActionCommand().equals(UnoFlipViewFrame.START_CMD)){
 
-            String[] numPlayerOptions = {"2 Players", "3 Players", "4 Players"};
+            String[] numPlayerOptions = {"2", "3", "4"};
 
             JComboBox<String> comboBox = new JComboBox<>(numPlayerOptions);
 
@@ -49,32 +49,30 @@ public class UnoFlipController implements ActionListener {
             if (result == JOptionPane.OK_OPTION) {
                 String option = (String) comboBox.getSelectedItem();
                 numPlayers = Integer.parseInt(option);
+                this.model.setNumPlayers(numPlayers);
             } else {
                 System.exit(0); // absolutely must select an option, otherwise, do not start the game
             }
 
             for (int i = 0; i < numPlayers; i++){
-                String name = (String) JOptionPane.showInputDialog("ENTER AMOUNT OF PLAYERS");
+                String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
                 this.model.setPlayer(name);
             }
             this.model.setUpInitialTopCard();
         }
-        if(e.getActionCommand().equals("draw")){
+        else if(e.getActionCommand().equals(UnoFlipViewFrame.DRAW_CMD)){
             this.model.playTurn(-1);
         }
-        if(e.getActionCommand().equals("next")) {
+        else if(e.getActionCommand().equals(UnoFlipViewFrame.NEXT_CMD)) {
             this.model.nextTurn();
         }
+        else {
+            try {
+                this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
-
-        try{
-            int index = Integer.parseInt(e.getActionCommand());
-            this.model.playTurn(Integer.parseInt(e.getActionCommand()));
-
-        } catch (NumberFormatException err){
-            System.out.println("Invalid ActionCommand: " + e.getActionCommand());
+            } catch (NumberFormatException err) {
+                System.out.println("Invalid ActionCommand: " + e.getActionCommand());
+            }
         }
-
-
     }
 }

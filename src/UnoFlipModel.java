@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -197,7 +198,7 @@ public class UnoFlipModel {
      */
     public int setNumPlayers(int numPlayers) {
 
-        if(numPlayers < 2 || numPlayers > 4) {  //2-4 players
+        if(!(numPlayers < 2 || numPlayers > 4)) {  //2-4 players
             this.numPlayers = numPlayers;
             return this.numPlayers;
         } else {                                //Invalid number of players
@@ -220,6 +221,7 @@ public class UnoFlipModel {
      * Method setUpInitialTopCard is meant to be called by the UnoFlipController to initialize the top card at the start of the game.
      */
     public void setUpInitialTopCard(){
+        System.out.println("in set up initial top card");
         //draw the first card from deck
         topCard = deck.takeCard();
 
@@ -247,8 +249,10 @@ public class UnoFlipModel {
      *
      */
     public void notifyViews(){
+        System.out.println("testing");
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
+            System.out.println("notifyin view");
             for( UnoFlipView view: views ) {
                 view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString() ));
             }
@@ -279,6 +283,7 @@ public class UnoFlipModel {
 
                 if(chosenCardIndex == -1){ // SELF DRAW ONE
                     turnSeqs.get(14).executeSequence(null);
+                    notifyViews();
                     return;
                 }
                 int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
@@ -369,10 +374,8 @@ public class UnoFlipModel {
         else{ //0->3->2->1
             currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
             nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
-
             }
-
-
+        notifyViews();
         }
 
 

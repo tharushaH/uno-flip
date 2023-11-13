@@ -74,7 +74,7 @@ public class Card {
             return (this.colour + "_card").toLowerCase();
 
         if(this.rank.ordinal() < 9){ //If number card
-            return (this.colour + "_"+ this.rank.ordinal()).toLowerCase();
+            return (this.colour + "_"+ (this.rank.ordinal()+1)).toLowerCase();
         }
 
         return (this.colour + "_" + this.rank).toLowerCase();   //If a Colour non-number card
