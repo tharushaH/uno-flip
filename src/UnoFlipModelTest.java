@@ -26,8 +26,8 @@ public class UnoFlipModelTest {
     }
     @Test
     public void testSetUpInitialTopCard(){
-        unoFlipModel.setPlayer("Bobby");
-        unoFlipModel.setPlayer("Mark");
+        unoFlipModel.createPlayer("Bobby");
+        unoFlipModel.createPlayer("Mark");
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
         unoFlipModel.setUpInitialTopCard();
@@ -36,8 +36,8 @@ public class UnoFlipModelTest {
 
     @Test
     public void testPlayTurnSelfDrawOne(){
-        unoFlipModel.setPlayer("Bobby");
-        unoFlipModel.setPlayer("Mark");
+        unoFlipModel.createPlayer("Bobby");
+        unoFlipModel.createPlayer("Mark");
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
         unoFlipModel.setUpInitialTopCard();

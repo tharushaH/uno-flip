@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 
 
@@ -63,7 +64,11 @@ public class UnoFlipController implements ActionListener {
 
             for (int i = 0; i < numPlayers; i++){
                 String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
-                this.model.setPlayer(name);
+                if (name.equals("")){
+                    this.model.setPlayer("Player " + (i+1));
+                } else{
+                    this.model.setPlayer(name);
+                }
             }
             this.model.setUpInitialTopCard();
         }

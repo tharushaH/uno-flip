@@ -87,6 +87,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         controlPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+
+        scrollPane.setPreferredSize(new Dimension(300, 340));
         gbc.weightx = 1.0; // Hand panel takes up most of the space
         gbc.weighty = 1.0;
         controlPanel.add(scrollPane, gbc);
