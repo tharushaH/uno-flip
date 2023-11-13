@@ -6,8 +6,8 @@
  */
 public class DrawOne extends TurnSequence {
 
-    public DrawOne(Game game) {
-        super(game);
+    public DrawOne(UnoFlipModel unoFlipModel) {
+        super(unoFlipModel);
     }
 
     /**
@@ -17,10 +17,10 @@ public class DrawOne extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
-        game.setTopCard(card);
-        game.setCurrentColour(card.getColour());
-        game.setCurrentRank(card.getRank());
-        game.drawNCards(1, game.getNextTurn());
-        game.skipTurn();
+        unoFlipModel.setTopCard(card);
+        unoFlipModel.setCurrentColour(card.getColour());
+        unoFlipModel.setCurrentRank(card.getRank());
+        unoFlipModel.drawNCards(1, unoFlipModel.getNextTurn());
+        unoFlipModel.skipTurn();
     }
 }
