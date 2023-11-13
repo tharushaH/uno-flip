@@ -1,32 +1,39 @@
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 
 
 /**
  * The UnoFlipController class implements the ActionListener interface
  * to handle user interactions and events in the Uno Flip game.
  */
+
 public class UnoFlipController implements ActionListener {
     private UnoFlipModel model;
 
-    /**
+
+/**
      * Constructs a UnoFlipController with the specified UnoFlipModel.
      *
      * @param model The UnoFlipModel instance associated with the controller.
      */
+
     public UnoFlipController(UnoFlipModel model){
         this.model = model;
     }
 
 
 
-    /**
+
+/**
      * Invoked when an action occurs. Handles various actions triggered
      * by user interactions with the Uno Flip game.
      *
      * @param e The ActionEvent representing the user's action.
      */
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(UnoFlipViewFrame.START_CMD)){
@@ -76,3 +83,4 @@ public class UnoFlipController implements ActionListener {
         }
     }
 }
+
