@@ -13,6 +13,18 @@ public class UnoFlipModelTest {
 
     }
     @Test
+    public void testSetNumPlayersValid() {
+        int numPlayers = 3;
+        assertEquals(numPlayers, unoFlipModel.setNumPlayers(numPlayers));
+        assertEquals(numPlayers, unoFlipModel.getNumPlayers());
+    }
+    @Test
+    public void testSetNumPlayersInvalid() {
+        int invalidNumPlayers = 5;
+        assertEquals(0, unoFlipModel.setNumPlayers(invalidNumPlayers));
+        assertEquals(0, unoFlipModel.getNumPlayers());
+    }
+    @Test
     public void testSetUpInitialTopCard(){
         unoFlipModel.setPlayer("Bobby");
         unoFlipModel.setPlayer("Mark");
@@ -23,15 +35,14 @@ public class UnoFlipModelTest {
     }
 
     @Test
-    public void testPlayTurn(){
+    public void testPlayTurnInvalid(){
         unoFlipModel.setPlayer("Bobby");
         unoFlipModel.setPlayer("Mark");
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
         unoFlipModel.setUpInitialTopCard();
-        assertEquals(0,unoFlipModel.getCurrentTurn());
-        unoFlipModel.playTurn(1);
-        assertEquals(1, unoFlipModel.getChosenCardIndex());
+        unoFlipModel.playTurn(-1);
+        assertEquals(-1, unoFlipModel.getChosenCardIndex());
         assertNotNull(unoFlipModel.getTopCard());
 
     }
