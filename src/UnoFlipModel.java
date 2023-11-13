@@ -272,7 +272,7 @@ public class UnoFlipModel {
      * @param btnIndex - the index of the cards that is being played, -1 if player draws a card
      *
      */
-    private void playTurn(int btnIndex){        // add a
+    public void playTurn(int btnIndex){        // add a
         //player chose to draw a card
 
                 chosenCardIndex = btnIndex;
