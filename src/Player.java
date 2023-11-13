@@ -1,3 +1,4 @@
+import javax.swing.text.html.StyleSheet;
 import java.util.ArrayList;
 
 /**
@@ -77,7 +78,7 @@ public class Player {
      */
 
     public String toString(){
-        return "Your Cards: \n" + this.hand;
+        return this.hand.toString();
     }
 
     /**
@@ -132,4 +133,9 @@ public class Player {
         return this.playerScore;
     }
 
+
 }
+
+
+
+

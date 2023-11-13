@@ -6,8 +6,8 @@
  */
 public class Number extends TurnSequence{
 
-    public Number(Game game) {
-        super(game);
+    public Number(UnoFlipModel unoFlipModel) {
+        super(unoFlipModel);
     }
 
     /**
@@ -17,9 +17,9 @@ public class Number extends TurnSequence{
      */
     @Override
     public void executeSequence(Card card) {
-        game.setTopCard(card);
-        game.setCurrentColour(card.getColour());
-        game.setCurrentRank(card.getRank());
-        game.nextTurn();
+        unoFlipModel.setTopCard(card);
+        unoFlipModel.setCurrentColour(card.getColour());
+        unoFlipModel.setCurrentRank(card.getRank());
+        unoFlipModel.nextTurn();
     }
 }
