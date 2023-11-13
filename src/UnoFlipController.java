@@ -60,19 +60,21 @@ public class UnoFlipController implements ActionListener {
             this.model.setUpInitialTopCard();
         }
         if(e.getActionCommand().equals("draw")){
-            model.playTurn(-1);
+            this.model.playTurn(-1);
         }
         if(e.getActionCommand().equals("next")) {
-            model.nextTurn();
+            this.model.nextTurn();
         }
 
 
         try{
             int index = Integer.parseInt(e.getActionCommand());
-            model.playTurn(Integer.parseInt(e.getActionCommand()));
 
+            if(this.model.checkValid(Integer.parseInt(e.getActionCommand()))){
+                this.model.playTurn(Integer.parseInt(e.getActionCommand()));
+            }
         } catch (NumberFormatException err){
-            System.out.println("Invalid command: " + e.getActionCommand());
+            System.out.println("Invalid ActionCommand: " + e.getActionCommand());
         }
 
 
