@@ -31,8 +31,9 @@ public class UnoFlipModelTest {
         unoFlipModel.setUpInitialTopCard();
         assertEquals(0,unoFlipModel.getCurrentTurn());
         unoFlipModel.playTurn(1);
-        unoFlipModel.nextTurn();
-        assertEquals(1,unoFlipModel.getCurrentTurn());
+        assertEquals(1, unoFlipModel.getChosenCardIndex());
+        assertNotNull(unoFlipModel.getTopCard());
+
     }
 
     @Test
