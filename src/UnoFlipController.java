@@ -45,9 +45,10 @@ public class UnoFlipController implements ActionListener {
                     null,
                     null);
 
+            int numPlayers = 0;
             if (result == JOptionPane.OK_OPTION) {
                 String option = (String) comboBox.getSelectedItem();
-                int numPlayers = Integer.parseInt(option);
+                numPlayers = Integer.parseInt(option);
             } else {
                 System.exit(0); // absolutely must select an option, otherwise, do not start the game
             }
@@ -56,7 +57,7 @@ public class UnoFlipController implements ActionListener {
                 String name = (String) JOptionPane.showInputDialog("ENTER AMOUNT OF PLAYERS");
                 this.model.setPlayer(name);
             }
-            this.model.setUpIntialTopCard();
+            this.model.setUpInitialTopCard();
         }
         if(e.getActionCommand().equals("draw")){
             model.playTurn(-1);
@@ -68,9 +69,8 @@ public class UnoFlipController implements ActionListener {
 
         try{
             int index = Integer.parseInt(e.getActionCommand());
-            if(model.checkValid(Integer.parseInt(e.getActionCommand()))){
-                model.playTurn(Integer.parseInt(e.getActionCommand()));
-            }
+            model.playTurn(Integer.parseInt(e.getActionCommand()));
+
         } catch (NumberFormatException err){
             System.out.println("Invalid command: " + e.getActionCommand());
         }
