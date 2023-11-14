@@ -17,8 +17,7 @@ public class Wild extends TurnSequence {
     @Override
     public void executeSequence(Card card) {
         unoFlipModel.setTopCard(card);
-        unoFlipModel.setCurrentColour(unoFlipModel.getColourSelectedByWild());
+        unoFlipModel.setCurrentColour(Card.Colour.WILD);
         unoFlipModel.setCurrentRank(Card.Rank.WILD);
-        unoFlipModel.nextTurn();
     }
 }
