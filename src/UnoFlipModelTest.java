@@ -33,7 +33,6 @@ public class UnoFlipModelTest {
         unoFlipModel.setUpInitialTopCard();
         assertFalse(unoFlipModel.getTopCard().getRank().ordinal()==13);
     }
-
     @Test
     public void testPlayTurnSelfDrawOne(){
         unoFlipModel.createPlayer("Bobby");
