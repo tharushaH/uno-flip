@@ -30,6 +30,8 @@ public class UnoFlipModel {
 
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
 
+    private String status;
+
 
 
     private List<UnoFlipView> views;
@@ -239,6 +241,7 @@ public class UnoFlipModel {
         else{
             currentColour = topCard.getColour();
             currentRank = topCard.getRank();
+            status = " ";
             notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
@@ -251,11 +254,21 @@ public class UnoFlipModel {
     public void notifyViews(){
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
-            System.out.println("notifyin view");
-            System.out.println(currentColour);
-            for( UnoFlipView view: views ) {
-                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
+
+            if (topCard.isWild()){
+                status = currentColour.toString();
+                System.out.println("REACHED: view1");
+                System.out.println("STATUS: " +  status);
+                for( UnoFlipView view: views ) {
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
+                }
+            } else{
+                System.out.println("REACHED: view2");
+                for( UnoFlipView view: views ) {
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
+                }
             }
+
 
         }
     }
@@ -283,6 +296,7 @@ public class UnoFlipModel {
 
                 if(chosenCardIndex == -1){ // SELF DRAW ONE
                     turnSeqs.get(14).executeSequence(null);
+                    status = " ";
                     notifyViews();
                     return;
                 }
@@ -298,23 +312,14 @@ public class UnoFlipModel {
 
                     System.out.println("WILD CARD: " + playCard);
 
-
+                    status = " ";
                     //notify view
                     notifyViews();
                 }
                 else{ // INVALID CARD OR WILD DRAW 2
-
-                    //WILD DRAW TWO
-                    if(index== Card.Rank.WILD_DRAW_2.ordinal()){
-                        /**
-                         *  **********UPDATE VIEW
-                         */
-                    }
-                    else { // INVALID CARD
-                        /**
-                         *  **********UPDATE VIEW
-                         */
-                    }
+                    //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
+                    status = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
+                    notifyViews();
                 }
     }
 
@@ -377,6 +382,7 @@ public class UnoFlipModel {
             currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
             nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
             }
+        status = " ";
         notifyViews();
         }
 
