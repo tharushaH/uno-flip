@@ -30,6 +30,8 @@ public class UnoFlipModel {
 
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
 
+    private String status;
+
 
 
     private List<UnoFlipView> views;
@@ -251,11 +253,18 @@ public class UnoFlipModel {
     public void notifyViews(){
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
-            System.out.println("notifyin view");
-            System.out.println(currentColour);
-            for( UnoFlipView view: views ) {
-                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
+
+            if (topCard.isWild()){
+                status = currentColour.toString();
+                for( UnoFlipView view: views ) {
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
+                }
+            } else{
+                for( UnoFlipView view: views ) {
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
+                }
             }
+
 
         }
     }

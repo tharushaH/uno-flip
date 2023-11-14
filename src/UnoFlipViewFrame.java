@@ -140,14 +140,16 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         statusArea.setText("");
 
         // check wild to select colour
-        if (e.getIsWild() && e.getCurrColour().equals("WILD")){
+        if (e.getIsWild() && e.getStatus().equals("WILD")){
             ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
             controller.actionPerformed(wildEvent);
         }
-
-        if(e.getIsWild() && !(e.getCurrColour().equals("WILD"))){
-            statusArea.append("\nSelected Colour: " + e.getCurrColour());
+        if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
+            if(e.getIsWild()){
+                statusArea.append("\nSelected Colour: " + e.getStatus());
+            }
         }
+
 
 
         // update the hand panel with the new hand's cards
