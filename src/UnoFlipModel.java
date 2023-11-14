@@ -34,6 +34,8 @@ public class UnoFlipModel {
 
     private Boolean turnFinished;
 
+    private boolean skipTurn;
+
 
 
     private List<UnoFlipView> views;
@@ -54,6 +56,7 @@ public class UnoFlipModel {
         numPlayers = 0; // initialize to 0
         chosenCardIndex = -1; //initialize to -1
         turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
+        skipTurn = false;
         for(int i =0;i<=8;i++){
             turnSeqs.add(new Number(this)); //Number
         }
@@ -364,6 +367,18 @@ public class UnoFlipModel {
                 currentTurn = (currentTurn - 1 + numPlayers) % numPlayers;
                 nextPlayerIndex = (currentTurn - 1 + numPlayers) % numPlayers;
             }
+            if (skipTurn){
+                if (turnDirection) { //0->1->2->3
+                    currentTurn = (currentTurn + 1) % numPlayers;
+                    nextPlayerIndex = (currentTurn + 1) % numPlayers;
+                }
+                //counterclockwise
+                else { //0->3->2->1
+                    currentTurn = (currentTurn - 1 + numPlayers) % numPlayers;
+                    nextPlayerIndex = (currentTurn - 1 + numPlayers) % numPlayers;
+                }
+                skipTurn = false;
+            }
             status = " ";
             notifyViews();
             turnFinished = false; // reset for next player
@@ -379,10 +394,7 @@ public class UnoFlipModel {
      * Skip the turn of the next player
      */
     public void skipTurn(){
-        turnFinished = true;
-        nextTurn();
-        turnFinished = true;
-        nextTurn();
+        skipTurn = true;
     }
 
     /**
