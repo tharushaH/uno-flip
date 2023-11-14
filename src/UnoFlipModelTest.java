@@ -12,6 +12,39 @@ public class UnoFlipModelTest {
 
 
     }
+    @Test
+    public void testSetNumPlayersValid() {
+        int numPlayers = 3;
+        assertEquals(numPlayers, unoFlipModel.setNumPlayers(numPlayers));
+        assertEquals(numPlayers, unoFlipModel.getNumPlayers());
+    }
+    @Test
+    public void testSetNumPlayersInvalid() {
+        int invalidNumPlayers = 5;
+        assertEquals(0, unoFlipModel.setNumPlayers(invalidNumPlayers));
+        assertEquals(0, unoFlipModel.getNumPlayers());
+    }
+    @Test
+    public void testSetUpInitialTopCard(){
+        unoFlipModel.createPlayer("Bobby");
+        unoFlipModel.createPlayer("Mark");
+        unoFlipModel.setNumPlayers(2);
+        assertEquals(2,unoFlipModel.getNumPlayers());
+        unoFlipModel.setUpInitialTopCard();
+        assertFalse(unoFlipModel.getTopCard().getRank().ordinal()==13);
+    }
+    @Test
+    public void testPlayTurnSelfDrawOne(){
+        unoFlipModel.createPlayer("Bobby");
+        unoFlipModel.createPlayer("Mark");
+        unoFlipModel.setNumPlayers(2);
+        assertEquals(2,unoFlipModel.getNumPlayers());
+        unoFlipModel.setUpInitialTopCard();
+        unoFlipModel.playTurn(-1);
+        assertEquals(-1, unoFlipModel.getChosenCardIndex());
+        assertNotNull(unoFlipModel.getTopCard());
+
+    }
 
     @Test
     public void testEmptyGame(){
