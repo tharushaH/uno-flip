@@ -249,12 +249,12 @@ public class UnoFlipModel {
      *
      */
     public void notifyViews(){
-        System.out.println("testing");
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
             System.out.println("notifyin view");
+            System.out.println(currentColour);
             for( UnoFlipView view: views ) {
-                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString() ));
+                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
             }
 
         }
@@ -290,12 +290,14 @@ public class UnoFlipModel {
 
                 if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))){ //if valid card
                     Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
-
                     //Check if winner
                     if(isWinner(getCurrentPlayer())){
                         return;
                     }
                     turnSeqs.get(index).executeSequence(playCard);
+
+                    System.out.println("WILD CARD: " + playCard);
+
 
                     //notify view
                     notifyViews();
@@ -409,7 +411,6 @@ public class UnoFlipModel {
      */
     public void setCurrentColour(Card.Colour colour){
         currentColour = colour;
-
     }
 
     /**

@@ -64,8 +64,31 @@ public class UnoFlipController implements ActionListener {
                 }
             }
             this.model.setUpInitialTopCard();
-        }
-        else if(e.getActionCommand().equals(UnoFlipViewFrame.DRAW_CMD)){
+        } else if (e.getActionCommand().equals(UnoFlipViewFrame.WILD_CMD)) {
+            String[] numPlayerOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
+
+            JComboBox<String> comboBox = new JComboBox<>(numPlayerOptions);
+
+            int result = JOptionPane.showOptionDialog(
+                    null,
+                    comboBox,
+                    "Select colour:",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    null);
+
+            Card.Colour colour;
+            if (result == JOptionPane.OK_OPTION) {
+                String option = (String) comboBox.getSelectedItem();
+                colour = Card.Colour.valueOf(option);
+                this.model.setCurrentColour(colour);
+                this.model.notifyViews();
+            } else {
+                System.exit(0); // absolutely must select an option, otherwise, do not start the game
+            }
+        } else if(e.getActionCommand().equals(UnoFlipViewFrame.DRAW_CMD)){
             this.model.playTurn(-1);
         }
         else if(e.getActionCommand().equals(UnoFlipViewFrame.NEXT_CMD)) {

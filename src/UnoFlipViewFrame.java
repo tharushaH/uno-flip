@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
@@ -12,10 +13,12 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JLabel topCardLabel;
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
+    private JTextArea statusArea;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
     public final static String START_CMD = "start";
+    public final static String WILD_CMD = "wild";
 
     public UnoFlipViewFrame() {
         super("Uno Flip!");
@@ -97,6 +100,24 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         gbc.weighty = 0.2;
         controlPanel.add(buttonPanel, gbc);
 
+        // create a status area to hold the status
+        statusArea = new JTextArea(1,20);
+        statusArea.setPreferredSize(new Dimension(100,10));
+        statusArea.setEditable(false);
+        statusArea.setFont(new Font("Arial", Font.BOLD, 16));
+        JScrollPane statusScrollPanel = new JScrollPane(statusArea);
+
+        // create an EmptyBorder with 10 pixels of margin on all sides
+        EmptyBorder marginBorder = new EmptyBorder(10, 0, 10, 10);
+        statusScrollPanel.setBorder(marginBorder);
+
+        JLabel label = new JLabel("GAME STATUS: ");
+        JPanel statusPanel = new JPanel(new BorderLayout());
+        statusPanel.add(label, BorderLayout.NORTH);
+        statusPanel.add(statusScrollPanel, BorderLayout.CENTER);
+
+
+        this.add(statusPanel, BorderLayout.EAST);
         this.add(currTurnPanel, BorderLayout.CENTER);
         this.add(controlPanel, BorderLayout.SOUTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -114,6 +135,21 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
      */
     @Override
     public void handleUnoFlipStatusUpdate(UnoFlipEvent e) {
+
+        // clear status area
+        statusArea.setText("");
+
+        // check wild to select colour
+        if (e.getIsWild() && e.getCurrColour().equals("WILD")){
+            ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
+            controller.actionPerformed(wildEvent);
+        }
+
+        if(e.getIsWild() && !(e.getCurrColour().equals("WILD"))){
+            statusArea.append("\nSelected Colour: " + e.getCurrColour());
+        }
+
+
         // update the hand panel with the new hand's cards
         handPanel.removeAll();  // remove current hand, about to replace with new one
         String currHand = e.getCurrHand();
@@ -122,7 +158,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         for (int i = 0; i < currHandArray.length; i++) {
             JButton newCard = new JButton();
             newCard.setPreferredSize(new Dimension(200,300));
-            System.out.println(currHandArray[i]);
             newCard.setIcon(new ImageIcon("src\\images\\" + currHandArray[i] + ".png"));  // images are named after card's toString
             newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
             newCard.addActionListener(controller);
