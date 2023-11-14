@@ -20,6 +20,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String START_CMD = "start";
     public final static String WILD_CMD = "wild";
 
+    public final static String CHALLENGE_CMD = "challenge";
+
     public UnoFlipViewFrame() {
         super("Uno Flip!");
         this.setLayout(new BorderLayout(20,50));
@@ -152,7 +154,15 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         } else if (e.getStatus().startsWith("WINNER:")) {
             JOptionPane.showMessageDialog(this,e.getStatus(),"WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
             this.dispose();
-        } else{
+
+
+        } else if (e.getStatus().equals(UnoFlipModel.CHALLENGE_STATUS_MESSAGE)) {
+            ActionEvent challengeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, CHALLENGE_CMD);
+            controller.actionPerformed(challengeEvent);
+
+
+
+        }else{
             System.out.println("reached2");
             statusArea.append(e.getStatus());
         }

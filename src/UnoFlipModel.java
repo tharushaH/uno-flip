@@ -36,9 +36,10 @@ public class UnoFlipModel {
 
     private boolean skipTurn;
 
-
+    private boolean challenge;
 
     private List<UnoFlipView> views;
+    public static final String  CHALLENGE_STATUS_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
 
 
     /**
@@ -213,6 +214,13 @@ public class UnoFlipModel {
         }
     }
 
+    /**
+     * Setting the status
+     * @param status - the new status
+     */
+    public void setStatus(String status ){
+        this.status = status;
+    }
 
     /**
      * Method addPlayers is meant to be activated by the UnoFlipController to initialize a player in the UnoFlip game
@@ -222,6 +230,15 @@ public class UnoFlipModel {
 
         Player p = new Player(playerName); //create player
         addPlayer(p); //add player to arraylist
+    }
+
+
+    public void setChallenge(boolean challenge){
+        this.challenge = challenge;
+    }
+
+    public boolean getChallenge(){
+        return  challenge;
     }
 
     /**
@@ -275,6 +292,7 @@ public class UnoFlipModel {
 
         }
     }
+
 
 
     /**
