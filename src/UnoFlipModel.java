@@ -308,8 +308,10 @@ public class UnoFlipModel {
                 Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
                 //Check if winner
                 if (isWinner(getCurrentPlayer())) {
+                    System.out.println("");
                     return;
                 }
+
                 turnSeqs.get(index).executeSequence(playCard);
 
                 System.out.println("WILD CARD: " + playCard);
@@ -341,8 +343,13 @@ public class UnoFlipModel {
     private boolean isWinner(Player player){
 
         if ( player.getHandSize() == 0 ) {
+
             getCurrentPlayer().setPlayerScore(getWinnerScore());
+            status = "WINNER:" + getCurrentPlayer().getName() + " Has WON !";
+            System.out.println(status);
+            notifyViews();
             return true;
+
         } else {
             return false;
         }
@@ -394,7 +401,6 @@ public class UnoFlipModel {
         players.get(index).addCardToHand(n);
         if(index==currentTurn){
             status = players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1);
-
         }
         else{
             status =players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard;

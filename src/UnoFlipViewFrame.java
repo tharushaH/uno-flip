@@ -145,13 +145,16 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         }
         else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
             if(e.getIsWild()){
-                System.out.println("reached1");
-                System.out.println(e.getStatus());
                 statusArea.append("\nSelected Colour: " + e.getStatus());
             }
-        } else{
-            System.out.println("reached2");
+        } else if(e.getStatus().startsWith("WINNER:")) {
+
+            JOptionPane.showMessageDialog(this,e.getStatus(),"WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
+            this.dispose();
+        }else{
             statusArea.append(e.getStatus());
+
+
         }
 
 
@@ -162,6 +165,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         String[] currHandArray = currHand.split(" ");
 
         for (int i = 0; i < currHandArray.length; i++) {
+            System.out.println(currHandArray[i]);
             JButton newCard = new JButton();
             newCard.setPreferredSize(new Dimension(200,300));
             newCard.setIcon(new ImageIcon("src\\images\\" + currHandArray[i] + ".png"));  // images are named after card's toString
