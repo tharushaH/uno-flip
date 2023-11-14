@@ -149,6 +149,9 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
                 System.out.println(e.getStatus());
                 statusArea.append("\nSelected Colour: " + e.getStatus());
             }
+        } else if (e.getStatus().startsWith("WINNER:")) {
+            JOptionPane.showMessageDialog(this,e.getStatus(),"WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
+            this.dispose();
         } else{
             System.out.println("reached2");
             statusArea.append(e.getStatus());

@@ -342,10 +342,13 @@ public class UnoFlipModel {
      * @return True if the player has no cards, false otherwise
      */
     private boolean isWinner(Player player){
-
         if ( player.getHandSize() == 0 ) {
             getCurrentPlayer().setPlayerScore(getWinnerScore());
+            status = "WINNER:" + getCurrentPlayer().getName() + " Has WON !";
+            System.out.println(status);
+            notifyViews();
             return true;
+
         } else {
             return false;
         }
