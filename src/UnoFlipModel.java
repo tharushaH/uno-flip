@@ -257,10 +257,13 @@ public class UnoFlipModel {
 
             if (topCard.isWild()){
                 status = currentColour.toString();
+                System.out.println("REACHED: view1");
+                System.out.println("STATUS: " +  status);
                 for( UnoFlipView view: views ) {
-                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
                 }
             } else{
+                System.out.println("REACHED: view2");
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
@@ -314,21 +317,9 @@ public class UnoFlipModel {
                     notifyViews();
                 }
                 else{ // INVALID CARD OR WILD DRAW 2
-
-                    //WILD DRAW TWO
-                    if(index== Card.Rank.WILD_DRAW_2.ordinal()){
-
-
-                        //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
-                        status = "YOU TIRED TO PLAY A WILD DRAW 2 CARD, BUT YOU HAVE A CARD OF THE CURRENT COLOUR. TRY AGAIN ";
-                        notifyViews();
-                    }
-                    else { // INVALID CARD
-
-                        //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
-                        status = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
-                        notifyViews();
-                    }
+                    //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
+                    status = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
+                    notifyViews();
                 }
     }
 

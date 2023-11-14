@@ -143,11 +143,14 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
             controller.actionPerformed(wildEvent);
         }
-        if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
+        else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
             if(e.getIsWild()){
+                System.out.println("reached1");
+                System.out.println(e.getStatus());
                 statusArea.append("\nSelected Colour: " + e.getStatus());
             }
         } else{
+            System.out.println("reached2");
             statusArea.append(e.getStatus());
         }
 

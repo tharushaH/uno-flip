@@ -23,11 +23,6 @@ public abstract class TurnSequence {
      */
     public boolean isValid(Card card) {
         if (card.isWild()) {
-            if (card.getRank() == Card.Rank.WILD_DRAW_2) {
-                if (unoFlipModel.getCurrentPlayer().colourInHand(unoFlipModel.getCurrentColour())) {
-                    return false;   // can only play wild draw 2 if player doesn't have current colour
-                }
-            }
             return true;
         }
         return unoFlipModel.getCurrentRank() == card.getRank() || unoFlipModel.getCurrentColour() == card.getColour();
