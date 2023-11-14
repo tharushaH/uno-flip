@@ -340,6 +340,8 @@ public class UnoFlipModel {
 
 
 
+
+
             //System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
             //String input = userInput.nextLine().toUpperCase();
             for(Card.Colour c:Card.Colour.values()){
