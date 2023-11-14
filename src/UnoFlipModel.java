@@ -215,7 +215,7 @@ public class UnoFlipModel {
      * Method addPlayers is meant to be activated by the UnoFlipController to initialize a player in the UnoFlip game
      * @param playerName - the name of the player that will be initialized
      */
-    public void setPlayer(String playerName){
+    public void createPlayer(String playerName){
 
         Player p = new Player(playerName); //create player
         addPlayer(p); //add player to arraylist
