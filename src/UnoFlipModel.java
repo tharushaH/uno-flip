@@ -20,7 +20,7 @@ public class UnoFlipModel {
     private Card.Colour currentColour; //current colour of the game
 
     private Card.Rank currentRank; //current rank of the game
-    private Scanner userInput; //scanner object for user input
+
     private int numPlayers; //number of players in the game
     private int chosenCardIndex; //user inputted card index
 
@@ -31,6 +31,8 @@ public class UnoFlipModel {
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
 
     private String status;
+
+    private Boolean turnFinished;
 
 
 
@@ -223,9 +225,10 @@ public class UnoFlipModel {
      * Method setUpInitialTopCard is meant to be called by the UnoFlipController to initialize the top card at the start of the game.
      */
     public void setUpInitialTopCard(){
-        System.out.println("in set up initial top card");
+
         //draw the first card from deck
         topCard = deck.takeCard();
+        turnFinished = false;
 
         //If topcard selected is a WILD_DRAW_2
         while(topCard.getRank().ordinal()==13){
@@ -257,13 +260,10 @@ public class UnoFlipModel {
 
             if (topCard.isWild()){
                 status = currentColour.toString();
-                System.out.println("REACHED: view1");
-                System.out.println("STATUS: " +  status);
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
                 }
             } else{
-                System.out.println("REACHED: view2");
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
@@ -292,63 +292,43 @@ public class UnoFlipModel {
     public void playTurn(int btnIndex){        // add a
         //player chose to draw a card
 
-                chosenCardIndex = btnIndex;
+        if (!turnFinished) { // If turn is false ( player has not played/ drawn a card)
+            chosenCardIndex = btnIndex;
 
-                if(chosenCardIndex == -1){ // SELF DRAW ONE
-                    turnSeqs.get(14).executeSequence(null);
-                    status = " ";
-                    notifyViews();
+            if (chosenCardIndex == -1) { // SELF DRAW ONE
+                turnSeqs.get(14).executeSequence(null);
+                status = " ";
+                notifyViews();
+                turnFinished = true;
+                return;
+            }
+            int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
+
+            if (turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))) { //if valid card
+                Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
+                //Check if winner
+                if (isWinner(getCurrentPlayer())) {
                     return;
                 }
-                int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
+                turnSeqs.get(index).executeSequence(playCard);
 
-                if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))){ //if valid card
-                    Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
-                    //Check if winner
-                    if(isWinner(getCurrentPlayer())){
-                        return;
-                    }
-                    turnSeqs.get(index).executeSequence(playCard);
+                System.out.println("WILD CARD: " + playCard);
 
-                    System.out.println("WILD CARD: " + playCard);
+                status = " ";
+                //notify view
+                notifyViews();
+                turnFinished = true;
 
-                    status = " ";
-                    //notify view
-                    notifyViews();
-                }
-                else{ // INVALID CARD OR WILD DRAW 2
-                    //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
-                    status = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
-                    notifyViews();
-                }
-    }
-
-    /**
-     * Gets colour from player to handle the wild cards
-     *
-     * @return The colour that was selected
-     */
-    public Card.Colour getColourSelectedByWild(){
-        boolean colourSet = false;
-        while(!colourSet){
-            //System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
-            //String input = userInput.nextLine().toUpperCase();
-            for(Card.Colour c:Card.Colour.values()){
-                if (c.toString().equals(Card.Colour.WILD.toString())){
-                    continue;
-                }
-                if(1== 0){//input.toString().equals(c.toString())){
-                   // System.out.println("The colour is now "+c);
-                    return c;
-                }
+            } else { // INVALID CARD OR WILD DRAW 2
+                //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESSAGE
+                status = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
+                notifyViews();
             }
-            if(!colourSet) {
-               // System.out.println("Invalid colour");
-            }
+        } else {
+            status = "YOUR TURN IS FINSISHED, PRESS NEXT PLAYER";
+            notifyViews();
 
         }
-        return null;
-
     }
 
     /**
@@ -371,27 +351,37 @@ public class UnoFlipModel {
     /**
      * Go to the turn of the next player based on turn direction
      */
-    public void nextTurn(){
-        //clockwise
-        if(turnDirection){ //0->1->2->3
-            currentTurn = (currentTurn+1) % numPlayers;
-            nextPlayerIndex = (currentTurn+1) % numPlayers;
-        }
-        //counterclockwise
-        else{ //0->3->2->1
-            currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
-            nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
+    public void nextTurn() {
+
+        if (turnFinished) { //If the turn is finished, allow player to press next player
+            //clockwise
+            if (turnDirection) { //0->1->2->3
+                currentTurn = (currentTurn + 1) % numPlayers;
+                nextPlayerIndex = (currentTurn + 1) % numPlayers;
             }
-        status = " ";
-        notifyViews();
+            //counterclockwise
+            else { //0->3->2->1
+                currentTurn = (currentTurn - 1 + numPlayers) % numPlayers;
+                nextPlayerIndex = (currentTurn - 1 + numPlayers) % numPlayers;
+            }
+            status = " ";
+            notifyViews();
+            turnFinished = false; // reset for next player
+        } else { // if player tries to skip turn
+            status = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
+            notifyViews();
         }
+
+    }
 
 
     /**
      * Skip the turn of the next player
      */
     public void skipTurn(){
+        turnFinished = true;
         nextTurn();
+        turnFinished = true;
         nextTurn();
     }
 
@@ -403,10 +393,11 @@ public class UnoFlipModel {
     public void drawNCards(int n,int index){
         players.get(index).addCardToHand(n);
         if(index==currentTurn){
-           // System.out.println(players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1));
+            status = players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1);
+
         }
         else{
-            // System.out.println(players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard);
+            status =players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard;
         }
     }
 
