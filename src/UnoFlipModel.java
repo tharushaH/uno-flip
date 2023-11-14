@@ -36,6 +36,8 @@ public class UnoFlipModel {
 
     private Boolean turnFinished;
 
+    private String inputColour;
+
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
      */
@@ -64,6 +66,7 @@ public class UnoFlipModel {
 
         this.views = new ArrayList<UnoFlipView>();
         this.status = null;
+        this.inputColour = null;
         this.turnFinished = false;
 
     }
@@ -129,6 +132,30 @@ public class UnoFlipModel {
      */
     public void setTopCard(Card topCard) {
         this.topCard = topCard;
+    }
+
+    /**
+     * Sets the type of status
+     * @param status the status type that will be set
+     */
+    public void setStatus(String status){
+        this.status = status;
+    }
+
+    /**
+     * Sets the inputColour as the colour recived by the UnoFlipController
+     * @param colour - colour recived by the UnoFlipController
+     */
+    public void setInputColour(String colour){
+        this.inputColour = colour;
+    }
+
+    /**
+     * Gets the inputColour
+     * @return the input Colour
+     */
+    public String getInputColour(){
+        return this.inputColour;
     }
     /**
      * Gets the current player.
@@ -242,7 +269,7 @@ public class UnoFlipModel {
         else{
             currentColour = topCard.getColour();
             currentRank = topCard.getRank();
-            status = "STANDARD";
+            status = " ";
             notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
@@ -255,8 +282,14 @@ public class UnoFlipModel {
     public void notifyViews(){
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
+
+            String topCardName = topCard.toString();
+            if (topCard.isWild()){
+                topCardName += " (" +  getInputColour() +")";
+            }
+
             for( UnoFlipView view: views ) {
-                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(), status ));
+                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCardName, getCurrentPlayer().toString(), this.status ));
             }
 
         }
@@ -287,7 +320,7 @@ public class UnoFlipModel {
 
                     if(chosenCardIndex == -1){ // SELF DRAW ONE
                         turnSeqs.get(14).executeSequence(null);
-                        status = "STANDARD";
+                        status = " ";
                         notifyViews();
                         turnFinished = true;
                         return;
@@ -304,7 +337,7 @@ public class UnoFlipModel {
                         turnSeqs.get(index).executeSequence(playCard);
 
                         //notify view
-                        status = "STANDARD";
+                        status = " ";
                         notifyViews();
                     }
                     else{ // INVALID CARD OR WILD DRAW 2
@@ -334,30 +367,19 @@ public class UnoFlipModel {
      * @return The colour that was selected
      */
     public Card.Colour getColourSelectedByWild(){
-        boolean colourSet = false;
-        while(!colourSet){
 
+        String input = getInputColour();
 
-
-
-
-
-            //System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
-            //String input = userInput.nextLine().toUpperCase();
             for(Card.Colour c:Card.Colour.values()){
                 if (c.toString().equals(Card.Colour.WILD.toString())){
                     continue;
                 }
                 if(1== 0){//input.toString().equals(c.toString())){
-                   // System.out.println("The colour is now "+c);
+
+                    notifyViews();
                     return c;
                 }
             }
-            if(!colourSet) {
-               // System.out.println("Invalid colour");
-            }
-
-        }
         return null;
 
     }
@@ -395,12 +417,12 @@ public class UnoFlipModel {
                 currentTurn = (currentTurn - 1 + numPlayers) % numPlayers;
                 nextPlayerIndex = (currentTurn - 1 + numPlayers) % numPlayers;
             }
-            status = "STANDARD";
+            status = " ";
             notifyViews();
 
             turnFinished = false; //reset for next player
         } else {
-            status = "TURN SKIP ERROR";
+            status = "INVALID NEXT TURN";
             notifyViews();
             System.out.println("CANNOT SKIP A TURN, EITHER PLAY A CARD FROM HAND OR DRAW FROM DECK!");
         }
@@ -469,12 +491,6 @@ public class UnoFlipModel {
      */
     public ArrayList<TurnSequence> getTurnSeqs() {
         return turnSeqs;
-    }
-
-    public static void main(String[] args) {
-        UnoFlipModel unoFlipModel = new UnoFlipModel();
-        //unoFlipModel.playGame();
-
     }
 
 }

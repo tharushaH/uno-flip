@@ -20,6 +20,6 @@ public class Skip extends TurnSequence {
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
-        unoFlipModel.skipTurn();
+        //unoFlipModel.skipTurn();
     }
 }

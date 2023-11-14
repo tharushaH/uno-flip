@@ -18,9 +18,14 @@ public class WildDrawTwo extends TurnSequence {
     @Override
     public void executeSequence(Card card) {
         unoFlipModel.setTopCard(card);
+
+        unoFlipModel.setStatus("WILD");
+        unoFlipModel.notifyViews();
+
         unoFlipModel.setCurrentColour(unoFlipModel.getColourSelectedByWild());
         unoFlipModel.setCurrentRank(Card.Rank.WILD);
         unoFlipModel.drawNCards(2, unoFlipModel.getNextTurn());
-        unoFlipModel.skipTurn();
+        unoFlipModel.notifyViews();
+        //unoFlipModel.skipTurn();
     }
 }
