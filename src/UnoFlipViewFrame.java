@@ -102,7 +102,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
 
         // create a status area to hold the status
         statusArea = new JTextArea(1,20);
-        statusArea.setPreferredSize(new Dimension(100,10));
         statusArea.setEditable(false);
         statusArea.setFont(new Font("Arial", Font.BOLD, 16));
         JScrollPane statusScrollPanel = new JScrollPane(statusArea);
@@ -148,6 +147,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             if(e.getIsWild()){
                 statusArea.append("\nSelected Colour: " + e.getStatus());
             }
+        } else{
+            statusArea.append(e.getStatus());
         }
 
 

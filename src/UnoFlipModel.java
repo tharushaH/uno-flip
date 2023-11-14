@@ -241,6 +241,7 @@ public class UnoFlipModel {
         else{
             currentColour = topCard.getColour();
             currentRank = topCard.getRank();
+            status = " ";
             notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
@@ -261,7 +262,7 @@ public class UnoFlipModel {
                 }
             } else{
                 for( UnoFlipView view: views ) {
-                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),getCurrentColour().toString(),this.currentRank == Card.Rank.WILD ));
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
             }
 
@@ -292,6 +293,7 @@ public class UnoFlipModel {
 
                 if(chosenCardIndex == -1){ // SELF DRAW ONE
                     turnSeqs.get(14).executeSequence(null);
+                    status = " ";
                     notifyViews();
                     return;
                 }
@@ -307,7 +309,7 @@ public class UnoFlipModel {
 
                     System.out.println("WILD CARD: " + playCard);
 
-
+                    status = " ";
                     //notify view
                     notifyViews();
                 }
@@ -315,14 +317,17 @@ public class UnoFlipModel {
 
                     //WILD DRAW TWO
                     if(index== Card.Rank.WILD_DRAW_2.ordinal()){
-                        /**
-                         *  **********UPDATE VIEW
-                         */
+
+
+                        //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
+                        status = "YOU TIRED TO PLAY A WILD DRAW 2 CARD, BUT YOU HAVE A CARD OF THE CURRENT COLOUR. TRY AGAIN ";
+                        notifyViews();
                     }
                     else { // INVALID CARD
-                        /**
-                         *  **********UPDATE VIEW
-                         */
+
+                        //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESAGE
+                        status = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
+                        notifyViews();
                     }
                 }
     }
@@ -386,6 +391,7 @@ public class UnoFlipModel {
             currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
             nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
             }
+        status = " ";
         notifyViews();
         }
 
