@@ -4,6 +4,7 @@ public class UnoFlipEvent extends EventObject {
     private final String currPlayerName;
     private final String topCard;                 // toString() of the top card
     private final String currHand;                // toString() of the current hand
+    private final String status;
 
     /**
      * Constructs a Uno Flip! Event.
@@ -11,11 +12,13 @@ public class UnoFlipEvent extends EventObject {
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand) {
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status) {
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;
         this.currHand = currHand;
+        this.status = status;
+
     }
 
     /**
@@ -44,4 +47,10 @@ public class UnoFlipEvent extends EventObject {
     public String getCurrHand() {
         return currHand;
     }
+
+    /**
+     * Gets the string representation of the status of the event.
+     * @return the string representation of the status
+     */
+    public String getStatus(){return status;}
 }

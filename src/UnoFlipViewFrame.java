@@ -128,6 +128,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             newCard.addActionListener(controller);
             handPanel.add(newCard);
         }
+        System.out.println("");
 
         // update the top card
         topCardLabel.setIcon(new ImageIcon("src\\images\\" + e.getTopCard() + ".png"));

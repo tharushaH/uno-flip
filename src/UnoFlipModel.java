@@ -30,10 +30,11 @@ public class UnoFlipModel {
 
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
 
-
-
     private List<UnoFlipView> views;
 
+    private String status;
+
+    private Boolean turnFinished;
 
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
@@ -62,6 +63,8 @@ public class UnoFlipModel {
 
 
         this.views = new ArrayList<UnoFlipView>();
+        this.status = null;
+        this.turnFinished = false;
 
     }
 
@@ -211,7 +214,7 @@ public class UnoFlipModel {
      * Method addPlayers is meant to be activated by the UnoFlipController to initialize a player in the UnoFlip game
      * @param playerName - the name of the player that will be initialized
      */
-    public void setPlayer(String playerName){
+    public void createPlayer(String playerName){
 
         Player p = new Player(playerName); //create player
         addPlayer(p); //add player to arraylist
@@ -239,6 +242,7 @@ public class UnoFlipModel {
         else{
             currentColour = topCard.getColour();
             currentRank = topCard.getRank();
+            status = "STANDARD";
             notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
@@ -249,12 +253,10 @@ public class UnoFlipModel {
      *
      */
     public void notifyViews(){
-        System.out.println("testing");
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
-            System.out.println("notifyin view");
             for( UnoFlipView view: views ) {
-                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString() ));
+                view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(), status ));
             }
 
         }
@@ -281,38 +283,48 @@ public class UnoFlipModel {
 
                 chosenCardIndex = btnIndex;
 
-                if(chosenCardIndex == -1){ // SELF DRAW ONE
-                    turnSeqs.get(14).executeSequence(null);
-                    notifyViews();
-                    return;
-                }
-                int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
+                if(!turnFinished){ // IF Turn Finished is false (player has not played card or drawn card)
 
-                if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))){ //if valid card
-                    Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
-
-                    //Check if winner
-                    if(isWinner(getCurrentPlayer())){
+                    if(chosenCardIndex == -1){ // SELF DRAW ONE
+                        turnSeqs.get(14).executeSequence(null);
+                        status = "STANDARD";
+                        notifyViews();
+                        turnFinished = true;
                         return;
                     }
-                    turnSeqs.get(index).executeSequence(playCard);
+                    int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
 
-                    //notify view
+                    if(turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))){ //if valid card
+                        Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
+
+                        //Check if winner
+                        if(isWinner(getCurrentPlayer())){
+                            return;
+                        }
+                        turnSeqs.get(index).executeSequence(playCard);
+
+                        //notify view
+                        status = "STANDARD";
+                        notifyViews();
+                    }
+                    else{ // INVALID CARD OR WILD DRAW 2
+
+                        //WILD DRAW TWO
+                        if(index== Card.Rank.WILD_DRAW_2.ordinal()){
+                            status = "WILD DRAW 2";
+                            notifyViews();
+                        }
+                        else { // INVALID CARD
+                            status = "INVALID CARD PLACED";
+                            notifyViews();
+                        }
+                    }
+                    turnFinished = true;
+                } else {
+                    status = "TURN FINISHED";
                     notifyViews();
-                }
-                else{ // INVALID CARD OR WILD DRAW 2
+                    System.out.println("YOUR TURN IS DONE, PRESS NEXT PLAYER!");
 
-                    //WILD DRAW TWO
-                    if(index== Card.Rank.WILD_DRAW_2.ordinal()){
-                        /**
-                         *  **********UPDATE VIEW
-                         */
-                    }
-                    else { // INVALID CARD
-                        /**
-                         *  **********UPDATE VIEW
-                         */
-                    }
                 }
     }
 
@@ -324,6 +336,10 @@ public class UnoFlipModel {
     public Card.Colour getColourSelectedByWild(){
         boolean colourSet = false;
         while(!colourSet){
+
+
+
+
             //System.out.println("Choose a colour(RED,BLUE,YELLOW,GREEN): ");
             //String input = userInput.nextLine().toUpperCase();
             for(Card.Colour c:Card.Colour.values()){
@@ -364,19 +380,30 @@ public class UnoFlipModel {
     /**
      * Go to the turn of the next player based on turn direction
      */
-    public void nextTurn(){
-        //clockwise
-        if(turnDirection){ //0->1->2->3
-            currentTurn = (currentTurn+1) % numPlayers;
-            nextPlayerIndex = (currentTurn+1) % numPlayers;
-        }
-        //counterclockwise
-        else{ //0->3->2->1
-            currentTurn = (currentTurn-1 + numPlayers)%numPlayers;
-            nextPlayerIndex = (currentTurn-1+numPlayers)%numPlayers;
+    public void nextTurn() {
+        if (turnFinished) { // If the player has played a card or drawn one, change player when next turn is pressed
+
+            //clockwise
+            if (turnDirection) { //0->1->2->3
+                currentTurn = (currentTurn + 1) % numPlayers;
+                nextPlayerIndex = (currentTurn + 1) % numPlayers;
             }
-        notifyViews();
+            //counterclockwise
+            else { //0->3->2->1
+                currentTurn = (currentTurn - 1 + numPlayers) % numPlayers;
+                nextPlayerIndex = (currentTurn - 1 + numPlayers) % numPlayers;
+            }
+            status = "STANDARD";
+            notifyViews();
+
+            turnFinished = false; //reset for next player
+        } else {
+            status = "TURN SKIP ERROR";
+            notifyViews();
+            System.out.println("CANNOT SKIP A TURN, EITHER PLAY A CARD FROM HAND OR DRAW FROM DECK!");
         }
+
+    }
 
 
     /**

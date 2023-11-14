@@ -56,7 +56,7 @@ public class UnoFlipController implements ActionListener {
 
             for (int i = 0; i < numPlayers; i++){
                 String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
-                this.model.setPlayer(name);
+                this.model.createPlayer(name);
             }
             this.model.setUpInitialTopCard();
         }
