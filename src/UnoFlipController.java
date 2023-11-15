@@ -15,7 +15,7 @@ public class UnoFlipController implements ActionListener {
     private UnoFlipModel model;
 
 
-/**
+    /**
      * Constructs a UnoFlipController with the specified UnoFlipModel.
      *
      * @param model The UnoFlipModel instance associated with the controller.
@@ -28,7 +28,7 @@ public class UnoFlipController implements ActionListener {
 
 
 
-/**
+    /**
      * Invoked when an action occurs. Handles various actions triggered
      * by user interactions with the Uno Flip game.
      *
@@ -75,26 +75,29 @@ public class UnoFlipController implements ActionListener {
             String[] numPlayerOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
 
             JComboBox<String> comboBox = new JComboBox<>(numPlayerOptions);
+            while(true){
+                int result = JOptionPane.showOptionDialog(
+                        null,
+                        comboBox,
+                        "Select colour:",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        null);
 
-            int result = JOptionPane.showOptionDialog(
-                    null,
-                    comboBox,
-                    "Select colour:",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    null);
-
-            Card.Colour colour;
-            if (result == JOptionPane.OK_OPTION) {
-                String option = (String) comboBox.getSelectedItem();
-                colour = Card.Colour.valueOf(option);
-                this.model.setCurrentColour(colour);
-                this.model.notifyViews();
-            } else {
-                System.exit(0); // absolutely must select an option, otherwise, do not start the game
+                Card.Colour colour;
+                if (result == JOptionPane.OK_OPTION) {
+                    String option = (String) comboBox.getSelectedItem();
+                    colour = Card.Colour.valueOf(option);
+                    this.model.setCurrentColour(colour);
+                    this.model.notifyViews();
+                    break;
+                } else if (result == JOptionPane.CLOSED_OPTION){
+                    continue;
+                }
             }
+
         } else if(e.getActionCommand().equals(UnoFlipViewFrame.DRAW_CMD)){
             this.model.playTurn(-1);
         }
