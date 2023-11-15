@@ -291,7 +291,6 @@ public class UnoFlipModel {
                 }
             } else{
                 for( UnoFlipView view: views ) {
-                    System.out.println("IM HERE IM HERE");
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
             }
@@ -375,7 +374,6 @@ public class UnoFlipModel {
         if ( player.getHandSize() == 0 ) {
             getCurrentPlayer().setPlayerScore(getWinnerScore());
             status = "WINNER:" + getCurrentPlayer().getName() + " Has WON !";
-            System.out.println(status);
             notifyViews();
             return true;
 
