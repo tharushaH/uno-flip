@@ -40,6 +40,7 @@ public class UnoFlipModel {
 
     private List<UnoFlipView> views;
     public static final String  CHALLENGE_STATUS_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
+    private boolean dontAsk;
 
 
     /**
@@ -58,6 +59,7 @@ public class UnoFlipModel {
         chosenCardIndex = -1; //initialize to -1
         turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
         skipTurn = false;
+        dontAsk = false;
         for(int i =0;i<=8;i++){
             turnSeqs.add(new Number(this)); //Number
         }
@@ -268,7 +270,7 @@ public class UnoFlipModel {
         else{
             currentColour = topCard.getColour();
             currentRank = topCard.getRank();
-            status = " ";
+            status = "";
             notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
@@ -281,15 +283,14 @@ public class UnoFlipModel {
     public void notifyViews(){
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
-
-
-            if (topCard.isWild() && !status.equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") && !status.equals("GUILTY:YOU DRAW 2 CARDS") ){
+            if (topCard.isWild() && !status.equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") && !status.equals("GUILTY:YOU DRAW 2 CARDS") && !dontAsk){
                 status = currentColour.toString();
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
                 }
             } else{
-                System.out.println("Current status: " + status);
+                if(status.equals("done"))
+                    status = "";
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
@@ -324,7 +325,7 @@ public class UnoFlipModel {
 
             if (chosenCardIndex == -1) { // SELF DRAW ONE
                 turnSeqs.get(14).executeSequence(null);
-                status = " ";
+                status = "";
                 notifyViews();
                 turnFinished = true;
                 return;
@@ -335,7 +336,6 @@ public class UnoFlipModel {
             if (index == 13){
                 turnSeqs.get(index).executeSequence(getCurrentPlayer().playCard(chosenCardIndex));
                 turnFinished = true;
-
             } else if (turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))) { //if valid card
                 Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
                 //Check if winner
@@ -344,12 +344,11 @@ public class UnoFlipModel {
                 }
                 turnSeqs.get(index).executeSequence(playCard);
 
-                System.out.println("WILD CARD: " + playCard);
-
-                status = " ";
+                status = "";
                 //notify view
                 notifyViews();
                 turnFinished = true;
+                dontAsk = false;
 
             } else { // INVALID CARD OR WILD DRAW 2
                 //VIEW WILL CREATE A JOPTIONPANE FOR THIS MESSAGE
@@ -374,7 +373,6 @@ public class UnoFlipModel {
         if ( player.getHandSize() == 0 ) {
             getCurrentPlayer().setPlayerScore(getWinnerScore());
             status = "WINNER:" + getCurrentPlayer().getName() + " Has WON !";
-            System.out.println(status);
             notifyViews();
             return true;
 
@@ -411,7 +409,7 @@ public class UnoFlipModel {
                 }
                 skipTurn = false;
             }
-            status = " ";
+            status = "";
             notifyViews();
             turnFinished = false; // reset for next player
         } else { // if player tries to skip turn
@@ -482,6 +480,24 @@ public class UnoFlipModel {
      */
     public ArrayList<TurnSequence> getTurnSeqs() {
         return turnSeqs;
+    }
+
+    /**
+     * Get boolean for dontAsk
+     *
+     * @return true if model should not ask, false otherwise
+     */
+    public boolean getDontAsk() {
+        return dontAsk;
+    }
+
+    /**
+     * Set boolean for dontAsk
+     *
+     * @param dontAsk set the ask permission
+     */
+    public void setDontAsk(boolean dontAsk) {
+        this.dontAsk = dontAsk;
     }
 
     public static void main(String[] args) {

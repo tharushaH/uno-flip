@@ -140,15 +140,14 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         // clear status area
         statusArea.setText("");
 
+
         // check wild to select colour
         if (e.getIsWild() && e.getStatus().equals("WILD")){
             ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
             controller.actionPerformed(wildEvent);
         }
         else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
-            System.out.println("STATUS: " + e.getStatus());
             if (e.getIsWild()){
-                System.out.println(e.getStatus());
                 statusArea.append("\nSelected Colour: " + e.getStatus());
                 if(e.getTopCard().equals("wild_draw_2")){
                     ActionEvent challengeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, CHALLENGE_CMD);
@@ -161,10 +160,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
 
 
         } else if (e.getStatus().equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") || e.getStatus().equals(("GUILTY:YOU DRAW 2 CARDS"))){
-            System.out.println("Reached: " + e.getStatus());
             statusArea.append(e.getStatus());
         }else {
-            System.out.println("reached2");
             statusArea.append(e.getStatus());
         }
 
