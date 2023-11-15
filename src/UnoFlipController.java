@@ -101,6 +101,9 @@ public class UnoFlipController implements ActionListener {
         else if(e.getActionCommand().equals(UnoFlipViewFrame.NEXT_CMD)) {
             this.model.nextTurn();
         } else if (e.getActionCommand().equals(UnoFlipViewFrame.CHALLENGE_CMD) ) {
+            System.out.println("******************************************");
+
+
             boolean challenge;
             int result = JOptionPane.showConfirmDialog(null, "Do you want to continue?", "Confirmation", JOptionPane.YES_NO_OPTION);
 

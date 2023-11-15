@@ -17,24 +17,30 @@ public class WildDrawTwo extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
+
+
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(Card.Colour.WILD);
         unoFlipModel.setCurrentRank(Card.Rank.WILD_DRAW_2);
-
+        System.out.println("&&&&&&&&&&&&*JNASNCKASNCKAJ");
         unoFlipModel.setStatus(UnoFlipModel.CHALLENGE_STATUS_MESSAGE);
+        System.out.println(unoFlipModel.getStatus());
         unoFlipModel.notifyViews();
 
         if( unoFlipModel.getChallenge()) { // If next player challenges
-
+            System.out.println("UP NEXT");
             if( isValid(unoFlipModel.getTopCard())) { // IF WILD DRAW 2 is valid
                 unoFlipModel.drawNCards(4, unoFlipModel.getNextTurn());
                 unoFlipModel.setStatus("INNOCENT: NEXT PLAYER DRAWS 4 CARDS");
+                System.out.println(unoFlipModel.getStatus());
                 unoFlipModel.notifyViews();
-
+                unoFlipModel.setStatus(" ");
             } else {                    // If WILD DRAW 2 is not valid
                 unoFlipModel.drawNCards(2, unoFlipModel.getCurrentTurn());
                 unoFlipModel.setStatus("GUILTY:YOU DRAW 2 CARDS");
+                System.out.println(unoFlipModel.getStatus());
                 unoFlipModel.notifyViews();
+                unoFlipModel.setStatus(" ");
             }
 
         } else {

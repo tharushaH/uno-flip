@@ -182,6 +182,10 @@ public class UnoFlipModel {
         return numPlayers;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     /**
      * Returns the chosen card index of the user,used for testing only
      * @return The card index chosen by the user
@@ -278,12 +282,14 @@ public class UnoFlipModel {
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
 
-            if (topCard.isWild()){
+
+            if (topCard.isWild() && !status.equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") && !status.equals("GUILTY:YOU DRAW 2 CARDS") ){
                 status = currentColour.toString();
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
                 }
             } else{
+                System.out.println("Current status: " + status);
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
@@ -325,7 +331,12 @@ public class UnoFlipModel {
             }
             int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
 
-            if (turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))) { //if valid card
+            // Wild draw 2
+            if (index == 13){
+                turnSeqs.get(index).executeSequence(getCurrentPlayer().playCard(chosenCardIndex));
+                turnFinished = true;
+
+            } else if (turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))) { //if valid card
                 Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
                 //Check if winner
                 if (isWinner(getCurrentPlayer())) {
