@@ -16,10 +16,9 @@ UNO Flip is a variation of the traditional UNO card game with additional "Flip" 
 ```shell
   java -jar ..\artifacts\unoflip_jar\UnoFlip.jar
 ```
+3. Follow the on-screen instructions to play the game. The game rules closely follow the official UNO Flip rules.
 ## Issues
 Issue with the images appearing in the JAR file. Please run the UnoFlipViewFrame.java file from IDE.
-
-Follow the on-screen instructions to play the game. The game rules closely follow the official UNO Flip rules.
 
 ## Features
 
