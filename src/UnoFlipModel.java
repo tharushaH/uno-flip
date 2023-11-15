@@ -36,9 +36,12 @@ public class UnoFlipModel {
 
     private boolean skipTurn;
 
-
-
     private List<UnoFlipView> views;
+
+    private boolean challenge;
+
+    public static final String  CHALLENGE_STATUS_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
+    private boolean dontAsk;
 
 
     /**
@@ -57,6 +60,7 @@ public class UnoFlipModel {
         chosenCardIndex = -1; //initialize to -1
         turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
         skipTurn = false;
+        dontAsk = false;
         for(int i =0;i<=8;i++){
             turnSeqs.add(new Number(this)); //Number
         }
@@ -182,6 +186,25 @@ public class UnoFlipModel {
     }
 
     /**
+     * Returns the string representation of current status
+     *
+     * @return string representation of current status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+
+    /**
+     * Setting the status
+     * @param status - the new status
+     */
+    public void setStatus(String status ){
+        this.status = status;
+    }
+
+
+    /**
      * Returns the chosen card index of the user,used for testing only
      * @return The card index chosen by the user
      */
@@ -261,7 +284,7 @@ public class UnoFlipModel {
         if(!views.isEmpty()) {
             //send UnoFlipEvent to view.
 
-            if (topCard.isWild()){
+            if (topCard.isWild() && !status.equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") && !status.equals("GUILTY:YOU DRAW 2 CARDS") && !dontAsk){
                 status = currentColour.toString();
                 for( UnoFlipView view: views ) {
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
@@ -313,15 +336,16 @@ public class UnoFlipModel {
             }
             int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
 
-            if (turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))) { //if valid card
+            if (index == 13){
+                turnSeqs.get(index).executeSequence(getCurrentPlayer().playCard(chosenCardIndex));
+                turnFinished = true;
+            } else if (turnSeqs.get(index).isValid(getCurrentPlayer().getCard(chosenCardIndex))) { //if valid card
                 Card playCard = getCurrentPlayer().playCard(chosenCardIndex);
                 //Check if winner
                 if (isWinner(getCurrentPlayer())) {
                     return;
                 }
                 turnSeqs.get(index).executeSequence(playCard);
-
-                System.out.println("WILD CARD: " + playCard);
 
                 status = " ";
                 //notify view
@@ -473,6 +497,32 @@ public class UnoFlipModel {
             }
         }
         return true;
+    }
+
+    public void setChallenge(boolean challenge){
+        this.challenge = challenge;
+    }
+
+    public boolean getChallenge(){
+        return  challenge;
+    }
+
+    /**
+     * Get boolean for dontAsk
+     *
+     * @return true if model should not ask, false otherwise
+     */
+    public boolean getDontAsk() {
+        return dontAsk;
+    }
+
+    /**
+     * Set boolean for dontAsk
+     *
+     * @param dontAsk set the ask permission
+     */
+    public void setDontAsk(boolean dontAsk) {
+        this.dontAsk = dontAsk;
     }
 
     public static void main(String[] args) {
