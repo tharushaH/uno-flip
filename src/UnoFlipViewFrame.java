@@ -145,7 +145,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         }
         else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
             if(e.getIsWild()){
-                System.out.println("reached1");
                 System.out.println(e.getStatus());
                 statusArea.append("\nSelected Colour: " + e.getStatus());
             }
@@ -153,7 +152,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             JOptionPane.showMessageDialog(this,e.getStatus(),"WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
             this.dispose();
         } else{
-            System.out.println("reached2");
+            System.out.println("IM ALSO HERE IM ALSO HERE: " +  e.getStatus());
             statusArea.append(e.getStatus());
         }
 

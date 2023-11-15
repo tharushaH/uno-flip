@@ -268,6 +268,7 @@ public class UnoFlipModel {
                 }
             } else{
                 for( UnoFlipView view: views ) {
+                    System.out.println("IM HERE IM HERE");
                     view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
                 }
             }
@@ -299,10 +300,15 @@ public class UnoFlipModel {
             chosenCardIndex = btnIndex;
 
             if (chosenCardIndex == -1) { // SELF DRAW ONE
-                turnSeqs.get(14).executeSequence(null);
-                status = " ";
-                notifyViews();
-                turnFinished = true;
+                if (validSelfDrawOne()){
+                    turnSeqs.get(14).executeSequence(null);
+                    status = " ";
+                    notifyViews();
+                    turnFinished = true;
+                } else{
+                    status = "YOU HAVE PLAYABLE CARD";
+                    notifyViews();
+                }
                 return;
             }
             int index = getCurrentPlayer().getCard(chosenCardIndex).getRank().ordinal();
@@ -453,6 +459,20 @@ public class UnoFlipModel {
      */
     public ArrayList<TurnSequence> getTurnSeqs() {
         return turnSeqs;
+    }
+
+    /**
+     * Return the boolean to see if the self draw one is playable.
+     *
+     * @return return true if valid, otherwise false.
+     */
+    private boolean validSelfDrawOne(){
+        for (int i = 0; i < this.getCurrentPlayer().getHandSize();i++){
+            if (this.getCurrentPlayer().getCard(i).getRank() == this.getCurrentRank() || this.getCurrentPlayer().getCard(i).getColour() == this.getCurrentColour()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
