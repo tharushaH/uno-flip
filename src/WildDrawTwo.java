@@ -20,7 +20,7 @@ public class WildDrawTwo extends TurnSequence {
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(Card.Colour.WILD);
         unoFlipModel.setCurrentRank(Card.Rank.WILD_DRAW_2);
-        unoFlipModel.setStatus(UnoFlipModel.CHALLENGE_STATUS_MESSAGE);
+        unoFlipModel.setStatus(UnoFlipModel.STATUS_CHALLENGE_MESSAGE);
         unoFlipModel.notifyViews();
 
         if( unoFlipModel.getChallenge()) { // If next player challenges
