@@ -102,9 +102,11 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         controlPanel.add(buttonPanel, gbc);
 
         // create a status area to hold the status
-        statusArea = new JTextArea(1,20);
+        statusArea = new JTextArea(1,30);
         statusArea.setEditable(false);
-        statusArea.setFont(new Font("Arial", Font.BOLD, 16));
+        statusArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        statusArea.setWrapStyleWord(true);
+        statusArea.setLineWrap(true);
         JScrollPane statusScrollPanel = new JScrollPane(statusArea);
 
         // create an EmptyBorder with 10 pixels of margin on all sides
