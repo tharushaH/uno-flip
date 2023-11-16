@@ -77,148 +77,6 @@ public class UnoFlipModel {
     }
 
 
-    /**
-     * Method addUnoFlipView adds a view to the view list
-     * @param view - the view that will be added to the list
-     */
-    public void addUnoFlipView(UnoFlipView view){
-        this.views.add(view);
-    }
-
-    /**
-     * Method removeUnoFlipView removes view from the view list
-     * @param view - the view that will be removed from the list
-     */
-    public void removeUnoFlipView(UnoFlipView view){
-        this.views.remove(view);
-    }
-
-
-    /**
-     * Gets the current colour of the game.
-     *
-     * @return The current colour
-     */
-    public Card.Colour getCurrentColour() {
-        return currentColour;
-    }
-
-    /**
-     * Gets the current rank of the game.
-     *
-     * @return The current rank
-     */
-    public Card.Rank getCurrentRank() {
-        return currentRank;
-    }
-
-    /**
-     * Sets the current rank of the game.
-     *
-     * @param currentRank The rank to be set
-     */
-    public void setCurrentRank(Card.Rank currentRank) {
-        this.currentRank = currentRank;
-    }
-
-    /**
-     * Gets the index of the player whose turn it is.
-     *
-     * @return The index of the current player.
-     */
-    public int getCurrentTurn() {
-        return currentTurn;
-    }
-
-    /**
-     * Sets the top card of the game.
-     *
-     * @param topCard The card to be set as the top card.
-     */
-    public void setTopCard(Card topCard) {
-        this.topCard = topCard;
-    }
-    /**
-     * Gets the current player.
-     *
-     * @return The current player.
-     */
-    public Player getCurrentPlayer(){
-        return players.get(currentTurn);
-    }
-    /**
-     * Flips the direction of the game.
-     */
-    public void flipTurnDirection(){
-        turnDirection = !turnDirection;
-    }
-    /**
-     * Gets the index of the next player.
-     *
-     * @return The index of the next player.
-     */
-    public int getNextTurn(){
-        return nextPlayerIndex;
-    }
-
-    /**
-     * Returns an ArrayList of players in the current game,used for testing only
-     * @return The ArrayList of players
-     */
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    /**
-     * Returns the turn direction,used for testing only
-     * @return The turn direction
-     */
-    public boolean getTurnDirection() {
-        return turnDirection;
-    }
-
-    /**
-     * Returns the number of players,used for testing only
-     * @return The number of players
-     */
-    public int getNumPlayers() {
-        return numPlayers;
-    }
-
-    /**
-     * Returns the string representation of current status
-     *
-     * @return string representation of current status
-     */
-    public String getStatus() {
-        return status;
-    }
-
-
-    /**
-     * Setting the status
-     * @param status - the new status
-     */
-    public void setStatus(String status ){
-        this.status = status;
-    }
-
-
-    /**
-     * Returns the chosen card index of the user,used for testing only
-     * @return The card index chosen by the user
-     */
-    public int getChosenCardIndex(){
-        return chosenCardIndex;
-    }
-
-    /**
-     * Returns the top card in play,used for testing only
-     * @return The top card
-     */
-    public Card getTopCard(){
-        return topCard;
-    }
 
     /**
      * Returns the number of players, used for testing only
@@ -236,7 +94,6 @@ public class UnoFlipModel {
         }
     }
 
-
     /**
      * Method addPlayers is meant to be activated by the UnoFlipController to initialize a player in the UnoFlip game
      * @param playerName - the name of the player that will be initialized
@@ -245,6 +102,14 @@ public class UnoFlipModel {
 
         Player p = new Player(playerName); //create player
         addPlayer(p); //add player to arraylist
+    }
+
+    /**
+     * Adds a player to the game.
+     * @param player The player to be added
+     */
+    public void addPlayer(Player player){
+        players.add(player);
     }
 
     /**
@@ -277,8 +142,7 @@ public class UnoFlipModel {
 
 
     /**
-     * Method notifyViews is meant to notify subscribers view about any changes that will effect the view of the UnoFlip Game
-     *
+     * Method notifyViews is meant to notify subscribers view about any changes that will affect the view of the UnoFlip Game
      */
     public void notifyViews(){
         if(!views.isEmpty()) {
@@ -301,19 +165,9 @@ public class UnoFlipModel {
 
 
     /**
-     * Adds a player to the game.
-     *
-     * @param player The player to be added
-     */
-    public void addPlayer(Player player){
-        players.add(player);
-    }
-
-    /**
      * PlayTurn method is used to handle game logic request sent by UnoFlipController for when a card is placed by the player
      * or when the player draws a card.
      * @param btnIndex - the index of the cards that is being played, -1 if player draws a card
-     *
      */
     public void playTurn(int btnIndex){        // add a
         //player chose to draw a card
@@ -363,10 +217,10 @@ public class UnoFlipModel {
         }
     }
 
+
     /**
      * Check if the player has no cards remaining
      * If player has no reamining cards, will update the players score
-     *
      * @param player The player that is checked
      * @return True if the player has no cards, false otherwise
      */
@@ -379,6 +233,22 @@ public class UnoFlipModel {
 
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Draw the amount of cards(n) based on which player(index) will be receiving them
+     * @param n The amount of cards to be added to the hand of the player
+     * @param index The index of the player that will be receiving cards
+     */
+    public void drawNCards(int n,int index){
+        players.get(index).addCardToHand(n);
+        if(index==currentTurn){
+            status = players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1);
+
+        }
+        else{
+            status =players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard;
         }
     }
 
@@ -420,42 +290,8 @@ public class UnoFlipModel {
 
     }
 
-
-    /**
-     * Skip the turn of the next player
-     */
-    public void skipTurn(){
-        skipTurn = true;
-    }
-
-    /**
-     * Draw the amount of cards(n) based on which player(index) will be receiving them
-     * @param n The amount of cards to be added to the hand of the player
-     * @param index The index of the player that will be receiving cards
-     */
-    public void drawNCards(int n,int index){
-        players.get(index).addCardToHand(n);
-        if(index==currentTurn){
-            status = players.get(index).getName()+" has drawn a card:"+players.get(index).getCard(players.get(index).getHandSize()-1);
-
-        }
-        else{
-            status =players.get(index).getName()+" has to draw "+n+" card(s) due to "+topCard;
-        }
-    }
-
-
-    /**
-     * Set the current colour of the game
-     * @param colour The colour to be set as the current colour
-     */
-    public void setCurrentColour(Card.Colour colour){
-        currentColour = colour;
-    }
-
     /**
      * Returns the score of the winner
-     *
      * @return The score of the winner
      */
     private int getWinnerScore(){
@@ -475,17 +311,7 @@ public class UnoFlipModel {
     }
 
     /**
-     * Return the ArrayList of sequences, for testing.
-     *
-     * @return return a list of the sequences.
-     */
-    public ArrayList<TurnSequence> getTurnSeqs() {
-        return turnSeqs;
-    }
-
-    /**
      * Return the boolean to see if the self draw one is playable.
-     *
      * @return return true if valid, otherwise false.
      */
     private boolean validSelfDrawOne(){
@@ -497,17 +323,144 @@ public class UnoFlipModel {
         return true;
     }
 
-    public void setChallenge(boolean challenge){
-        this.challenge = challenge;
+    /**
+     * Skip the turn of the next player
+     */
+    public void skipTurn(){
+        skipTurn = true;
     }
 
+    /**
+     * Flips the direction of the game.
+     */
+    public void flipTurnDirection(){
+        turnDirection = !turnDirection;
+    }
+
+
+    /**
+     * Method addUnoFlipView adds a view to the view list
+     * @param view - the view that will be added to the list
+     */
+    public void addUnoFlipView(UnoFlipView view){
+        this.views.add(view);
+    }
+
+    /**
+     * Method removeUnoFlipView removes view from the view list
+     * @param view - the view that will be removed from the list
+     */
+    public void removeUnoFlipView(UnoFlipView view){
+        this.views.remove(view);
+    }
+
+
+    /**
+     * Gets the current colour of the game.
+     * @return The current colour
+     */
+    public Card.Colour getCurrentColour() {
+        return currentColour;
+    }
+
+    /**
+     * Gets the current rank of the game.
+     * @return The current rank
+     */
+    public Card.Rank getCurrentRank() {
+        return currentRank;
+    }
+
+    /**
+     * Gets the index of the player whose turn it is.
+     * @return The index of the current player.
+     */
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    /**
+     * Gets the current player.
+     * @return The current player.
+     */
+    public Player getCurrentPlayer(){
+        return players.get(currentTurn);
+    }
+
+    /**
+     * Gets the index of the next player.
+     * @return The index of the next player.
+     */
+    public int getNextTurn(){
+        return nextPlayerIndex;
+    }
+
+    /**
+     * Returns an ArrayList of players in the current game,used for testing only
+     * @return The ArrayList of players
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Returns the turn direction,used for testing only
+     * @return The turn direction
+     */
+    public boolean getTurnDirection() {
+        return turnDirection;
+    }
+
+    /**
+     * Returns the number of players,used for testing only
+     * @return The number of players
+     */
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    /**
+     * Returns the string representation of current status
+     * @return string representation of current status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * Returns the chosen card index of the user,used for testing only
+     * @return The card index chosen by the user
+     */
+    public int getChosenCardIndex(){
+        return chosenCardIndex;
+    }
+
+    /**
+     * Returns the top card in play,used for testing only
+     * @return The top card
+     */
+    public Card getTopCard(){
+        return topCard;
+    }
+
+    /**
+     * Return the ArrayList of sequences, for testing.
+     * @return return a list of the sequences.
+     */
+    public ArrayList<TurnSequence> getTurnSeqs() {
+        return turnSeqs;
+    }
+
+    /**
+     * Gets the status of the challenge, whether the next player wants to challenge
+     * @return true if next player wants to challenge, false if next player does not want to challenge
+     */
     public boolean getChallenge(){
         return  challenge;
     }
 
     /**
      * Get boolean for dontAsk
-     *
      * @return true if model should not ask, false otherwise
      */
     public boolean getDontAsk() {
@@ -515,18 +468,51 @@ public class UnoFlipModel {
     }
 
     /**
+     * Setting the status
+     * @param status - the new status
+     */
+    public void setStatus(String status ){
+        this.status = status;
+    }
+
+    /**
+     * Sets the current rank of the game.
+     * @param currentRank The rank to be set
+     */
+    public void setCurrentRank(Card.Rank currentRank) {
+        this.currentRank = currentRank;
+    }
+
+    /**
+     * Sets the top card of the game.
+     * @param topCard The card to be set as the top card.
+     */
+    public void setTopCard(Card topCard) {
+        this.topCard = topCard;
+    }
+
+    /**
+     * Set the current colour of the game
+     * @param colour The colour to be set as the current colour
+     */
+    public void setCurrentColour(Card.Colour colour){
+        currentColour = colour;
+    }
+
+    /**
+     * Sets the challenge status for if the next player wants to challenge
+     * @param challenge - next player's decision on challenging
+     */
+    public void setChallenge(boolean challenge){
+        this.challenge = challenge;
+    }
+
+    /**
      * Set boolean for dontAsk
-     *
      * @param dontAsk set the ask permission
      */
     public void setDontAsk(boolean dontAsk) {
         this.dontAsk = dontAsk;
-    }
-
-    public static void main(String[] args) {
-        UnoFlipModel unoFlipModel = new UnoFlipModel();
-        //unoFlipModel.playGame();
-
     }
 
 }
