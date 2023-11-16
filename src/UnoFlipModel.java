@@ -12,70 +12,60 @@ import java.util.Scanner;
  * Date: 2023-10-20
  */
 public class UnoFlipModel {
-    private ArrayList<Player> players; //arraylist of players
+
+    //Constants used to indicate the current status
+    public static final String  CHALLENGE_STATUS_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
+    public static final String STANDARD_STATUS = " ";
+    public static final String CHALLENGE_STATUS_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS 4 CARDS";
+    public static final String CHALLENGE_STATUS_GUILTY = "GUILTY:YOU DRAW 2 CARDS";
+
+
+    private boolean turnFinished; //true if user has played/drawn a card, else false
+    private boolean skipTurn; //true if skipping the next person, else false
+    private boolean challenge; //true if next player wants to challenge, false if they do not
+    private boolean dontAsk;
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
-    private int currentTurn; // 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4
-    private int nextPlayerIndex; //index of next player
-    private Deck deck; //deck that will be used for the game
-    private Card.Colour currentColour; //current colour of the game
-
-    private Card.Rank currentRank; //current rank of the game
-
     private int numPlayers; //number of players in the game
     private int chosenCardIndex; //user inputted card index
-
+    private int currentTurn; // 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4
+    private int nextPlayerIndex; //index of next player
+    private String status; //indicate the status for which the view will update to
+    private Deck deck; //deck that will be used for the game
+    private Card.Colour currentColour; //current colour of the game
+    private Card.Rank currentRank; //current rank of the game
     private Card topCard;//top card that is in play
-
-    private Card.Colour colourSetByWild; //colour chosen by the user
-
+    private List<UnoFlipView> views;  // list of views
     private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
-
-    private String status;
-
-    private Boolean turnFinished;
-
-    private boolean skipTurn;
-
-    private List<UnoFlipView> views;
-
-    private boolean challenge;
-
-    public static final String  CHALLENGE_STATUS_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
-    private boolean dontAsk;
+    private ArrayList<Player> players; //arraylist of players
 
 
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
      */
     public UnoFlipModel(){
-        players = new ArrayList<Player>(); //empty player list
-        turnDirection = true; //initialize to clockwise
-        currentTurn = 0; // start from player 1
-        nextPlayerIndex = 1; // next player is player 2
-        deck = new Deck(); //create a new deck
-        currentColour = null; //set colour to null
-        currentRank = null; //set rank to null
-        //userInput = new Scanner(System.in); //scanner used for user input
-        numPlayers = 0; // initialize to 0
-        chosenCardIndex = -1; //initialize to -1
-        turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
-        skipTurn = false;
-        dontAsk = false;
+        this.players = new ArrayList<Player>(); //empty player list
+        this.turnDirection = true; //initialize to clockwise
+        this.currentTurn = 0; // start from player 1
+        this.nextPlayerIndex = 1; // next player is player 2
+        this.deck = new Deck(); //create a new deck
+        this.currentColour = null; //set colour to null
+        this.currentRank = null; //set rank to null
+        this.numPlayers = 0; // initialize to 0
+        this.chosenCardIndex = -1; //initialize to -1
+        this.turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
+        this.skipTurn = false; // initialize to false
+        this.dontAsk = false;  // initialize to false
         for(int i =0;i<=8;i++){
-            turnSeqs.add(new Number(this)); //Number
+            this.turnSeqs.add(new Number(this)); //Number
         }
-        turnSeqs.add(new DrawOne(this)); //Draw_One
-        turnSeqs.add(new Reverse(this)); //Reverse
-        turnSeqs.add(new Skip(this)); //Skip
-        turnSeqs.add(new Wild(this)); //Wild
-        turnSeqs.add(new WildDrawTwo(this)); //Wild Draw Two
-        turnSeqs.add(new SelfDrawOne(this)); //Self Draw One
-
-
-        this.views = new ArrayList<UnoFlipView>();
-
+        this.turnSeqs.add(new DrawOne(this)); //Draw_One
+        this.turnSeqs.add(new Reverse(this)); //Reverse
+        this.turnSeqs.add(new Skip(this)); //Skip
+        this.turnSeqs.add(new Wild(this)); //Wild
+        this.turnSeqs.add(new WildDrawTwo(this)); //Wild Draw Two
+        this.turnSeqs.add(new SelfDrawOne(this)); //Self Draw One
+        this.views = new ArrayList<UnoFlipView>(); //arrau list of views
     }
-
 
 
     /**
@@ -87,7 +77,7 @@ public class UnoFlipModel {
     public int setNumPlayers(int numPlayers) {
 
         if(!(numPlayers < 2 || numPlayers > 4)) {  //2-4 players
-            this.numPlayers = numPlayers;
+            this.numPlayers = numPlayers;        //Set the number of players going to be playing
             return this.numPlayers;
         } else {                                //Invalid number of players
             return 0;
@@ -99,17 +89,16 @@ public class UnoFlipModel {
      * @param playerName - the name of the player that will be initialized
      */
     public void createPlayer(String playerName){
-
         Player p = new Player(playerName); //create player
         addPlayer(p); //add player to arraylist
     }
 
     /**
-     * Adds a player to the game.
+     * Adds a player to the arraylist of players.
      * @param player The player to be added
      */
     public void addPlayer(Player player){
-        players.add(player);
+        this.players.add(player); // adding player to arraylist of players
     }
 
     /**
@@ -117,25 +106,25 @@ public class UnoFlipModel {
      */
     public void setUpInitialTopCard(){
 
-        //draw the first card from deck
-        topCard = deck.takeCard();
-        turnFinished = false;
+        this.topCard = deck.takeCard();    //draw the first card from deck
+        this.turnFinished = false;        //initialize false to allow first player to play/draw a card
 
-        //If topcard selected is a WILD_DRAW_2
-        while(topCard.getRank().ordinal()==13){
-            //return card back to deck and get a new one
-            deck.putCard(topCard);
-            topCard = deck.takeCard();
+        //If topCard selected is a WILD_DRAW_2
+        while(this.topCard.getRank().ordinal() == Card.RANK_WILD_DRAW_2){
+            this.deck.putCard(this.topCard);      //return card back to deck and get a new one
+            this.topCard = this.deck.takeCard();  //draw another card from deck
         }
 
-        if(topCard.getRank().ordinal()>8) {
-            //only execute sequence if action card, if number don't do anything
-            turnSeqs.get(topCard.getRank().ordinal()).executeSequence(topCard);
+        //if first card drawn form dec is an action card
+        if(this.topCard.getRank().ordinal() > Card.RANK_NUMBER_CARDS) {
+            //only execute sequence if action card
+            this.turnSeqs.get(this.topCard.getRank().ordinal()).executeSequence(this.topCard);
         }
+        //if number don't do anything
         else{
-            currentColour = topCard.getColour();
-            currentRank = topCard.getRank();
-            status = " ";
+            this.currentColour = this.topCard.getColour();
+            this.currentRank = this.topCard.getRank();
+            this.status = STANDARD_STATUS;
             notifyViews(); // Notifying view here since it is the last step in the initialization of the game,
         }
     }
@@ -145,20 +134,28 @@ public class UnoFlipModel {
      * Method notifyViews is meant to notify subscribers view about any changes that will affect the view of the UnoFlip Game
      */
     public void notifyViews(){
-        if(!views.isEmpty()) {
-            //send UnoFlipEvent to view.
 
-            if (topCard.isWild() && !status.equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") && !status.equals("GUILTY:YOU DRAW 2 CARDS") && !dontAsk){
-                status = currentColour.toString();
-                for( UnoFlipView view: views ) {
-                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
+        //Makse sure there are views in the view arraylist to send UnoFlipEvents to.
+        if(!this.views.isEmpty()) {
+
+            //if WILD_DRAW_2 card and next player declines to challenge
+            if (this.topCard.isWild() && !this.status.equals(CHALLENGE_STATUS_INNOCENT) && !this.status.equals(CHALLENGE_STATUS_GUILTY) && !this.dontAsk){
+
+                this.status = this.currentColour.toString(); // set current colour as the status
+
+                //notify views
+                for( UnoFlipView view: this.views ) {
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(),this.status,(this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2)));
                 }
-            } else{
-                for( UnoFlipView view: views ) {
-                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), topCard.toString(), getCurrentPlayer().toString(),status ,this.currentRank == Card.Rank.WILD ));
+
+            }
+            //if a non WILD_DRAW_2 card.
+            else{
+                //notify views
+                for( UnoFlipView view: this.views ) {
+                    view.handleUnoFlipStatusUpdate( new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(),this.status ,this.currentRank == Card.Rank.WILD ));
                 }
             }
-
 
         }
     }
