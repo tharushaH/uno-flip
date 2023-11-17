@@ -13,10 +13,10 @@ import java.util.Scanner;
  */
 public class UnoFlipModel {
 
-    private boolean turnFinished; //true if user has played/drawn a card, else false
-    private boolean skipTurn; //true if skipping the next person, else false
-    private boolean challenge; //true if next player wants to challenge, false if they do not
-    private boolean dontAsk;
+    private boolean turnFinished;
+    private boolean skipTurn;
+    private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
+    private boolean dontAskChallenge; //true if game does not want give player challenge prompt, false if game want to give player challenge prompt
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
     private int numPlayers;
     private int chosenCardIndex;
@@ -54,44 +54,47 @@ public class UnoFlipModel {
         this.players = new ArrayList<Player>();
         this.turnDirection = true; //initialize to clockwise
         this.currentTurn = 0;
-        this.nextPlayerIndex = 1;
+        this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
         this.currentColour = null;
         this.currentRank = null;
         this.numPlayers = 0;
-        this.chosenCardIndex = -1;
+        this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
         this.turnSeqs = new ArrayList<TurnSequence>();
         this.skipTurn = false;
-        this.dontAsk = false;
+        this.dontAskChallenge = false;
+        this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
+
+
+        //loop adds each number card turn sequence (1-9) to the turnSeqs arraylist
         for(int i =0;i<=8;i++){
             this.turnSeqs.add(new Number(this)); //Number
         }
-        this.turnSeqs.add(new DrawOne(this)); //Draw_One
-        this.turnSeqs.add(new Reverse(this)); //Reverse
-        this.turnSeqs.add(new Skip(this)); //Skip
-        this.turnSeqs.add(new Wild(this)); //Wild
-        this.turnSeqs.add(new WildDrawTwo(this)); //Wild Draw Two
-        this.turnSeqs.add(new SelfDrawOne(this)); //Self Draw One
+
+        //adding the action cards turn sequence the turnSeqs Arraylist
+        this.turnSeqs.add(new DrawOne(this));
+        this.turnSeqs.add(new Reverse(this));
+        this.turnSeqs.add(new Skip(this));
+        this.turnSeqs.add(new Wild(this));
+        this.turnSeqs.add(new WildDrawTwo(this));
+        this.turnSeqs.add(new SelfDrawOne(this));
         this.views = new ArrayList<UnoFlipView>();
     }
 
 
     /**
-     * Returns the number of players, used for testing only
-     * will only set the number of players if its between 2-4 players
+     * Sets the number of players
      * @param numPlayers The number of players received from the UnoFLipController
-     * @return the number of players that of the game
      */
-    public int setNumPlayers(int numPlayers) {
+    public void setNumPlayers(int numPlayers) {
         this.numPlayers = numPlayers;
-        return this.numPlayers;
     }
 
     /**
-     * Method addPlayers is meant to be activated by the UnoFlipController to initialize a player in the UnoFlip game
-     * @param playerName - the name of the player that will be initialized
+     * Creates player and adds them to the game
+     * @param playerName - the name of the player that will be created and added to the players list
      */
-    public void createPlayer(String playerName){
+    public void initializePlayer(String playerName){
         Player p = new Player(playerName);
         addPlayer(p); //add player to arraylist
     }
@@ -105,12 +108,11 @@ public class UnoFlipModel {
     }
 
     /**
-     * Method setUpInitialTopCard is meant to be called by the UnoFlipController to initialize the top card at the start of the game.
+     * Method setUpInitialTopCard is meant to initialize the top card at the start of the game.
      */
     public void setUpInitialTopCard(){
 
         this.topCard = deck.takeCard();
-        this.turnFinished = false;        //initialize false to allow first player to play/draw a card
 
         //continue to drawing a different card if WILD_DRAW_2
         while(this.topCard.getRank().ordinal() == Card.RANK_WILD_DRAW_2){
@@ -142,7 +144,7 @@ public class UnoFlipModel {
 
             //sending events to the view to update depending on different situations that occur within the game
             //if wild draw 2 card and next player declines to challenge
-            if(this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY) && !this.dontAsk){
+            if(this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY) && !this.dontAskChallenge){
 
                 this.status = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
 
@@ -310,7 +312,6 @@ public class UnoFlipModel {
             drawNCards(2,this.nextPlayerIndex);
         }
 
-        //accumulate points
         for(Player p: this.players){
             winnerScore += p.getHandScore();
         }
@@ -502,8 +503,8 @@ public class UnoFlipModel {
      * Set boolean for dontAsk
      * @param dontAsk set the ask permission
      */
-    public void setDontAsk(boolean dontAsk) {
-        this.dontAsk = dontAsk;
+    public void setDontAskChallenge(boolean dontAsk) {
+        this.dontAskChallenge = dontAsk;
     }
 
 }
