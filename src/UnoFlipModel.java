@@ -357,7 +357,7 @@ public class UnoFlipModel {
                 notifyViews();
             }
         } else {
-            status = "YOUR TURN IS FINSISHED, PRESS NEXT PLAYER";
+            status = "YOUR TURN IS FINISHED, PRESS NEXT TURN";
             notifyViews();
 
         }
