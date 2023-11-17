@@ -47,6 +47,7 @@ public class UnoFlipModel {
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
     public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
     public static final String STATUS_DONE = "done";
+    
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
      */
