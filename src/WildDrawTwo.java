@@ -37,6 +37,6 @@ public class WildDrawTwo extends TurnSequence {
             unoFlipModel.drawNCards(2, unoFlipModel.getNextTurn());
             unoFlipModel.setStatus(UnoFlipModel.STATUS_DONE);
         }
-        unoFlipModel.skipTurn();
+        unoFlipModel.setSkipTurnFlag();
     }
 }

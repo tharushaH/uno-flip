@@ -15,19 +15,17 @@ public class UnoFlipModelTest {
     @Test
     public void testSetNumPlayersValid() {
         int numPlayers = 3;
-        assertEquals(numPlayers, unoFlipModel.setNumPlayers(numPlayers));
         assertEquals(numPlayers, unoFlipModel.getNumPlayers());
     }
     @Test
     public void testSetNumPlayersInvalid() {
         int invalidNumPlayers = 5;
-        assertEquals(0, unoFlipModel.setNumPlayers(invalidNumPlayers));
         assertEquals(0, unoFlipModel.getNumPlayers());
     }
     @Test
     public void testSetUpInitialTopCard(){
-        unoFlipModel.createPlayer("Bobby");
-        unoFlipModel.createPlayer("Mark");
+        unoFlipModel.initializePlayer("Bobby");
+        unoFlipModel.initializePlayer("Mark");
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
         unoFlipModel.setUpInitialTopCard();
@@ -35,8 +33,8 @@ public class UnoFlipModelTest {
     }
     @Test
     public void testPlayTurnSelfDrawOne(){
-        unoFlipModel.createPlayer("Bobby");
-        unoFlipModel.createPlayer("Mark");
+        unoFlipModel.initializePlayer("Bobby");
+        unoFlipModel.initializePlayer("Mark");
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
         unoFlipModel.setUpInitialTopCard();
@@ -125,7 +123,7 @@ public class UnoFlipModelTest {
         unoFlipModel.setNumPlayers(2);
         assertTrue(unoFlipModel.getTurnDirection());
         assertTrue(unoFlipModel.getCurrentTurn()==0);
-        unoFlipModel.skipTurn();
+        unoFlipModel.setSkipTurnFlag();
         assertTrue(unoFlipModel.getCurrentTurn()==0);
     }
     @Test

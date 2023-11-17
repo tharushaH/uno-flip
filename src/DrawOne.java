@@ -21,6 +21,6 @@ public class DrawOne extends TurnSequence {
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
         unoFlipModel.drawNCards(1, unoFlipModel.getNextTurn());
-        unoFlipModel.skipTurn();
+        unoFlipModel.setSkipTurnFlag();
     }
 }
