@@ -333,7 +333,7 @@ public class UnoFlipModel {
 
     /**
      * Skip the turn of the next player
-     */
+     */ 
     public void skipTurn(){
         this.skipTurn = true;
     }
