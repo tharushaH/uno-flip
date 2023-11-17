@@ -114,7 +114,7 @@ public class UnoFlipController implements ActionListener {
                 challenge = false;
             }
             this.model.setChallenge(challenge);
-            this.model.setDontAsk(true);
+            this.model.setDontAskChallenge(true);
 
         }
         else {

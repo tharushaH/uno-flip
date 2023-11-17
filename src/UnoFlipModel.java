@@ -119,7 +119,6 @@ public class UnoFlipModel {
             this.deck.putCard(this.topCard);
             this.topCard = this.deck.takeCard();  //redraw the topCard
         }
-        notifyViews();
         //if first card drawn from deck is an action card (non-number card)
         if(this.topCard.getRank().ordinal() > Card.RANK_NUMBER_CARDS) {
             this.turnSeqs.get(this.topCard.getRank().ordinal()).executeSequence(this.topCard); //execute sequence if action card
@@ -129,9 +128,11 @@ public class UnoFlipModel {
             this.currentColour = this.topCard.getColour();
             this.currentRank = this.topCard.getRank();
             this.status = STATUS_STANDARD;
-            notifyViews();
+
         }
+        notifyViews();
     }
+
 
 
     /**
@@ -187,7 +188,7 @@ public class UnoFlipModel {
                     this.status = STATUS_PLAYABLE_CARD;
 
                 }
-            
+
                 return;
             }
 
@@ -222,7 +223,6 @@ public class UnoFlipModel {
 
 
         }
-
         notifyViews();
     }
 
@@ -246,7 +246,7 @@ public class UnoFlipModel {
     }
 
     /**
-     * Draw the amount of cards(n) based on which player(index) will be receiving them
+     * Draw n cards for the player
      * @param n The amount of cards to be added to the hand of the player
      * @param index The index of the player that will be receiving cards
      */
@@ -259,43 +259,35 @@ public class UnoFlipModel {
      */
     public void nextTurn() {
 
-        //if the turn is finished, allow player to press next player
         if (this.turnFinished) {
 
-            //clockwise (ex. 0->1->2->3)
-            if (this.turnDirection) {
-                this.currentTurn = (this.currentTurn + 1) % this.numPlayers;
-                this.nextPlayerIndex = (this.currentTurn + 1) % this.numPlayers;
+            int numPasses=0;
 
-            //counterclockwise (ex. 0->3->2->1)
-            } else {
-                this.currentTurn = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
-                this.nextPlayerIndex = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
+            if(skipTurn){
+                numPasses =2;
             }
 
-            //if next player's turn is being skipped (ex. player 2 is being skipped:  0->1->3->0)
-            if (this.skipTurn){
-                //clockwise (ex. 0->1->2->3)
+            for( int i =0; i < numPasses ; i++){
                 if (this.turnDirection) {
                     this.currentTurn = (this.currentTurn + 1) % this.numPlayers;
-                    this. nextPlayerIndex = (this.currentTurn + 1) % this.numPlayers;
+                    this.nextPlayerIndex = (this.currentTurn + 1) % this.numPlayers;
 
-                //counterclockwise (ex. 0->3->2->1)
+                    //counterclockwise (ex. 0->3->2->1)
                 } else {
                     this.currentTurn = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
                     this.nextPlayerIndex = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
                 }
-                this.skipTurn = false;
             }
-            this.status = STATUS_STANDARD;
-            notifyViews();
-            this.turnFinished = false; // reset for next player
 
-        // if player tries to skip turn
-        } else {
+            this.skipTurn = false;
+            this.status = STATUS_STANDARD;
+            this.turnFinished = false;
+
+        }else {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
-            notifyViews();
+
         }
+        notifyViews();
 
     }
 
