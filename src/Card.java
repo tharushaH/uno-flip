@@ -16,6 +16,8 @@ public class Card {
 
     public static final int RANK_NUMBER_CARDS = 8; //Indicate the ordinal of the last number card in the enum Rank
     public static final int RANK_WILD_DRAW_2 = 13; // Indicate the ordinal of the WILD_DRAW_2 card in the enum Rank
+
+    public static final int RANK_DRAW_ONE = 9;
     private final Rank rank;
     private final Colour colour;
 
