@@ -45,8 +45,8 @@ public class UnoFlipModel {
     public static final String STATUS_PLAYABLE_CARD = "YOU HAVE PLAYABLE CARD";
     public static final String STATUS_INVALID_CARD_BEING_PLACED = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
-    public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINSISHED, PRESS NEXT PLAYER";
-
+    public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
+    public static final String STATUS_DONE = "done";
     /**
      * Constructs a new game of Uno by initializing fields with default settings.
      */
@@ -457,7 +457,7 @@ public class UnoFlipModel {
     public boolean getChallenge(){
         return this.challenge;
     }
-    
+
     /**
      * Setting the status
      * @param status - the new status
