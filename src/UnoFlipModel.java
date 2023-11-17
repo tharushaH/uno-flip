@@ -18,19 +18,18 @@ public class UnoFlipModel {
     private boolean challenge; //true if next player wants to challenge, false if they do not
     private boolean dontAsk;
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
-    private int numPlayers; //number of players in the game
-    private int chosenCardIndex; //user inputted card index
-    private int currentTurn; // 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4
-    private int nextPlayerIndex; //index of next player
+    private int numPlayers;
+    private int chosenCardIndex;
+    private int currentTurn; // 0-indexed (ex. 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4)
+    private int nextPlayerIndex;
     private String status; //indicate the status for which the view will update to
-    private Deck deck; //deck that will be used for the game
-    private Card.Colour currentColour; //current colour of the game
-    private Card.Rank currentRank; //current rank of the game
-    private Card topCard;//top card that is in play
-    private List<UnoFlipView> views;  // list of views
-    private ArrayList<TurnSequence> turnSeqs; // arraylist of turn sequences
-    private ArrayList<Player> players; //arraylist of players
-
+    private Deck deck;
+    private Card.Colour currentColour;
+    private Card.Rank currentRank;
+    private Card topCard;
+    private List<UnoFlipView> views;
+    private ArrayList<TurnSequence> turnSeqs;
+    private ArrayList<Player> players;
 
     public static final int DRAW_ONE_BUTTON = -1; // draw one button indicator
 
@@ -52,18 +51,18 @@ public class UnoFlipModel {
      * Constructs a new game of Uno by initializing fields with default settings.
      */
     public UnoFlipModel(){
-        this.players = new ArrayList<Player>(); //empty player list
+        this.players = new ArrayList<Player>();
         this.turnDirection = true; //initialize to clockwise
-        this.currentTurn = 0; // start from player 1
-        this.nextPlayerIndex = 1; // next player is player 2
-        this.deck = new Deck(); //create a new deck
-        this.currentColour = null; //set colour to null
-        this.currentRank = null; //set rank to null
-        this.numPlayers = 0; // initialize to 0
-        this.chosenCardIndex = -1; //initialize to -1
-        this.turnSeqs = new ArrayList<TurnSequence>(); //arraylist for turn sequences
-        this.skipTurn = false; // initialize to false
-        this.dontAsk = false;  // initialize to false
+        this.currentTurn = 0;
+        this.nextPlayerIndex = 1;
+        this.deck = new Deck();
+        this.currentColour = null;
+        this.currentRank = null;
+        this.numPlayers = 0;
+        this.chosenCardIndex = -1;
+        this.turnSeqs = new ArrayList<TurnSequence>();
+        this.skipTurn = false;
+        this.dontAsk = false;
         for(int i =0;i<=8;i++){
             this.turnSeqs.add(new Number(this)); //Number
         }
@@ -73,7 +72,7 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Wild(this)); //Wild
         this.turnSeqs.add(new WildDrawTwo(this)); //Wild Draw Two
         this.turnSeqs.add(new SelfDrawOne(this)); //Self Draw One
-        this.views = new ArrayList<UnoFlipView>(); //array list of views
+        this.views = new ArrayList<UnoFlipView>();
     }
 
 
