@@ -101,8 +101,9 @@ public class UnoFlipModelTest {
         unoFlipModel.setNumPlayers(2);
         assertTrue(unoFlipModel.getCurrentTurn()==0);
         assertTrue(unoFlipModel.getNextTurn()==1);
+        unoFlipModel.setTurnFinished(true);
         unoFlipModel.nextTurn();
-        assertTrue(unoFlipModel.getNextTurn()==0);
+        assertEquals(0, unoFlipModel.getNextTurn());
 
     }
     @Test

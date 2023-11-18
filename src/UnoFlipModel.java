@@ -64,6 +64,7 @@ public class UnoFlipModel {
         this.skipTurn = false;
         this.dontAskChallenge = false;
         this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
+        this.status = STATUS_STANDARD;
 
 
         //loop adds each number card turn sequence (1-9) to the turnSeqs arraylist
@@ -84,7 +85,7 @@ public class UnoFlipModel {
 
     /**
      * Sets the number of players
-     * @param numPlayers The number of players received from the UnoFLipController
+     * @param numPlayers The number of players (between 2-4)
      */
     public void setNumPlayers(int numPlayers) {
         this.numPlayers = numPlayers;
@@ -186,9 +187,7 @@ public class UnoFlipModel {
                 //player has a playable card, player still has to complete their turn
                 } else{
                     this.status = STATUS_PLAYABLE_CARD;
-
                 }
-
                 return;
             }
 
@@ -248,10 +247,10 @@ public class UnoFlipModel {
     /**
      * Draw n cards for the player
      * @param n The amount of cards to be added to the hand of the player
-     * @param index The index of the player that will be receiving cards
+     * @param playerIndex The index of the player that will be receiving cards
      */
-    public void drawNCards(int n,int index){
-        this.players.get(index).addCardToHand(n);
+    public void drawNCards(int n,int playerIndex){
+        this.players.get(playerIndex).addCardToHand(n);
     }
 
     /**
@@ -260,8 +259,7 @@ public class UnoFlipModel {
     public void nextTurn() {
 
         if (this.turnFinished) {
-
-            int numPasses=0;
+            int numPasses=1;
 
             if(skipTurn){
                 numPasses =2;
@@ -287,6 +285,7 @@ public class UnoFlipModel {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
 
         }
+
         notifyViews();
 
     }
@@ -499,6 +498,14 @@ public class UnoFlipModel {
      */
     public void setDontAskChallenge(boolean dontAskChallenge) {
         this.dontAskChallenge = dontAskChallenge;
+    }
+
+    /**
+     * set the status of the turnFinished variable - used for testing
+     * @param turnFinished state of the players turn
+     */
+    public void setTurnFinished(boolean turnFinished){
+        this.turnFinished = turnFinished;
     }
 
 }
