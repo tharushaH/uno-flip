@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
+
 /**
  * Create the main Uno Flip! game frame.
  */
@@ -20,6 +21,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String START_CMD = "start";
     public final static String WILD_CMD = "wild";
     public final static String CHALLENGE_CMD = "challenge";
+
 
     public UnoFlipViewFrame() {
         super("Uno Flip!");
@@ -102,9 +104,11 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         controlPanel.add(buttonPanel, gbc);
 
         // create a status area to hold the status
-        statusArea = new JTextArea(1,20);
+        statusArea = new JTextArea(1,30);
         statusArea.setEditable(false);
-        statusArea.setFont(new Font("Arial", Font.BOLD, 16));
+        statusArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        statusArea.setWrapStyleWord(true);
+        statusArea.setLineWrap(true);
         JScrollPane statusScrollPanel = new JScrollPane(statusArea);
 
         // create an EmptyBorder with 10 pixels of margin on all sides
@@ -171,7 +175,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         for (int i = 0; i < currHandArray.length; i++) {
             JButton newCard = new JButton();
             newCard.setPreferredSize(new Dimension(200,300));
-            newCard.setIcon(new ImageIcon("src\\images\\" + currHandArray[i] + ".png"));  // images are named after card's toString
+            newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));
             newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
             newCard.addActionListener(controller);
             handPanel.add(newCard);
@@ -180,7 +184,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         this.repaint();  // prevent visual bug by resetting the frame
 
         // update the top card
-        topCardLabel.setIcon(new ImageIcon("src\\images\\" + e.getTopCard() + ".png"));
+        topCardLabel.setIcon(new ImageIcon(getClass().getResource("images/"+e.getTopCard()+".png")));
         topCardNameLabel.setText(e.getTopCard());
         topCardNameLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
 
