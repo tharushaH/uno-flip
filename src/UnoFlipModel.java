@@ -494,11 +494,11 @@ public class UnoFlipModel {
     }
 
     /**
-     * Set boolean for dontAsk
-     * @param dontAsk set the ask permission
+     * Set boolean for dontAskChallenge
+     * @param dontAskChallenge set the ask permission
      */
-    public void setDontAskChallenge(boolean dontAsk) {
-        this.dontAskChallenge = dontAsk;
+    public void setDontAskChallenge(boolean dontAskChallenge) {
+        this.dontAskChallenge = dontAskChallenge;
     }
 
 }
