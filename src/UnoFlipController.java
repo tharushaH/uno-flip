@@ -64,11 +64,13 @@ public class UnoFlipController implements ActionListener {
 
             for (int i = 0; i < numPlayers; i++){
                 String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
+                Player player;
                 if (name == null || name.equals("")){
-                    this.model.initializePlayer("Player " + (i+1));
+                    player = this.model.createPlayer("Player " + (i+1));
                 } else{
-                    this.model.initializePlayer(name);
+                    player = this.model.createPlayer(name);
                 }
+                this.model.addPlayer(player);
             }
             this.model.setUpInitialTopCard();
         } else if (e.getActionCommand().equals(UnoFlipViewFrame.WILD_CMD)) {
@@ -105,15 +107,15 @@ public class UnoFlipController implements ActionListener {
             this.model.nextTurn();
         } else if (e.getActionCommand().equals(UnoFlipViewFrame.CHALLENGE_CMD) ) {
 
-            boolean challenge;
+            boolean challengeFlag;
             int result = JOptionPane.showConfirmDialog(null, "Do you want to continue?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
-                challenge = true;
+                challengeFlag = true;
             } else {
-                challenge = false;
+                challengeFlag = false;
             }
-            this.model.setChallenge(challenge);
+            this.model.setChallengeFlag(challengeFlag);
             this.model.setDontAskChallenge(true);
 
         }
