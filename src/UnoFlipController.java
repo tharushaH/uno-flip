@@ -14,7 +14,6 @@ import java.util.Objects;
 public class UnoFlipController implements ActionListener {
     private UnoFlipModel model;
 
-
     /**
      * Constructs a UnoFlipController with the specified UnoFlipModel.
      *
@@ -25,9 +24,6 @@ public class UnoFlipController implements ActionListener {
         this.model = model;
     }
 
-
-
-
     /**
      * Invoked when an action occurs. Handles various actions triggered
      * by user interactions with the Uno Flip game.
@@ -37,93 +33,123 @@ public class UnoFlipController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(UnoFlipViewFrame.START_CMD)){
+        String actionCommand =  e.getActionCommand();
+        JComboBox comboBox;
+        int result = 0;
 
-            String[] numPlayerOptions = {"2", "3", "4"};
+        switch(actionCommand){
 
-            JComboBox<String> comboBox = new JComboBox<>(numPlayerOptions);
+            // User starts the game and is prompted for amount of players and names for each player
+            case UnoFlipViewFrame.START_CMD:
 
-            int result = JOptionPane.showOptionDialog(
-                    null,
-                    comboBox,
-                    "Select number of players:",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    null);
+                // Amount of players options for drop down menu
+                String[] numPlayerOptions = {"2", "3", "4"};
 
-            int numPlayers = 0;
-            if (result == JOptionPane.OK_OPTION) {
-                String option = (String) comboBox.getSelectedItem();
-                numPlayers = Integer.parseInt(option);
-                this.model.setNumPlayers(numPlayers);
-            } else {
-                System.exit(0); // absolutely must select an option, otherwise, do not start the game
-            }
+                comboBox = new JComboBox<>(numPlayerOptions);
 
-            for (int i = 0; i < numPlayers; i++){
-                String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
-                if (name == null || name.equals("")){
-                    this.model.createPlayer("Player " + (i+1));
-                } else{
-                    this.model.createPlayer(name);
-                }
-            }
-            this.model.setUpInitialTopCard();
-        } else if (e.getActionCommand().equals(UnoFlipViewFrame.WILD_CMD)) {
-            String[] numPlayerOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
-
-            JComboBox<String> comboBox = new JComboBox<>(numPlayerOptions);
-            while(true){
-                int result = JOptionPane.showOptionDialog(
+                result = JOptionPane.showOptionDialog(
                         null,
                         comboBox,
-                        "Select colour:",
+                        "Select number of players:",
                         JOptionPane.DEFAULT_OPTION,
                         JOptionPane.PLAIN_MESSAGE,
                         null,
                         null,
                         null);
 
-                Card.Colour colour;
+                // initialize the number of players with the inputted amount from the drop-down menu
                 if (result == JOptionPane.OK_OPTION) {
+                    int numPlayers = 0;
+
                     String option = (String) comboBox.getSelectedItem();
-                    colour = Card.Colour.valueOf(option);
-                    this.model.setCurrentColour(colour);
-                    this.model.notifyViews();
-                    break;
-                } else if (result == JOptionPane.CLOSED_OPTION){
-                    continue;
+                    numPlayers = Integer.parseInt(option);
+
+                    this.model.setNumPlayers(numPlayers);
+                } else { // Exit the game if the user cancels, absolutely must select an option, otherwise, do not start the game
+                    System.exit(0);
                 }
-            }
 
-        } else if(e.getActionCommand().equals(UnoFlipViewFrame.DRAW_CMD)){
-            this.model.playTurn(-1);
-        }
-        else if(e.getActionCommand().equals(UnoFlipViewFrame.NEXT_CMD)) {
-            this.model.nextTurn();
-        } else if (e.getActionCommand().equals(UnoFlipViewFrame.CHALLENGE_CMD) ) {
+                // Prompt the user for the name of each player
+                for (int i = 0; i < this.model.getNumPlayers(); i++) {
+                    String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
 
-            boolean challenge;
-            int result = JOptionPane.showConfirmDialog(null, "Do you want to continue?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                    // If player does not select name, give a default name (Player + player number) ex. Player 2
+                    if (name == null || name.equals("")) {
+                        this.model.createPlayer("Player " + (i+1));
+                    }
+                    else {
+                        this.model.createPlayer(name);
+                    }
+                }
 
-            if (result == JOptionPane.YES_OPTION) {
-                challenge = true;
-            } else {
-                challenge = false;
-            }
-            this.model.setChallenge(challenge);
-            this.model.setDontAsk(true);
+                this.model.setUpInitialTopCard();
+                break;
 
-        }
-        else {
-            try {
-                this.model.playTurn(Integer.parseInt(e.getActionCommand()));
+            // User places a wild card and prompts the player to choose a colour to update game state
+            case UnoFlipViewFrame.WILD_CMD:
+                // Colour options for Player to chose from
+                String[] colourOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
 
-            } catch (NumberFormatException err) {
-                System.out.println("Invalid ActionCommand: " + e.getActionCommand());
-            }
+                comboBox = new JComboBox<>(colourOptions);
+                // Keep asking user to pick a colour until they do
+                while(true) {
+                    result = JOptionPane.showOptionDialog(
+                            null,
+                            comboBox,
+                            "Select colour:",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            null);
+
+                    // User chooses colour and selects okay to change the current colour
+                    if (result == JOptionPane.OK_OPTION) {
+                        Card.Colour colour;
+
+                        String option = (String) comboBox.getSelectedItem();
+                        colour = Card.Colour.valueOf(option);
+
+                        this.model.setCurrentColour(colour);
+                        this.model.notifyViews();
+                        break;
+                    }
+                }
+                break;
+
+            // User selects the draw button option to draw a card
+            case UnoFlipViewFrame.DRAW_CMD:
+                this.model.playTurn(this.model.DRAW_ONE_BUTTON);
+                break;
+
+            // User selects the next turn button to go to the next turn
+            case UnoFlipViewFrame.NEXT_CMD:
+                this.model.nextTurn();
+                break;
+
+            // User places a Wild Draw 2 and prompts the next player to challenge
+            case UnoFlipViewFrame.CHALLENGE_CMD:
+                result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                boolean challenge = result == JOptionPane.YES_OPTION;
+
+                this.model.setChallenge(challenge);
+                // Set the dontAskChallenge variable to true for game not to prompt user again for the challenge
+                this.model.setDontAskChallenge(true);
+                break;
+
+            // A card is selected from the hand
+            default:
+                // Try Catch Exception to catch NumberFormatException if the given command was not an Integer value
+                try {
+                    // Model playTurn call to play the card at the index of the parsed integer value.
+                    this.model.playTurn(Integer.parseInt(e.getActionCommand()));
+
+                }
+                // Catch NumberFormatException for commands that are not Integer values
+                catch (NumberFormatException err) {
+                    System.out.println("Invalid ActionCommand: " + e.getActionCommand());
+                }
         }
     }
 }
