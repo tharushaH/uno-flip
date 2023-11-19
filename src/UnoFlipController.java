@@ -47,7 +47,9 @@ public class UnoFlipController implements ActionListener {
 
                 comboBox = new JComboBox<>(numPlayerOptions);
 
+
                 result = JOptionPane.showOptionDialog(
+
                         null,
                         comboBox,
                         "Select number of players:",
@@ -72,18 +74,21 @@ public class UnoFlipController implements ActionListener {
                 // Prompt the user for the name of each player
                 for (int i = 0; i < this.model.getNumPlayers(); i++) {
                     String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
+                    Player player;
 
                     // If player does not select name, give a default name (Player + player number) ex. Player 2
                     if (name == null || name.equals("")) {
-                        this.model.createPlayer("Player " + (i+1));
+                        player = this.model.createPlayer("Player " + (i+1));
                     }
                     else {
-                        this.model.createPlayer(name);
+                        player =this.model.createPlayer(name);
                     }
+                    this.model.addPlayer(player);
                 }
 
                 this.model.setUpInitialTopCard();
                 break;
+
 
             // User places a wild card and prompts the player to choose a colour to update game state
             case UnoFlipViewFrame.WILD_CMD:
@@ -133,7 +138,7 @@ public class UnoFlipController implements ActionListener {
 
                 boolean challenge = result == JOptionPane.YES_OPTION;
 
-                this.model.setChallenge(challenge);
+                this.model.setChallengeFlag(challenge);
                 // Set the dontAskChallenge variable to true for game not to prompt user again for the challenge
                 this.model.setDontAskChallenge(true);
                 break;
