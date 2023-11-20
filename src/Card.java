@@ -1,6 +1,3 @@
-import java.awt.*;
-
-
 /**
  * The Card class represents a card used in the Uno Flip game. Each card has a color and a rank.
  * It provides methods for checking wild, getting the rank and colour of the card, and generating a string
@@ -11,30 +8,40 @@ import java.awt.*;
  */
 
 public class Card {
-    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD};
-    public enum Rank {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, DRAW_ONE, REVERSE, SKIP, WILD, WILD_DRAW_2};
+    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE};
+    public enum Rank {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, DRAW_ONE, REVERSE, SKIP, WILD, WILD_DRAW_2,
+        DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOUR, FLIP};
 
     public static final int RANK_NUMBER_CARDS = 8; //Indicate the ordinal of the last number card in the enum Rank
     public static final int RANK_WILD_DRAW_2 = 13; // Indicate the ordinal of the WILD_DRAW_2 card in the enum Rank
 
-    public static final int RANK_DRAW_ONE = 9;
-    private final Rank rank;
-    private final Colour colour;
+    public static final int RANK_DRAW_ONE = 9;  // ordinal of the draw one enum in Rank enums
+    public static final boolean LIGHT = true;
+    public static final boolean DARK = false;
+    private final Rank lightRank;
+    private final Colour lightColour;
+    private final Rank darkRank;
+    private final Colour darkColour;
+    private static boolean side;
+
 
     /**
      * Constructs a Card object with the specified rank and color.
      *
-     * @param rank   the rank of the card
-     * @param colour the color of the card
+     * @param rank        the rank of the card
+     * @param colour      the color of the card
+     * @param lightRank
+     * @param lightColour
+     * @param darkRank
+     * @param darkColour
      * @throws IllegalArgumentException if an invalid card is attempted to be created
      */
-    public Card(Rank rank, Colour colour){
-        if ((rank == Rank.WILD || rank == Rank.WILD_DRAW_2) && !(colour == Colour.WILD))
-            throw new IllegalArgumentException("ERROR: Invalid Card Creation.");
-        if (colour == Colour.WILD && !(rank == Rank.WILD || rank == Rank.WILD_DRAW_2))
-            throw new IllegalArgumentException("ERROR: Invalid Card Creation.");
-        this.rank = rank;
-        this.colour = colour;
+    public Card(Rank rank, Colour colour, Rank lightRank, Colour lightColour, Rank darkRank, Colour darkColour){
+        this.lightRank = lightRank;
+        this.lightColour = lightColour;
+        this.darkRank = darkRank;
+        this.darkColour = darkColour;
+        side = LIGHT;
     }
 
     /**
@@ -43,7 +50,7 @@ public class Card {
      * @return true if the card is a wild card, false otherwise
      */
     public boolean isWild(){
-        return this.colour == Colour.WILD;
+        return (this.lightColour == Colour.WILD && this.darkColour == Colour.WILD);
     }
 
     /**
@@ -51,7 +58,11 @@ public class Card {
      * @return the colour of the Card.
      */
     public Colour getColour() {
-        return this.colour;
+        if (side == LIGHT) {
+            return lightColour;
+        } else {
+            return darkColour;
+        }
     }
 
     /**
@@ -59,7 +70,18 @@ public class Card {
      * @return the rank of the Card.
      */
     public Rank getRank(){
-        return this.rank;
+        if (side == LIGHT) {
+            return lightRank;
+        } else {
+            return darkRank;
+        }
+    }
+
+    /**
+     * Flips the side of all cards.
+     */
+    public static void flipSide() {
+        side = !side;
     }
 
     /**
@@ -68,21 +90,21 @@ public class Card {
      * @return the string representation of the card
      */
     @Override
-    public String toString(){
+    public String toString() {
 
-        if (this.rank == Rank.WILD_DRAW_2)  //If a Wild Draw 2
-            return (this.colour + "_draw_2").toLowerCase();
-        if (this.rank == Rank.DRAW_ONE)     //If a Wild Draw 1
-            return (this.colour + "_draw_1").toLowerCase();
-        if (this.rank == Rank.WILD)         //If a Wild Card
-            return (this.colour + "_card").toLowerCase();
+        if (this.getRank() == Rank.WILD_DRAW_2)
+            return (this.getColour() + "_draw_2").toLowerCase();
+        if (this.getRank() == Rank.DRAW_ONE)
+            return (this.getColour() + "_draw_1").toLowerCase();
+        if (this.getRank() == Rank.WILD)
+            return (this.getColour() + "_card").toLowerCase();
+        if (this.getRank() == Rank.WILD_DRAW_COLOUR)
+            return (this.getColour() + "_draw_colour");
+        if(this.getRank().ordinal() < 9) // if number card
+            return (this.getColour() + "_"+ (this.getRank().ordinal()+1)).toLowerCase();
 
-        if(this.rank.ordinal() < 9){ //If number card
-            return (this.colour + "_"+ (this.rank.ordinal()+1)).toLowerCase();
-        }
 
-        return (this.colour + "_" + this.rank).toLowerCase();   //If a Colour non-number card
-
+        return (this.getColour() + "_" + this.getRank()).toLowerCase();   // if a Colour non-number card
     }
 
     /**
@@ -100,7 +122,7 @@ public class Card {
         if (obj.getClass() != this.getClass())
             return false;
         Card other = (Card) obj;
-        return this.rank == other.rank && this.colour == other.colour;
+        return this.getRank() == other.getRank() && this.getColour() == other.getColour();
     }
 
 }
