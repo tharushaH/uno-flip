@@ -14,8 +14,8 @@ public class HandTest {
     @Before
     public void setUp() {
         hand = new Hand();
-        testCard1 = new Card(Card.Rank.ONE, Card.Colour.RED);
-        testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD);
+        testCard1 = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
+        testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
     }
 
 
