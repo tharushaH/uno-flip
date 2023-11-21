@@ -107,7 +107,7 @@ public class Card {
         if (this.getRank() == Rank.WILD && (this.getColour() == Colour.WILD || this.getColour() == Colour.WILD_DARK))
             return (this.getColour() + "_card").toLowerCase();
         if (this.getRank() == Rank.WILD_DRAW_COLOUR)
-            return (this.getColour() + "_draw_colour");
+            return ("wild_draw_colour");
         if(this.getRank().ordinal() < 9) // if number card
             return (this.getColour() + "_"+ (this.getRank().ordinal()+1)).toLowerCase();    // +1 because ordinal 0-based
 
