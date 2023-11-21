@@ -64,15 +64,15 @@ public class CardTest {
 
     @Test
     public void testToString() {
-        assertEquals("green_five", numberCard.toString());
+        assertEquals("green_5", numberCard.toString());
         assertEquals("blue_draw_1", drawDrawOneOrFiveCard.toString());
         assertEquals("wild_card", wildCard.toString());
         assertEquals("wild_draw_2", wildDrawTwoColourCard.toString());
         Card.flipSide();    // test dark side as well
-        assertEquals("teal_five", numberCard.toString());
+        assertEquals("teal_5", numberCard.toString());
         assertEquals("pink_draw_5", drawDrawOneOrFiveCard.toString());
         assertEquals("wild_dark_card", wildCard.toString());
-        assertEquals("wild_draw_colour", wildDrawTwoColourCard.toString());
+        assertEquals("wild_dark_draw_colour", wildDrawTwoColourCard.toString());
     }
 
     @Test
