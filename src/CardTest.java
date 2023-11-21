@@ -72,7 +72,7 @@ public class CardTest {
         assertEquals("teal_5", numberCard.toString());
         assertEquals("pink_draw_5", drawDrawOneOrFiveCard.toString());
         assertEquals("wild_dark_card", wildCard.toString());
-        assertEquals("wild_dark_draw_colour", wildDrawTwoColourCard.toString());
+        assertEquals("wild_draw_colour", wildDrawTwoColourCard.toString());
     }
 
     @Test
