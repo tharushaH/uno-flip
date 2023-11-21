@@ -15,6 +15,7 @@ public class UnoFlipModel {
 
     private boolean turnFinished;
     private boolean skipTurn;
+    private boolean skipEveryone;
     private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
     private boolean dontAskChallenge; //true if game does not want give player challenge prompt, false if game want to give player challenge prompt
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
@@ -55,6 +56,7 @@ public class UnoFlipModel {
         this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
         this.views = new ArrayList<UnoFlipView>();
         this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
         this.currentTurn = 0;
         this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
@@ -79,6 +81,7 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
         this.turnSeqs.add(new SelfDrawOne(this));
+        this.turnSeqs.add(new SkipEveryone(this)); //must be index 16
 
     }
 
@@ -264,6 +267,10 @@ public class UnoFlipModel {
 
             if(skipTurn){
                 numPasses =2; //skipping the next player
+            }
+
+            if(skipEveryone){
+                numPasses = numPlayers; //skip all players
             }
 
             //change the current player's turn based on the numPasses
@@ -508,6 +515,13 @@ public class UnoFlipModel {
      */
     public void setTurnFinished(boolean turnFinished){
         this.turnFinished = turnFinished;
+    }
+
+    /**
+     * Set value of skipEveryone to true to indicate that the all players should be skipped, and current player can go again
+     */
+    public void setSkipEveryoneFlag(){
+        this.skipEveryone = true;
     }
 
 }
