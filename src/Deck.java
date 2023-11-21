@@ -21,6 +21,7 @@ public class Deck {
     private ArrayList<Card> inPlay; // keep track of cards not in deck to draw from or discard
     private static final int MAX_SIZE = 112;
     private static final int NUM_CARDS_PER_COLOUR = 2;
+    private static final int NUM_CARDS_PER_WILD = 4;    // there are 4 of each wild card
 
     /**
      * Create a shuffled deck with all the Uno Flip! cards.
@@ -75,19 +76,23 @@ public class Deck {
         if (deck.size() == MAX_SIZE) {
             throw new IllegalStateException("The deck already contains all cards, cannot add more.");
         }
+
+        inPlay.remove(card);
+        discard.push(card);
+
         if (card.isWild()) {
             // need to check for 4 cards because there are 4 of each wild
-            if (frequency(card) > 4) {
+            if (frequency(card) > NUM_CARDS_PER_WILD) {
+                discard.pop();
                 throw new IllegalArgumentException("The card object passed already has its max amount in the deck.");
             }
         } else {
             // need to check for 2 cards because there are 2 of each non-wild
-            if (frequency(card) > 2) {
+            if (frequency(card) > NUM_CARDS_PER_COLOUR) {
+                discard.pop();
                 throw new IllegalArgumentException("The card object passed already has its max amount in the deck.");
             }
         }
-        inPlay.remove(card);
-        discard.push(card);
     }
 
 
