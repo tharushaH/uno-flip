@@ -83,6 +83,14 @@ public class Card {
     }
 
     /**
+     * Returns the current side (light or dark) of all Card objects (defined by constants LIGHT and DARK)
+     * @return LIGHT (true) if light side, DARK (false) if dark side
+     */
+    public static boolean getSide() {
+        return side;
+    }
+
+    /**
      * Returns a string representation of the card, displaying its color followed by its rank.
      *
      * @return the string representation of the card
