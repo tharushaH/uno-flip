@@ -16,7 +16,6 @@ public class UnoFlipModel {
     private boolean turnFinished;
     private boolean skipTurn;
     private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
-    private boolean dontAskChallenge; //true if game does not want give player challenge prompt, false if game want to give player challenge prompt
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
     private int numPlayers;
     private int chosenCardIndex;
@@ -63,7 +62,6 @@ public class UnoFlipModel {
         this.numPlayers = 0;
         this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
         this.skipTurn = false;
-        this.dontAskChallenge = false;
         this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
         this.status = STATUS_STANDARD;
 
@@ -148,11 +146,11 @@ public class UnoFlipModel {
         //make sure there are views in the view arraylist to send UnoFlipEvents to
         if(!this.views.isEmpty()){
 
-            boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY) && !this.dontAskChallenge;
+            boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY);
 
             String statusToUpdate;
 
-            // If the current top card is a Wild Draw 2 and the next player declines to challenge (dontAskChallenge flag prevents repetition of this situation)
+            // If the current top card is a Wild Draw 2 and the next player declines to challenge
             if (isWildDraw) {
                 statusToUpdate = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
             } else {
@@ -530,14 +528,6 @@ public class UnoFlipModel {
     public void setChallengeFlag(boolean challenge){
         this.challenge = challenge;
         notifyViews();
-    }
-
-    /**
-     * Set boolean for dontAskChallenge
-     * @param dontAskChallenge set the ask permission
-     */
-    public void setDontAskChallenge(boolean dontAskChallenge) {
-        this.dontAskChallenge = dontAskChallenge;
     }
 
     /**
