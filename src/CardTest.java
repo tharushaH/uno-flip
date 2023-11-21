@@ -64,11 +64,15 @@ public class CardTest {
 
     @Test
     public void testToString() {
+        Card flipCard = new Card(Card.Rank.FLIP, Card.Colour.GREEN, Card.Rank.FLIP, Card.Colour.TEAL);
+
+        assertEquals("green_flip", flipCard.toString());
         assertEquals("green_5", numberCard.toString());
         assertEquals("blue_draw_1", drawDrawOneOrFiveCard.toString());
         assertEquals("wild_card", wildCard.toString());
         assertEquals("wild_draw_2", wildDrawTwoColourCard.toString());
         Card.flipSide();    // test dark side as well
+        assertEquals("teal_flip", flipCard.toString());
         assertEquals("teal_5", numberCard.toString());
         assertEquals("pink_draw_5", drawDrawOneOrFiveCard.toString());
         assertEquals("wild_dark_card", wildCard.toString());
@@ -86,6 +90,8 @@ public class CardTest {
         assertEquals(sameAsDrawDrawOneOrFiveCard, drawDrawOneOrFiveCard);
         assertEquals(sameAsWildCard, wildCard);
         assertEquals(sameAsWildDrawTwoColourCard, wildDrawTwoColourCard);
+        assertNotEquals(sameAsDrawDrawOneOrFiveCard, numberCard);
+        assertNotEquals(sameAsWildCard, wildDrawTwoColourCard);
         Card.flipSide();    // test with dark side as well
         assertEquals(sameAsNumberCard, numberCard);
         assertEquals(sameAsDrawDrawOneOrFiveCard, drawDrawOneOrFiveCard);
