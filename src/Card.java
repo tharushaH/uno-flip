@@ -8,7 +8,7 @@
  */
 
 public class Card {
-    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE};
+    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE, WILD_DARK};
     public enum Rank {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, DRAW_ONE, REVERSE, SKIP, WILD, WILD_DRAW_2,
         DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOUR, FLIP};
 
@@ -28,10 +28,10 @@ public class Card {
     /**
      * Constructs a Card object with the specified rank and color.
      *
-     * @param lightRank
-     * @param lightColour
-     * @param darkRank
-     * @param darkColour
+     * @param lightRank The card's light side rank
+     * @param lightColour The card's light side colour
+     * @param darkRank The card's dark side rank
+     * @param darkColour The card's dark side colour
      * @throws IllegalArgumentException if an invalid card is attempted to be created
      */
     public Card(Rank lightRank, Colour lightColour, Rank darkRank, Colour darkColour){
@@ -48,7 +48,7 @@ public class Card {
      * @return true if the card is a wild card, false otherwise
      */
     public boolean isWild(){
-        return (this.lightColour == Colour.WILD && this.darkColour == Colour.WILD);
+        return (this.lightColour == Colour.WILD && this.darkColour == Colour.WILD_DARK);
     }
 
     /**
@@ -89,18 +89,17 @@ public class Card {
      */
     @Override
     public String toString() {
-
+        // some cards' formats cannot be derived purely from their rank and colour enums
         if (this.getRank() == Rank.WILD_DRAW_2)
             return (this.getColour() + "_draw_2").toLowerCase();
         if (this.getRank() == Rank.DRAW_ONE)
             return (this.getColour() + "_draw_1").toLowerCase();
-        if (this.getRank() == Rank.WILD)
+        if (this.getRank() == Rank.WILD && (this.getColour() == Colour.WILD || this.getColour() == Colour.WILD_DARK))
             return (this.getColour() + "_card").toLowerCase();
         if (this.getRank() == Rank.WILD_DRAW_COLOUR)
             return (this.getColour() + "_draw_colour");
         if(this.getRank().ordinal() < 9) // if number card
-            return (this.getColour() + "_"+ (this.getRank().ordinal()+1)).toLowerCase();
-
+            return (this.getColour() + "_"+ (this.getRank().ordinal()+1)).toLowerCase();    // +1 because ordinal 0-based
 
         return (this.getColour() + "_" + this.getRank()).toLowerCase();   // if a Colour non-number card
     }
