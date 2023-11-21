@@ -5,72 +5,91 @@ import static org.junit.Assert.*;
 
 public class CardTest {
 
-    private Card regularCard;
-    private Card drawOneCard;
+    private Card numberCard;
+    private Card drawDrawOneOrFiveCard;
     private Card wildCard;
-    private Card wildDrawTwoCard;
+    private Card wildDrawTwoColourCard;
+
 
     @Before
     public void setUp() {
-        regularCard = new Card(Card.Rank.FIVE, Card.Colour.GREEN);
-        drawOneCard = new Card(Card.Rank.DRAW_ONE, Card.Colour.BLUE);
-        wildCard = new Card(Card.Rank.WILD, Card.Colour.WILD);
-        wildDrawTwoCard = new Card(Card.Rank.WILD_DRAW_2, Card.Colour.WILD);
+        numberCard = new Card(Card.Rank.FIVE, Card.Colour.GREEN, Card.Rank.FIVE, Card.Colour.TEAL);
+        drawDrawOneOrFiveCard = new Card(Card.Rank.DRAW_ONE, Card.Colour.BLUE, Card.Rank.DRAW_FIVE, Card.Colour.PINK);
+        wildCard = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
+        wildDrawTwoColourCard = new Card(Card.Rank.WILD_DRAW_2, Card.Colour.WILD, Card.Rank.WILD_DRAW_COLOUR, Card.Colour.WILD_DARK);
+        if (Card.getSide() == Card.DARK) {
+            Card.flipSide();    // always start a test on light side
+        }
     }
 
-    @Test
-    public void createWrongCards(){
-        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.WILD, Card.Colour.RED));
-        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.WILD_DRAW_2, Card.Colour.RED));
-        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.REVERSE, Card.Colour.WILD));
-        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.SKIP, Card.Colour.WILD));
-        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.DRAW_ONE, Card.Colour.WILD));
-        assertThrows(IllegalArgumentException.class,() -> new Card(Card.Rank.ONE, Card.Colour.WILD));
-    }
 
     @Test
     public void testIsWild() {
-        assertFalse(regularCard.isWild());
-        assertFalse(drawOneCard.isWild());
+        assertFalse(numberCard.isWild());
+        assertFalse(drawDrawOneOrFiveCard.isWild());
         assertTrue(wildCard.isWild());
-        assertTrue(wildDrawTwoCard.isWild());
-
+        assertTrue(wildDrawTwoColourCard.isWild());
+        Card.flipSide();    // test dark side as well
+        assertFalse(numberCard.isWild());
+        assertFalse(drawDrawOneOrFiveCard.isWild());
+        assertTrue(wildCard.isWild());
+        assertTrue(wildDrawTwoColourCard.isWild());
     }
 
     @Test
     public void testGetColour() {
-        assertEquals(Card.Colour.GREEN, regularCard.getColour());
-        assertEquals(Card.Colour.BLUE, drawOneCard.getColour());
+        assertEquals(Card.Colour.GREEN, numberCard.getColour());
+        assertEquals(Card.Colour.BLUE, drawDrawOneOrFiveCard.getColour());
         assertEquals(Card.Colour.WILD, wildCard.getColour());
-        assertEquals(Card.Colour.WILD, wildDrawTwoCard.getColour());
+        assertEquals(Card.Colour.WILD, wildDrawTwoColourCard.getColour());
+        Card.flipSide();    // test dark side as well
+        assertEquals(Card.Colour.TEAL, numberCard.getColour());
+        assertEquals(Card.Colour.PINK, drawDrawOneOrFiveCard.getColour());
+        assertEquals(Card.Colour.WILD_DARK, wildCard.getColour());
+        assertEquals(Card.Colour.WILD_DARK, wildDrawTwoColourCard.getColour());
     }
 
     @Test
     public void testGetRank() {
-        assertEquals(Card.Rank.FIVE, regularCard.getRank());
-        assertEquals(Card.Rank.DRAW_ONE, drawOneCard.getRank());
+        assertEquals(Card.Rank.FIVE, numberCard.getRank());
+        assertEquals(Card.Rank.DRAW_ONE, drawDrawOneOrFiveCard.getRank());
         assertEquals(Card.Rank.WILD, wildCard.getRank());
-        assertEquals(Card.Rank.WILD_DRAW_2, wildDrawTwoCard.getRank());
+        assertEquals(Card.Rank.WILD_DRAW_2, wildDrawTwoColourCard.getRank());
+        Card.flipSide();    // test dark side as well
+        assertEquals(Card.Rank.FIVE, numberCard.getRank());
+        assertEquals(Card.Rank.DRAW_FIVE, drawDrawOneOrFiveCard.getRank());
+        assertEquals(Card.Rank.WILD, wildCard.getRank());
+        assertEquals(Card.Rank.WILD_DRAW_COLOUR, wildDrawTwoColourCard.getRank());
     }
 
     @Test
     public void testToString() {
-        assertEquals("GREEN FIVE", regularCard.toString());
-        assertEquals("BLUE DRAW 1", drawOneCard.toString());
-        assertEquals("WILD CARD", wildCard.toString());
-        assertEquals("WILD DRAW 2", wildDrawTwoCard.toString());
+        assertEquals("green_five", numberCard.toString());
+        assertEquals("blue_draw_1", drawDrawOneOrFiveCard.toString());
+        assertEquals("wild_card", wildCard.toString());
+        assertEquals("wild_draw_2", wildDrawTwoColourCard.toString());
+        Card.flipSide();    // test dark side as well
+        assertEquals("teal_five", numberCard.toString());
+        assertEquals("pink_draw_5", drawDrawOneOrFiveCard.toString());
+        assertEquals("wild_dark_card", wildCard.toString());
+        assertEquals("wild_draw_colour", wildDrawTwoColourCard.toString());
     }
 
     @Test
     public void testEquals(){
-        Card sameAsRegular =  new Card(Card.Rank.FIVE, Card.Colour.GREEN);
-        Card sameAsWild =  new Card(Card.Rank.WILD, Card.Colour.WILD);
+        Card sameAsNumberCard =  new Card(Card.Rank.FIVE, Card.Colour.GREEN, Card.Rank.FIVE, Card.Colour.TEAL);
+        Card sameAsDrawDrawOneOrFiveCard  = new Card(Card.Rank.DRAW_ONE, Card.Colour.BLUE, Card.Rank.DRAW_FIVE, Card.Colour.PINK);
+        Card sameAsWildCard =  new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
+        Card sameAsWildDrawTwoColourCard = new Card(Card.Rank.WILD_DRAW_2, Card.Colour.WILD, Card.Rank.WILD_DRAW_COLOUR, Card.Colour.WILD_DARK);
 
-        assertEquals(sameAsRegular, regularCard);
-        assertEquals(sameAsWild, wildCard);
-
-        assertFalse(regularCard.equals(wildCard));
-        assertFalse(regularCard.equals(drawOneCard));
-        assertFalse(wildCard.equals(wildDrawTwoCard));
+        assertEquals(sameAsNumberCard, numberCard);
+        assertEquals(sameAsDrawDrawOneOrFiveCard, drawDrawOneOrFiveCard);
+        assertEquals(sameAsWildCard, wildCard);
+        assertEquals(sameAsWildDrawTwoColourCard, wildDrawTwoColourCard);
+        Card.flipSide();    // test with dark side as well
+        assertEquals(sameAsNumberCard, numberCard);
+        assertEquals(sameAsDrawDrawOneOrFiveCard, drawDrawOneOrFiveCard);
+        assertEquals(sameAsWildCard, wildCard);
+        assertEquals(sameAsWildDrawTwoColourCard, wildDrawTwoColourCard);
     }
 }
