@@ -293,6 +293,42 @@ public class UnoFlipModel {
     }
 
     /**
+     * Challenge
+     */
+    public void challenge(){
+        if(challenge) { // If next player challenges
+            if(isWildDrawTwoValid()) { // IF WILD DRAW 2 is valid
+                this.drawNCards(4, this.getNextTurn());
+                this.setStatus(UnoFlipModel.STATUS_CHALLENGE_INNOCENT);
+            } else {                    // If WILD DRAW 2 is not valid
+                this.drawNCards(2, this.getCurrentTurn());
+                this.setStatus(UnoFlipModel.STATUS_CHALLENGE_GUILTY);
+            }
+        } else {
+            this.drawNCards(2, this.getNextTurn());
+            this.setStatus(UnoFlipModel.STATUS_DONE);
+        }
+        notifyViews();
+    }
+
+    /**
+     * Checks to see if there is a playable card in hand before allowing player to check if player is guilty or not
+     * @return return true if valid time to play wild draw 2, otherwise false.
+     */
+    private boolean isWildDrawTwoValid(){
+        for (int i = 0; i < this.getCurrentPlayer().getHandSize();i++){
+            if (this.getCurrentPlayer().getCard(i).getRank() == this.getCurrentRank() || this.getCurrentPlayer().getCard(i).getColour() == this.getCurrentColour()){
+                // If the hand contains an action card, playing wild draw 2 is still valid
+                if(this.getCurrentPlayer().getCard(i).getRank() == Card.Rank.REVERSE || this.getCurrentPlayer().getCard(i).getRank() == Card.Rank.SKIP || this.getCurrentPlayer().getCard(i).getRank() == Card.Rank.DRAW_ONE){
+                    continue;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Returns the score of the winner, score is generated based on the cards opponents are left holding
      * @return The score of the winner
      */
@@ -484,6 +520,7 @@ public class UnoFlipModel {
      */
     public void setCurrentColour(Card.Colour colour){
         this.currentColour = colour;
+        notifyViews();
     }
 
     /**
@@ -492,6 +529,7 @@ public class UnoFlipModel {
      */
     public void setChallengeFlag(boolean challenge){
         this.challenge = challenge;
+        notifyViews();
     }
 
     /**

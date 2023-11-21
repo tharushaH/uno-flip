@@ -144,24 +144,17 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         statusArea.setText("");
 
         // check wild to select colour
-        if (e.getIsWild() && e.getStatus().equals("WILD")){
-            ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
-            controller.actionPerformed(wildEvent);
-        }
-        else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
-            if(e.getIsWild()){
-                statusArea.append("\nSelected Colour: " + e.getStatus());
-                if(e.getTopCard().equals("wild_draw_2")){
-                    ActionEvent challengeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, CHALLENGE_CMD);
-                    controller.actionPerformed(challengeEvent);
-                }
-            }
+        if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
+            statusArea.append("\nSelected Colour: " + e.getStatus());
         } else if (e.getStatus().startsWith("WINNER:")) {
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
             this.dispose();
         } else if (e.getStatus().equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") || e.getStatus().equals(("GUILTY:YOU DRAW 2 CARDS"))){
             statusArea.append(e.getStatus());
-        }else {
+        } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
+            statusArea.append("\nSelecting Colour...");
+        }
+        else {
             statusArea.append(e.getStatus());
         }
 

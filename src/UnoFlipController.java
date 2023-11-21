@@ -89,58 +89,14 @@ public class UnoFlipController implements ActionListener {
                 this.model.setUpInitialTopCard();
                 break;
 
-
-            // User places a wild card and prompts the player to choose a colour to update game state
-            case UnoFlipViewFrame.WILD_CMD:
-                // Colour options for Player to chose from
-                String[] colourOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
-
-                comboBox = new JComboBox<>(colourOptions);
-                // Keep asking user to pick a colour until they do
-                while(true) {
-                    result = JOptionPane.showOptionDialog(
-                            null,
-                            comboBox,
-                            "Select colour:",
-                            JOptionPane.DEFAULT_OPTION,
-                            JOptionPane.PLAIN_MESSAGE,
-                            null,
-                            null,
-                            null);
-
-                    // User chooses colour and selects okay to change the current colour
-                    if (result == JOptionPane.OK_OPTION) {
-                        Card.Colour colour;
-
-                        String option = (String) comboBox.getSelectedItem();
-                        colour = Card.Colour.valueOf(option);
-
-                        this.model.setCurrentColour(colour);
-                        this.model.notifyViews();
-                        break;
-                    }
-                }
-                break;
-
             // User selects the draw button option to draw a card
             case UnoFlipViewFrame.DRAW_CMD:
-                this.model.playTurn(this.model.DRAW_ONE_BUTTON);
+                this.model.playTurn(UnoFlipModel.DRAW_ONE_BUTTON);
                 break;
 
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
                 this.model.nextTurn();
-                break;
-
-            // User places a Wild Draw 2 and prompts the next player to challenge
-            case UnoFlipViewFrame.CHALLENGE_CMD:
-                result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
-
-                boolean challenge = result == JOptionPane.YES_OPTION;
-
-                this.model.setChallengeFlag(challenge);
-                // Set the dontAskChallenge variable to true for game not to prompt user again for the challenge
-                this.model.setDontAskChallenge(true);
                 break;
 
             // A card is selected from the hand
@@ -149,6 +105,50 @@ public class UnoFlipController implements ActionListener {
                 try {
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
+
+                    // User places a wild card and prompts the player to choose a colour to update game state
+                    if(this.model.getTopCard().isWild()){
+
+                        // Colour options for Player to chose from
+                        String[] colourOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
+
+                        comboBox = new JComboBox<>(colourOptions);
+
+                        while(true) {
+                            result = JOptionPane.showOptionDialog(
+                                    null,
+                                    comboBox,
+                                    "Select colour:",
+                                    JOptionPane.DEFAULT_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    null,
+                                    null);
+
+                            // User chooses colour and selects okay to change the current colour
+                            if (result == JOptionPane.OK_OPTION) {
+                                Card.Colour colour;
+
+                                String option = (String) comboBox.getSelectedItem();
+                                colour = Card.Colour.valueOf(option);
+
+                                this.model.setCurrentColour(colour);
+                                break;
+                            }
+                        }
+
+                        // User places a Wild Draw 2 and prompts the next player to challenge
+                        if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
+                            result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                            boolean challenge = result == JOptionPane.YES_OPTION;
+
+                            this.model.setChallengeFlag(challenge);
+                            this.model.challenge();
+                        }
+
+
+                    }
 
                 }
                 // Catch NumberFormatException for commands that are not Integer values
