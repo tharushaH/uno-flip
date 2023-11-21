@@ -102,6 +102,8 @@ public class Card {
             return (this.getColour() + "_draw_2").toLowerCase();
         if (this.getRank() == Rank.DRAW_ONE)
             return (this.getColour() + "_draw_1").toLowerCase();
+        if (this.getRank() == Rank.DRAW_FIVE)
+            return (this.getColour() + "_draw_5").toLowerCase();
         if (this.getRank() == Rank.WILD && (this.getColour() == Colour.WILD || this.getColour() == Colour.WILD_DARK))
             return (this.getColour() + "_card").toLowerCase();
         if (this.getRank() == Rank.WILD_DRAW_COLOUR)
