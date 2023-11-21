@@ -28,15 +28,13 @@ public class Card {
     /**
      * Constructs a Card object with the specified rank and color.
      *
-     * @param rank        the rank of the card
-     * @param colour      the color of the card
      * @param lightRank
      * @param lightColour
      * @param darkRank
      * @param darkColour
      * @throws IllegalArgumentException if an invalid card is attempted to be created
      */
-    public Card(Rank rank, Colour colour, Rank lightRank, Colour lightColour, Rank darkRank, Colour darkColour){
+    public Card(Rank lightRank, Colour lightColour, Rank darkRank, Colour darkColour){
         this.lightRank = lightRank;
         this.lightColour = lightColour;
         this.darkRank = darkRank;
