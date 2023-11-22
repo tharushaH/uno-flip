@@ -13,7 +13,7 @@ public class SkipTest {
         unoFlipModel.getPlayers().add(new Player("test1"));
         unoFlipModel.getPlayers().add(new Player("test2"));
         unoFlipModel.setNumPlayers(2);
-        testCard = new Card(Card.Rank.ONE, Card.Colour.RED);
+        testCard = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
     }
 
     @Test
