@@ -15,9 +15,9 @@ public class UnoFlipModel {
 
     private boolean turnFinished;
     private boolean skipTurn;
+    private boolean skipEveryone;
     private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
-    private boolean skipEveryone; //true if everyone should be skipped
     private int numPlayers;
     private int chosenCardIndex;
     private int currentTurn; // 0-indexed (ex. 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4)
@@ -60,6 +60,7 @@ public class UnoFlipModel {
         this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
         this.views = new ArrayList<UnoFlipView>();
         this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
         this.currentTurn = 0;
         this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
@@ -83,7 +84,9 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
         this.turnSeqs.add(new SelfDrawOne(this));
+
         this.turnSeqs.add(new DrawFive(this));
+        this.turnSeqs.add(new SkipEveryone(this)); //must be index 16
 
         this.turnSeqs.add(new Flip(this));
 
@@ -166,7 +169,6 @@ public class UnoFlipModel {
                 statusToUpdate = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
 
             } else {
-                System.out.println(this.status);
                 statusToUpdate = this.status;
             }
 
@@ -208,7 +210,7 @@ public class UnoFlipModel {
 
             int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
 
-            //if the card wanting to be placed is a Wild Draw 2 or Wild 
+            //if the card wanting to be placed is a Wild Draw 2 or Wild
             if (rank == Card.RANK_WILD_DRAW_2 || rank == Card.Rank.WILD.ordinal()){
                 this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
                 this.turnFinished = true;
@@ -278,6 +280,11 @@ public class UnoFlipModel {
                 numPasses =2; //skipping the next player
             }
 
+            if(skipEveryone){
+                numPasses = numPlayers; //skip all players
+
+            }
+
             //change the current player's turn based on the numPasses
             for( int i =0; i < numPasses ; i++){
                 if (this.turnDirection) {
@@ -291,9 +298,8 @@ public class UnoFlipModel {
                 }
             }
 
-            this.skipTurn = false;
             this.status = STATUS_STANDARD;
-            this.turnFinished = false;
+            clearActionCardFlags();
 
         }else {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
@@ -378,17 +384,19 @@ public class UnoFlipModel {
     }
 
     /**
-     * Set value of skipTurn to true to indicate that the next player should be skipped
-     */
-    public void setSkipTurnFlag(){
-        this.skipTurn = true;
-    }
-
-    /**
      * Flips the turn direction of the game.
      */
     public void flipTurnDirection(){
         this.turnDirection = !this.turnDirection;
+    }
+
+    /**
+     * Clear action card flags
+     */
+    public void clearActionCardFlags(){
+        this.skipTurn = false;
+        this.skipEveryone = false;
+        this.turnFinished = false;
     }
 
 
@@ -506,6 +514,14 @@ public class UnoFlipModel {
     }
 
     /**
+     * Gets the status of the skipEveryone, whether the all players are going to be skipped
+     * @return true if the skipping all players, false if not
+     */
+    public boolean getSkipEveryoneFlag(){
+        return this.skipEveryone;
+    }
+
+    /**
      * Setting the status
      * @param status - the new status
      */
@@ -556,18 +572,10 @@ public class UnoFlipModel {
     }
 
     /**
-     * Return the boolean representation of if the current player turn is finished
-     *
-     * @return true if the turn is finished, otherwise false
-     */
-    public boolean getTurnFinished(){
-        return this.turnFinished;
-    }
-
-    /**
-     *  Set value of skipEveryone to true to indicate that the all players should be skipped, and current player can go again
+     * Set value of skipEveryone to true to indicate that the all players should be skipped, and current player can go again
      */
     public void setSkipEveryoneFlag(){
         this.skipEveryone = true;
     }
+
 }
