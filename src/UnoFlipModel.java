@@ -80,6 +80,7 @@ public class UnoFlipModel {
         this.turnSeqs.add(new WildDrawTwo(this));
         this.turnSeqs.add(new SelfDrawOne(this));
 
+        this.turnSeqs.add(new Flip(this));
 
     }
 

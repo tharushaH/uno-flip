@@ -18,16 +18,13 @@ public class FlipTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.setTopCard(testCard);
-        unoFlipModel.setCurrentColour(testCard.getColour());
+        unoFlipModel.getTurnSeqs().get(15).executeSequence(testCard); // should be index 18 according to enum
         assertTrue(unoFlipModel.getTurnDirection());
-        assertEquals(testCard, unoFlipModel.getTopCard());
+        assertEquals(testCard, unoFlipModel.getTopCard()); // make sure the testCard is on top
         Card.flipSide();
-        unoFlipModel.setCurrentColour(testCard.getColour());
-        unoFlipModel.setCurrentRank(testCard.getRank());
-        assertEquals(Card.Colour.ORANGE, unoFlipModel.getCurrentColour());
+        assertEquals(Card.Colour.ORANGE, unoFlipModel.getCurrentColour()); // check to see if card was flipped
         assertEquals(Card.Rank.FLIP, unoFlipModel.getCurrentRank());
-        assertEquals(0, unoFlipModel.getCurrentTurn());
+        assertEquals(0, unoFlipModel.getCurrentTurn()); //make sure nothing else was touched
         assertEquals(1, unoFlipModel.getNextTurn());
 
     }
