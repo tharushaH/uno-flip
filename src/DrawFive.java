@@ -16,6 +16,10 @@ public class DrawFive extends TurnSequence{
      */
     @Override
     public void executeSequence(Card card) {
+        unoFlipModel.setTopCard(card);
+        unoFlipModel.setCurrentColour(card.getColour());
+        unoFlipModel.setCurrentRank(card.getRank());
         unoFlipModel.drawNCards(5,unoFlipModel.getNextTurn());
+        unoFlipModel.setSkipTurnFlag();
     }
 }

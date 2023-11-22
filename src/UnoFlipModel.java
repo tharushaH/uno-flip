@@ -76,7 +76,7 @@ public class UnoFlipModel {
         this.turnSeqs.add(new DrawOne(this));
         this.turnSeqs.add(new Reverse(this));
         this.turnSeqs.add(new Skip(this));
-        this.turnSeqs.add(new Wild(this));CD sps
+        this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
         this.turnSeqs.add(new SelfDrawOne(this));
         this.turnSeqs.add(new DrawFive(this));
