@@ -27,4 +27,39 @@ public class SkipEveryoneTest {
         assertTrue(unoFlipModel.getSkipEveryoneFlag());
 
     }
+
+    @Test
+    public void testExecuteSequenceAtLastTurn(){
+
+        unoFlipModel.setTurnFinished(true);
+        unoFlipModel.nextTurn();
+        unoFlipModel.setTurnFinished(true);
+        unoFlipModel.nextTurn();
+
+        unoFlipModel.getTurnSeqs().get(15).executeSequence(testCard);
+        assertTrue(unoFlipModel.getTurnDirection());
+        assertEquals(testCard, unoFlipModel.getTopCard());
+        assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
+        assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
+        assertEquals(2,unoFlipModel.getCurrentTurn());
+        assertEquals(0,unoFlipModel.getNextTurn());
+        assertTrue(unoFlipModel.getSkipEveryoneFlag());
+    }
+
+    @Test
+    public void testExecuteSequenceAtMiddle(){
+
+        unoFlipModel.setTurnFinished(true);
+        unoFlipModel.nextTurn();
+
+        unoFlipModel.getTurnSeqs().get(15).executeSequence(testCard);
+        assertTrue(unoFlipModel.getTurnDirection());
+        assertEquals(testCard, unoFlipModel.getTopCard());
+        assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
+        assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
+        assertEquals(1,unoFlipModel.getCurrentTurn());
+        assertEquals(2,unoFlipModel.getNextTurn());
+        assertTrue(unoFlipModel.getSkipEveryoneFlag());
+    }
+
 }
