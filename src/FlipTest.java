@@ -13,7 +13,7 @@ public class FlipTest {
         unoFlipModel.getPlayers().add(new Player("test1"));
         unoFlipModel.getPlayers().add(new Player("test2"));
         unoFlipModel.setNumPlayers(2);
-        testCard = new Card(Card.Rank.FLIP, Card.Colour.RED);
+        testCard = new Card(Card.Rank.FLIP, Card.Colour.RED,Card.Rank.FLIP,Card.Colour.ORANGE);
     }
 
     @Test
