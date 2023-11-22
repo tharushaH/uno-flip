@@ -462,6 +462,14 @@ public class UnoFlipModel {
     }
 
     /**
+     * Gets the status of the skipEveryone, whether the all players are going to be skipped
+     * @return true if the skipping all players, false if not
+     */
+    public boolean getSkipEveryoneFlag(){
+        return this.skipEveryone;
+    }
+
+    /**
      * Setting the status
      * @param status - the new status
      */

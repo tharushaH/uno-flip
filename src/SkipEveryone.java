@@ -19,6 +19,5 @@ public class SkipEveryone extends TurnSequence {
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
         unoFlipModel.setSkipEveryoneFlag();
-
     }
 }
