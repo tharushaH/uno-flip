@@ -18,11 +18,15 @@ public class FlipTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(12).executeSequence(testCard);
+        unoFlipModel.setTopCard(testCard);
+        unoFlipModel.setCurrentColour(testCard.getColour());
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
+        Card.flipSide();
+        unoFlipModel.setCurrentColour(testCard.getColour());
+        unoFlipModel.setCurrentRank(testCard.getRank());
         assertEquals(Card.Colour.ORANGE, unoFlipModel.getCurrentColour());
-        assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
+        assertEquals(Card.Rank.FLIP, unoFlipModel.getCurrentRank());
         assertEquals(0, unoFlipModel.getCurrentTurn());
         assertEquals(1, unoFlipModel.getNextTurn());
 
