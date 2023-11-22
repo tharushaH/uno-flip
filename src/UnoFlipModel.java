@@ -148,6 +148,8 @@ public class UnoFlipModel {
 
             boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY);
 
+
+
             String statusToUpdate;
 
             // If the current top card is a Wild Draw 2 and the next player declines to challenge
@@ -159,7 +161,7 @@ public class UnoFlipModel {
 
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, isWildDraw || this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished));
             }
         }
     }
@@ -193,10 +195,9 @@ public class UnoFlipModel {
 
             int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
 
-            //if the card wanting to be placed is a Wild Draw 2
-            if (rank == Card.RANK_WILD_DRAW_2){
+            //if the card wanting to be placed is a Wild Draw 2 or Wild 
+            if (rank == Card.RANK_WILD_DRAW_2 || rank == Card.Rank.WILD.ordinal()){
                 this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
-                this.turnFinished = true;
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
                 Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
@@ -291,16 +292,19 @@ public class UnoFlipModel {
     }
 
     /**
-     * Challenge
+     * challenge method to be used for wild draw 2 method to implement challenge feature.
+     * Checks to see if the next player has decided to challenge or not.
+     * If the next player challenges, they are either 'guilty' or 'innocent'
+     * If the next player does not challenge, game continues as normal
      */
     public void challenge(){
         if(challenge) { // If next player challenges
             if(isWildDrawTwoValid()) { // IF WILD DRAW 2 is valid
                 this.drawNCards(4, this.getNextTurn());
-                this.setStatus(UnoFlipModel.STATUS_CHALLENGE_INNOCENT);
+                status = STATUS_CHALLENGE_INNOCENT;
             } else {                    // If WILD DRAW 2 is not valid
                 this.drawNCards(2, this.getCurrentTurn());
-                this.setStatus(UnoFlipModel.STATUS_CHALLENGE_GUILTY);
+                status = STATUS_CHALLENGE_GUILTY;
             }
         } else {
             this.drawNCards(2, this.getNextTurn());
@@ -538,4 +542,12 @@ public class UnoFlipModel {
         this.turnFinished = turnFinished;
     }
 
+    /**
+     * Return the boolean representation of if the current player turn is finished
+     *
+     * @return true if the turn is finished, otherwise false
+     */
+    public boolean getTurnFinished(){
+        return this.turnFinished;
+    }
 }

@@ -15,6 +15,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
     private JTextArea statusArea;
+    private JButton drawCard;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
@@ -73,7 +74,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         // create button to draw a card and to go to next turn
-        JButton drawCard = new JButton("Draw card");
+        drawCard = new JButton("Draw card");
         drawCard.setFont(new Font("Dialog", Font.PLAIN, 18));
         drawCard.setActionCommand(DRAW_CMD);
         drawCard.addActionListener(controller);
@@ -139,6 +140,11 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
      */
     @Override
     public void handleUnoFlipStatusUpdate(UnoFlipEvent e) {
+        if(e.getTurnFinished()){
+            drawCard.setEnabled(false);
+        } else {
+            drawCard.setEnabled(true);
+        }
 
         // clear status area
         statusArea.setText("");
@@ -171,8 +177,12 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));
             newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
             newCard.addActionListener(controller);
+            if(e.getTurnFinished()){
+                newCard.setEnabled(false);
+            }
             handPanel.add(newCard);
         }
+
 
         this.repaint();  // prevent visual bug by resetting the frame
 

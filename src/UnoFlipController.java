@@ -107,7 +107,7 @@ public class UnoFlipController implements ActionListener {
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
                     // User places a wild card and prompts the player to choose a colour to update game state
-                    if(this.model.getTopCard().isWild()){
+                    if((this.model.getTopCard().isWild() && !this.model.getTurnFinished()) || (this.model.getTopCard().getRank() == Card.Rank.WILD && !this.model.getTurnFinished())){
 
                         // Colour options for Player to chose from
                         String[] colourOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
@@ -146,8 +146,7 @@ public class UnoFlipController implements ActionListener {
                             this.model.setChallengeFlag(challenge);
                             this.model.challenge();
                         }
-
-
+                        this.model.setTurnFinished(true);
                     }
 
                 }
