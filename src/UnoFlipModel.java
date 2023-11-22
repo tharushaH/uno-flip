@@ -211,7 +211,7 @@ public class UnoFlipModel {
             int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
 
             //if the card wanting to be placed is a Wild Draw 2 or Wild
-            if (rank == Card.RANK_WILD_DRAW_2 || rank == Card.Rank.WILD.ordinal()){
+            if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
                 this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
                 this.turnFinished = true;
 

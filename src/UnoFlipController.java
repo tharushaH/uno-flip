@@ -106,7 +106,7 @@ public class UnoFlipController implements ActionListener {
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
-                    // User places a wild card and prompts the player to choose a colour to update game state
+                    // Makes the current player is the one that placed the wild card and not the next player.
                     if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
 
                         // Colour options for Player to chose from
