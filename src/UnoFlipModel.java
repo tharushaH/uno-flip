@@ -35,6 +35,7 @@ public class UnoFlipModel {
 
     //Constants used for Turn sequence
     public static final int TURN_SEQ_SELF_DRAW_ONE = 14;
+    public static final int TURN_SEQ_DRAW_FIVE = 15;
 
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
