@@ -20,7 +20,5 @@ public class Reverse extends TurnSequence {
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
-        unoFlipModel.flipTurnDirection();
-        unoFlipModel.nextTurn();
-    }
+        unoFlipModel.flipTurnDirection();}
 }
