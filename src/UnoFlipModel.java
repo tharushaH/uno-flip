@@ -119,7 +119,7 @@ public class UnoFlipModel {
         this.topCard = deck.takeCard();
 
         //rules don't allow wild draw 2 to be first card, keep drawing until a different card is drawn
-        while(this.topCard.getRank().ordinal() == Card.RANK_WILD_DRAW_2){
+        while(this.topCard.getRank().ordinal() == Card.RANK_WILD_DRAW_2 || this.topCard.getRank().ordinal() == Card.Rank.WILD.ordinal()){
             this.deck.putCard(this.topCard);
             this.topCard = this.deck.takeCard();  //redraw the topCard
         }
@@ -156,7 +156,7 @@ public class UnoFlipModel {
             // If the current top card is a Wild Draw 2 and the next player declines to challenge
             if (isWildDraw) {
                 statusToUpdate = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
-                System.out.println("I PLACED COLOUR RAHHHHHH");
+
             } else {
                 System.out.println(this.status);
                 statusToUpdate = this.status;
@@ -167,6 +167,7 @@ public class UnoFlipModel {
                 view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished));
             }
         }
+        this.status = STATUS_STANDARD;
     }
 
 
