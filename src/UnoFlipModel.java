@@ -17,6 +17,7 @@ public class UnoFlipModel {
     private boolean skipTurn;
     private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
+    private boolean skipEveryone; //true if everyone should be skipped
     private int numPlayers;
     private int chosenCardIndex;
     private int currentTurn; // 0-indexed (ex. 0 is player 1, 1 is player 2, 2 is player 3, 3 is player 4)
@@ -561,5 +562,12 @@ public class UnoFlipModel {
      */
     public boolean getTurnFinished(){
         return this.turnFinished;
+    }
+
+    /**
+     *  Set value of skipEveryone to true to indicate that the all players should be skipped, and current player can go again
+     */
+    public void setSkipEveryoneFlag(){
+        this.skipEveryone = true;
     }
 }
