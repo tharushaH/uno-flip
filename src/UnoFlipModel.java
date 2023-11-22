@@ -36,6 +36,10 @@ public class UnoFlipModel {
 
     //Constants used for Turn sequence
     public static final int TURN_SEQ_SELF_DRAW_ONE = 14;
+    public static final int TURN_SEQ_DRAW_FIVE = 15;
+
+
+    public static final int TURN_SEQ_FLIP = 15;
 
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
@@ -81,7 +85,11 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
         this.turnSeqs.add(new SelfDrawOne(this));
+
+        this.turnSeqs.add(new DrawFive(this));
         this.turnSeqs.add(new SkipEveryone(this)); //must be index 16
+
+        this.turnSeqs.add(new Flip(this));
 
     }
 
