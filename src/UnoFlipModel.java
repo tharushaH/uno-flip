@@ -15,6 +15,7 @@ public class UnoFlipModel {
 
     private boolean turnFinished;
     private boolean skipTurn;
+    private boolean skipEveryone;
     private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
     private boolean dontAskChallenge; //true if game does not want give player challenge prompt, false if game want to give player challenge prompt
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
@@ -35,6 +36,10 @@ public class UnoFlipModel {
 
     //Constants used for Turn sequence
     public static final int TURN_SEQ_SELF_DRAW_ONE = 14;
+    public static final int TURN_SEQ_DRAW_FIVE = 15;
+
+
+    public static final int TURN_SEQ_FLIP = 15;
 
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
@@ -55,6 +60,7 @@ public class UnoFlipModel {
         this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
         this.views = new ArrayList<UnoFlipView>();
         this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
         this.currentTurn = 0;
         this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
@@ -79,6 +85,11 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
         this.turnSeqs.add(new SelfDrawOne(this));
+
+        this.turnSeqs.add(new DrawFive(this));
+        this.turnSeqs.add(new SkipEveryone(this)); //must be index 16
+
+        this.turnSeqs.add(new Flip(this));
 
     }
 
@@ -266,6 +277,11 @@ public class UnoFlipModel {
                 numPasses =2; //skipping the next player
             }
 
+            if(skipEveryone){
+                numPasses = numPlayers; //skip all players
+
+            }
+
             //change the current player's turn based on the numPasses
             for( int i =0; i < numPasses ; i++){
                 if (this.turnDirection) {
@@ -279,9 +295,8 @@ public class UnoFlipModel {
                 }
             }
 
-            this.skipTurn = false;
             this.status = STATUS_STANDARD;
-            this.turnFinished = false;
+            clearActionCardFlags();
 
         }else {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
@@ -327,17 +342,19 @@ public class UnoFlipModel {
     }
 
     /**
-     * Set value of skipTurn to true to indicate that the next player should be skipped
-     */
-    public void setSkipTurnFlag(){
-        this.skipTurn = true;
-    }
-
-    /**
      * Flips the turn direction of the game.
      */
     public void flipTurnDirection(){
         this.turnDirection = !this.turnDirection;
+    }
+
+    /**
+     * Clear action card flags
+     */
+    public void clearActionCardFlags(){
+        this.skipTurn = false;
+        this.skipEveryone = false;
+        this.turnFinished = false;
     }
 
 
@@ -455,11 +472,26 @@ public class UnoFlipModel {
     }
 
     /**
+     * Gets the status of the skipEveryone, whether the all players are going to be skipped
+     * @return true if the skipping all players, false if not
+     */
+    public boolean getSkipEveryoneFlag(){
+        return this.skipEveryone;
+    }
+
+    /**
      * Setting the status
      * @param status - the new status
      */
     public void setStatus(String status ){
         this.status = status;
+    }
+
+    /**
+     * Set value of skipTurn to true to indicate that the next player should be skipped
+     */
+    public void setSkipTurnFlag(){
+        this.skipTurn = true;
     }
 
     /**
@@ -508,6 +540,13 @@ public class UnoFlipModel {
      */
     public void setTurnFinished(boolean turnFinished){
         this.turnFinished = turnFinished;
+    }
+
+    /**
+     * Set value of skipEveryone to true to indicate that the all players should be skipped, and current player can go again
+     */
+    public void setSkipEveryoneFlag(){
+        this.skipEveryone = true;
     }
 
 }
