@@ -38,7 +38,7 @@ public class UnoFlipModel {
     public static final int TURN_SEQ_DRAW_FIVE = 15;
 
 
-    public static final int TURN_SEQ_FLIP = 15;
+    public static final int TURN_SEQ_FLIP = 17;
 
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
@@ -495,6 +495,21 @@ public class UnoFlipModel {
      */
     public Card getTopCard(){
         return this.topCard;
+    }
+
+    /**
+     * Returns the current side of the Cards (light or dark)
+     * @return true if it's light side, false if it's dark side
+     */
+    public boolean getCardSide() {
+        return Card.getSide();
+    }
+
+    /**
+     * Flips the current side of the cards in the game.
+     */
+    public void flipCardSide() {
+        Card.flipSide();
     }
 
     /**
