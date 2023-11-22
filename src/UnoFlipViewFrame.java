@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -146,6 +147,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             drawCard.setEnabled(true);
         }
 
+        System.out.println(e.getStatus());
         // clear status area
         statusArea.setText("");
 

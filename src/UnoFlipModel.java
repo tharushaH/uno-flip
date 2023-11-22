@@ -41,6 +41,7 @@ public class UnoFlipModel {
     public static final String STATUS_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS 4 CARDS";
     public static final String STATUS_CHALLENGE_GUILTY = "GUILTY:YOU DRAW 2 CARDS";
     public static final String STATUS_PLAYABLE_CARD = "YOU HAVE PLAYABLE CARD";
+    public static final String DRAW_CARD = "YOU HAVE DRAWN A CARD";
     public static final String STATUS_INVALID_CARD_BEING_PLACED = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
     public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
@@ -155,7 +156,9 @@ public class UnoFlipModel {
             // If the current top card is a Wild Draw 2 and the next player declines to challenge
             if (isWildDraw) {
                 statusToUpdate = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
+                System.out.println("I PLACED COLOUR RAHHHHHH");
             } else {
+                System.out.println(this.status);
                 statusToUpdate = this.status;
             }
 
@@ -183,13 +186,14 @@ public class UnoFlipModel {
 
                 if (validSelfDrawOne()){
                     this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
-                    this.status = STATUS_STANDARD;
+                    this.status = DRAW_CARD;
                     this.turnFinished = true;
 
                 //player has a playable card, player still has to complete their turn
                 } else{
                     this.status = STATUS_PLAYABLE_CARD;
                 }
+                notifyViews();
                 return;
             }
 
@@ -198,6 +202,7 @@ public class UnoFlipModel {
             //if the card wanting to be placed is a Wild Draw 2 or Wild 
             if (rank == Card.RANK_WILD_DRAW_2 || rank == Card.Rank.WILD.ordinal()){
                 this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
+                this.turnFinished = true;
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
                 Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
@@ -219,7 +224,6 @@ public class UnoFlipModel {
             }
         } else {
            this.status = STATUS_TURN_FINISHED;
-
 
         }
         notifyViews();
