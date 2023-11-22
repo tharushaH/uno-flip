@@ -271,6 +271,7 @@ public class UnoFlipModel {
 
             if(skipEveryone){
                 numPasses = numPlayers; //skip all players
+
             }
 
             //change the current player's turn based on the numPasses
@@ -286,9 +287,8 @@ public class UnoFlipModel {
                 }
             }
 
-            this.skipTurn = false;
             this.status = STATUS_STANDARD;
-            this.turnFinished = false;
+            clearNextTurnFlags();
 
         }else {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
@@ -337,7 +337,9 @@ public class UnoFlipModel {
      * Set value of skipTurn to true to indicate that the next player should be skipped
      */
     public void setSkipTurnFlag(){
-        this.skipTurn = true;
+        this.skipTurn = false;
+        this.skipEveryone = false;
+        this.turnFinished = false;
     }
 
     /**
@@ -345,6 +347,15 @@ public class UnoFlipModel {
      */
     public void flipTurnDirection(){
         this.turnDirection = !this.turnDirection;
+    }
+
+    /**
+     * Clear flags for next turn
+     */
+    public void clearNextTurnFlags(){
+        this.skipTurn = false;
+        this.skipEveryone = false;
+        this.turnFinished = false;
     }
 
 
