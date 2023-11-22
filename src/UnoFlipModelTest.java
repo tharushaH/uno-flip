@@ -74,7 +74,7 @@ public class UnoFlipModelTest {
     }
     @Test
     public void testSetTopCard(){
-        unoFlipModel.setTopCard(new Card(Card.Rank.FIVE, Card.Colour.RED));
+        unoFlipModel.setTopCard(new Card(Card.Rank.FIVE, Card.Colour.RED, Card.Rank.FIVE, Card.Colour.ORANGE));
         assertTrue(unoFlipModel.getTopCard().getRank()== Card.Rank.FIVE);
         assertTrue(unoFlipModel.getTopCard().getColour()== Card.Colour.RED);
     }

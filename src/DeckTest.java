@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 
 public class DeckTest {
     private Deck deck;
-    final static int MAX_SIZE = 104;    // should be 112, but not including the 8 flip cards yet
+    final static int MAX_SIZE = 112;
 
     @Before
     public void setUp() {
@@ -55,8 +55,8 @@ public class DeckTest {
 
     @Test
     public void testPutCard() {
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE);
-        Card card2 = new Card(Card.Rank.REVERSE, Card.Colour.RED);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE, Card.Rank.EIGHT, Card.Colour.PINK);
+        Card card2 = new Card(Card.Rank.REVERSE, Card.Colour.RED, Card.Rank.REVERSE, Card.Colour.ORANGE);
 
         // take cards until only 3 left in deck
         for (int i = 0; i < (MAX_SIZE - 3); i++) {
@@ -72,7 +72,7 @@ public class DeckTest {
 
     @Test
     public void testPutCardWithFullDeck() {
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE, Card.Rank.EIGHT, Card.Colour.BLUE);
 
         // adding card to full deck should throw an exception
         assertThrows(IllegalStateException.class, () -> {
