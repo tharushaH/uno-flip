@@ -146,8 +146,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         } else {
             drawCard.setEnabled(true);
         }
-
-        System.out.println(e.getStatus());
         // clear status area
         statusArea.setText("");
 

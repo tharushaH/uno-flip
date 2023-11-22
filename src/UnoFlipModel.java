@@ -498,6 +498,13 @@ public class UnoFlipModel {
     }
 
     /**
+     * Set value of skipTurn to true to indicate that the next player should be skipped
+     */
+    public void setSkipTurnFlag(){
+        this.skipTurn = true;
+    }
+
+    /**
      * Return the ArrayList of sequences, for testing.
      * @return return a list of the sequences.
      */
@@ -569,6 +576,15 @@ public class UnoFlipModel {
      */
     public void setTurnFinished(boolean turnFinished){
         this.turnFinished = turnFinished;
+    }
+
+    /**
+     * Return the boolean representation of if the players turn is finished
+     *
+     * @return returns true if players turn is finished, otherwise false
+     */
+    public boolean getTurnFinished(){
+        return this.turnFinished;
     }
 
     /**
