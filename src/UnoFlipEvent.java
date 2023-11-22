@@ -5,7 +5,7 @@ public class UnoFlipEvent extends EventObject {
     private final String topCard;                 // toString() of the top card
     private final String currHand;                // toString() of the current hand
     private final String status;              // toString() of the current colour
-    private final boolean isWild;
+    private final boolean turnFinished;
 
     /**
      * Constructs a Uno Flip! Event.
@@ -13,13 +13,13 @@ public class UnoFlipEvent extends EventObject {
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean isWild) {
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished) {
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;
         this.currHand = currHand;
         this.status = status;
-        this.isWild = isWild;
+        this.turnFinished = turnFinished;
     }
 
     /**
@@ -63,7 +63,7 @@ public class UnoFlipEvent extends EventObject {
      *
      * @return true if wild, otherwise false
      */
-    public boolean getIsWild() {
-        return isWild;
+    public boolean getTurnFinished() {
+        return turnFinished;
     }
 }

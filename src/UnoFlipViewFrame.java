@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -15,6 +16,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
     private JTextArea statusArea;
+    private JButton drawCard;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
@@ -73,7 +75,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         // create button to draw a card and to go to next turn
-        JButton drawCard = new JButton("Draw card");
+        drawCard = new JButton("Draw card");
         drawCard.setFont(new Font("Dialog", Font.PLAIN, 18));
         drawCard.setActionCommand(DRAW_CMD);
         drawCard.addActionListener(controller);
@@ -139,29 +141,26 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
      */
     @Override
     public void handleUnoFlipStatusUpdate(UnoFlipEvent e) {
-
+        if(e.getTurnFinished()){
+            drawCard.setEnabled(false);
+        } else {
+            drawCard.setEnabled(true);
+        }
         // clear status area
         statusArea.setText("");
 
         // check wild to select colour
-        if (e.getIsWild() && e.getStatus().equals("WILD")){
-            ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
-            controller.actionPerformed(wildEvent);
-        }
-        else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
-            if(e.getIsWild()){
-                statusArea.append("\nSelected Colour: " + e.getStatus());
-                if(e.getTopCard().equals("wild_draw_2")){
-                    ActionEvent challengeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, CHALLENGE_CMD);
-                    controller.actionPerformed(challengeEvent);
-                }
-            }
+        if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
+            statusArea.append("\nSelected Colour: " + e.getStatus());
         } else if (e.getStatus().startsWith("WINNER:")) {
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
             this.dispose();
-        } else if (e.getStatus().equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") || e.getStatus().equals(("GUILTY:YOU DRAW 2 CARDS"))){
+        } else if (e.getStatus().equals(UnoFlipModel.STATUS_CHALLENGE_INNOCENT) || e.getStatus().equals((UnoFlipModel.STATUS_CHALLENGE_GUILTY))){
             statusArea.append(e.getStatus());
-        }else {
+        } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
+            statusArea.append("\nSelecting Colour...");
+        }
+        else {
             statusArea.append(e.getStatus());
         }
 
@@ -178,8 +177,12 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));
             newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
             newCard.addActionListener(controller);
+            if(e.getTurnFinished()){
+                newCard.setEnabled(false);
+            }
             handPanel.add(newCard);
         }
+
 
         this.repaint();  // prevent visual bug by resetting the frame
 
