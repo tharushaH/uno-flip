@@ -7,6 +7,11 @@ public class FlipTest {
     private UnoFlipModel unoFlipModel;
     private Card testCard;
 
+
+
+
+
+
     @Before
     public void setUp(){
         unoFlipModel = new UnoFlipModel();
@@ -18,10 +23,11 @@ public class FlipTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(15).executeSequence(testCard); // should be index 18 according to enum
+        unoFlipModel.getTurnSeqs().get(UnoFlipModel.TURN_SEQ_FLIP).executeSequence(testCard); // should be index 18 according to enum
+        // don't have the other turnSeqs added yet to model so have index as 15 instead of 18
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard()); // make sure the testCard is on top
-        Card.flipSide();
+        assertEquals(Card.DARK,Card.getSide()); // make sure side was flipped in card class
         assertEquals(Card.Colour.ORANGE, unoFlipModel.getCurrentColour()); // check to see if card was flipped
         assertEquals(Card.Rank.FLIP, unoFlipModel.getCurrentRank());
         assertEquals(0, unoFlipModel.getCurrentTurn()); //make sure nothing else was touched
