@@ -288,7 +288,7 @@ public class UnoFlipModel {
             }
 
             this.status = STATUS_STANDARD;
-            clearNextTurnFlags();
+            clearActionCardFlags();
 
         }else {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
@@ -334,15 +334,6 @@ public class UnoFlipModel {
     }
 
     /**
-     * Set value of skipTurn to true to indicate that the next player should be skipped
-     */
-    public void setSkipTurnFlag(){
-        this.skipTurn = false;
-        this.skipEveryone = false;
-        this.turnFinished = false;
-    }
-
-    /**
      * Flips the turn direction of the game.
      */
     public void flipTurnDirection(){
@@ -350,9 +341,9 @@ public class UnoFlipModel {
     }
 
     /**
-     * Clear flags for next turn
+     * Clear action card flags
      */
-    public void clearNextTurnFlags(){
+    public void clearActionCardFlags(){
         this.skipTurn = false;
         this.skipEveryone = false;
         this.turnFinished = false;
@@ -486,6 +477,13 @@ public class UnoFlipModel {
      */
     public void setStatus(String status ){
         this.status = status;
+    }
+
+    /**
+     * Set value of skipTurn to true to indicate that the next player should be skipped
+     */
+    public void setSkipTurnFlag(){
+        this.skipTurn = true;
     }
 
     /**
