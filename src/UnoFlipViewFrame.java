@@ -154,7 +154,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             statusArea.append("\nSelected Colour: " + e.getStatus());
         } else if (e.getStatus().startsWith("WINNER:")) {
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
-            this.dispose();
+            //this.dispose();
         } else if (e.getStatus().equals(UnoFlipModel.STATUS_CHALLENGE_INNOCENT) || e.getStatus().equals((UnoFlipModel.STATUS_CHALLENGE_GUILTY))){
             statusArea.append(e.getStatus());
         } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
@@ -164,38 +164,41 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             statusArea.append(e.getStatus());
         }
 
+        //display cards since there are still cards in current player's hand
+        if( !e.getStatus().startsWith("WINNER:")) {
+            // update the hand panel with the new hand's cards
+            handPanel.removeAll();  // remove current hand, about to replace with new one
+            String currHand = e.getCurrHand();
+            String[] currHandArray = currHand.split(" ");
 
 
-        // update the hand panel with the new hand's cards
-        handPanel.removeAll();  // remove current hand, about to replace with new one
-        String currHand = e.getCurrHand();
-        String[] currHandArray = currHand.split(" ");
+            for (int i = 0; i < currHandArray.length; i++) {
 
-
-        for (int i = 0; i < currHandArray.length; i++) {
-
-            JButton newCard = new JButton();
-            newCard.setPreferredSize(new Dimension(200,300));
-            newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));
-            newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
-            newCard.addActionListener(controller);
-            if(e.getTurnFinished()){
-                newCard.setEnabled(false);
+                JButton newCard = new JButton();
+                newCard.setPreferredSize(new Dimension(200, 300));
+                newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
+                newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
+                newCard.addActionListener(controller);
+                if (e.getTurnFinished()) {
+                    newCard.setEnabled(false);
+                }
+                handPanel.add(newCard);
             }
-            handPanel.add(newCard);
+
+
+            this.repaint();  // prevent visual bug by resetting the frame
+
+            // update the top card
+            topCardLabel.setIcon(new ImageIcon(getClass().getResource("images/" + e.getTopCard() + ".png")));
+            topCardNameLabel.setText(e.getTopCard());
+            topCardNameLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+
+            // update the current player
+            currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
+            currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+
         }
 
-
-        this.repaint();  // prevent visual bug by resetting the frame
-
-        // update the top card
-        topCardLabel.setIcon(new ImageIcon(getClass().getResource("images/"+e.getTopCard()+".png")));
-        topCardNameLabel.setText(e.getTopCard());
-        topCardNameLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
-
-        // update the current player
-        currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
-        currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
     }
 
     public static void main(String[] args) {
