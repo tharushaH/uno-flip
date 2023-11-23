@@ -171,7 +171,9 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         String currHand = e.getCurrHand();
         String[] currHandArray = currHand.split(" ");
 
+
         for (int i = 0; i < currHandArray.length; i++) {
+
             JButton newCard = new JButton();
             newCard.setPreferredSize(new Dimension(200,300));
             newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));

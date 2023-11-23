@@ -35,7 +35,8 @@ public class UnoFlipModel {
 
     //Constants used for Turn sequence
     public static final int TURN_SEQ_SELF_DRAW_ONE = 18;
-    public static final int TURN_SEQ_DRAW_FIVE = 15;
+    public static final int TURN_SEQ_SKIP_EVERYONE = 15;
+    public static final int TURN_SEQ_DRAW_FIVE = 14;
     public static final int TURN_SEQ_FLIP = 17;
 
     //Constants used to indicate the current status
@@ -76,18 +77,18 @@ public class UnoFlipModel {
         }
 
         //adding the turn sequence for the action cards into turnSeqs Arraylist
-        this.turnSeqs.add(new DrawOne(this)); //9
-        this.turnSeqs.add(new Reverse(this));//10
-        this.turnSeqs.add(new Skip(this));//11
-        this.turnSeqs.add(new Wild(this));//12
-        this.turnSeqs.add(new WildDrawTwo(this)); //13
+        this.turnSeqs.add(new DrawOne(this));
+        this.turnSeqs.add(new Reverse(this));
+        this.turnSeqs.add(new Skip(this));
+        this.turnSeqs.add(new Wild(this));
+        this.turnSeqs.add(new WildDrawTwo(this));
 
-        this.turnSeqs.add(new DrawFive(this)); //14
-        this.turnSeqs.add(new SkipEveryone(this)); //15
-        this.turnSeqs.add(new WildDrawColour(this)); // 16
-        this.turnSeqs.add(new Flip(this)); //17
+        this.turnSeqs.add(new DrawFive(this));
+        this.turnSeqs.add(new SkipEveryone(this));
+        this.turnSeqs.add(new WildDrawColour(this));
+        this.turnSeqs.add(new Flip(this));
 
-        this.turnSeqs.add(new SelfDrawOne(this)); //18
+        this.turnSeqs.add(new SelfDrawOne(this));
 
     }
 
