@@ -34,11 +34,10 @@ public class UnoFlipModel {
     public static final int DRAW_ONE_BUTTON = -1;
 
     //Constants used for Turn sequence
-    public static final int TURN_SEQ_SELF_DRAW_ONE = 14;
-    public static final int TURN_SEQ_DRAW_FIVE = 15;
-
-
-    public static final int TURN_SEQ_FLIP = 15;
+    public static final int TURN_SEQ_SELF_DRAW_ONE = 18;
+    public static final int TURN_SEQ_SKIP_EVERYONE = 15;
+    public static final int TURN_SEQ_DRAW_FIVE = 14;
+    public static final int TURN_SEQ_FLIP = 17;
 
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
@@ -83,12 +82,13 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Skip(this));
         this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
-        this.turnSeqs.add(new SelfDrawOne(this));
 
         this.turnSeqs.add(new DrawFive(this));
-        this.turnSeqs.add(new SkipEveryone(this)); //must be index 16
-
+        this.turnSeqs.add(new SkipEveryone(this));
+        this.turnSeqs.add(new WildDrawColour(this));
         this.turnSeqs.add(new Flip(this));
+
+        this.turnSeqs.add(new SelfDrawOne(this));
 
     }
 
@@ -495,6 +495,21 @@ public class UnoFlipModel {
      */
     public Card getTopCard(){
         return this.topCard;
+    }
+
+    /**
+     * Returns the current side of the Cards (light or dark)
+     * @return true if it's light side, false if it's dark side
+     */
+    public boolean getCardSide() {
+        return Card.getSide();
+    }
+
+    /**
+     * Flips the current side of the cards in the game.
+     */
+    public void flipCardSide() {
+        Card.flipSide();
     }
 
     /**

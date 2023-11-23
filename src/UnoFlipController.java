@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Collections;
 import java.util.Objects;
 
 
@@ -110,9 +111,16 @@ public class UnoFlipController implements ActionListener {
                     if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
 
                         // Colour options for Player to chose from
-                        String[] colourOptions = {"RED", "BLUE", "YELLOW", "GREEN"};
+                        String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
+                                Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
+                        String[] darkColourOptions = {Card.Colour.ORANGE.toString(), Card.Colour.PINK.toString(),
+                                Card.Colour.PURPLE.toString(), Card.Colour.TEAL.toString()};
 
-                        comboBox = new JComboBox<>(colourOptions);
+                        if (model.getCardSide() == Card.LIGHT) {
+                            comboBox = new JComboBox<>(lightColourOptions);
+                        } else {
+                            comboBox = new JComboBox<>(darkColourOptions);
+                        }
 
                         while(true) {
                             result = JOptionPane.showOptionDialog(

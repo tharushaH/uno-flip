@@ -18,10 +18,10 @@ public class SelfDrawOneTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(14).executeSequence(testCard);
+        unoFlipModel.getTurnSeqs().get(unoFlipModel.TURN_SEQ_SELF_DRAW_ONE).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
-        assertEquals(1, unoFlipModel.getCurrentTurn());
-        assertEquals(0, unoFlipModel.getNextTurn());
+        assertEquals(0, unoFlipModel.getCurrentTurn());
+        assertEquals(1, unoFlipModel.getNextTurn());
         assertEquals(8, unoFlipModel.getPlayers().get(0).getHandSize());
 
     }

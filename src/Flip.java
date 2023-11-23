@@ -17,7 +17,7 @@ public class Flip extends TurnSequence{
      */
     @Override
     public void executeSequence(Card card) {
-        Card.flipSide();
+        unoFlipModel.flipCardSide();
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
