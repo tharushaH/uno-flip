@@ -156,7 +156,7 @@ public class UnoFlipModel {
     public void setUpInitalPlayerScore(){
         for( int i=0; i < numPlayers ; i ++){
             playerScores.add(players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
-            System.out.println(playerScores.get(i));
+
         }
 
     }
@@ -187,7 +187,7 @@ public class UnoFlipModel {
 
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.playerScores));
             }
         }
         this.status = STATUS_STANDARD;
@@ -265,9 +265,8 @@ public class UnoFlipModel {
             getCurrentPlayer().setPlayerScore(getWinnerScore());
             this.status = "WINNER:" + getCurrentPlayer().getName() + " HAS WON !"; // (EX. "WINNER: Player 1 HAS WON!")
 
-            notifyViews();
             updatePlayerScores();
-
+            notifyViews();
             return true;
 
         } else {
@@ -392,7 +391,6 @@ public class UnoFlipModel {
     public void updatePlayerScores(){
         for( int i=0; i < numPlayers ; i ++){
             playerScores.set(i,players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
-            System.out.println(playerScores.get(i));
         }
     }
 

@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -154,13 +155,12 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             statusArea.append("\nSelected Colour: " + e.getStatus());
         } else if (e.getStatus().startsWith("WINNER:")) {
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
-            //this.dispose();
+
         } else if (e.getStatus().equals(UnoFlipModel.STATUS_CHALLENGE_INNOCENT) || e.getStatus().equals((UnoFlipModel.STATUS_CHALLENGE_GUILTY))){
             statusArea.append(e.getStatus());
         } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
             statusArea.append("\nSelecting Colour...");
-        }
-        else {
+        } else {
             statusArea.append(e.getStatus());
         }
 
@@ -185,7 +185,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
                 handPanel.add(newCard);
             }
 
-
             this.repaint();  // prevent visual bug by resetting the frame
 
             // update the top card
@@ -198,6 +197,12 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
 
         }
+
+        ArrayList<String> scores = e.getPlayersScores();
+        for(int i =0; i < scores.size(); i ++){
+            System.out.println(scores.get(i));
+        }
+        System.out.println("");
 
     }
 
