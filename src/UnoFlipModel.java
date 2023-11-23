@@ -208,8 +208,6 @@ public class UnoFlipModel {
             }
 
             int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
-            System.out.println("RANK OF PLAYING CARD: " + rank );
-
 
             //if the card wanting to be placed is a Wild Draw 2 or Wild
             if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
@@ -306,7 +304,7 @@ public class UnoFlipModel {
             this.status = STATUS_PLAYER_SKIPPING_TURN;
 
         }
-         System.out.println(players.get(currentTurn) +": "+players.get(currentTurn).toString());
+
         notifyViews();
 
     }
