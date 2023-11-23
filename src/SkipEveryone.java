@@ -15,9 +15,6 @@ public class SkipEveryone extends TurnSequence {
      */
     @Override
     public void executeSequence(Card card) {
-        System.out.println("NUM PLAYERS: "+ unoFlipModel.getNumPlayers());
-        System.out.println("CURRL " +  unoFlipModel.getCurrentPlayer());
-
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
