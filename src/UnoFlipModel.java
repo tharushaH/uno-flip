@@ -520,6 +520,14 @@ public class UnoFlipModel {
     }
 
     /**
+     * Gets the value of the skipTurn field, which indicates if the next player's turn is skipped
+     * @return true if the flag is set, false otherwise
+     */
+    public boolean getSkipTurnFlag() {
+        return skipTurn;
+    }
+
+    /**
      * Return the ArrayList of sequences, for testing.
      * @return return a list of the sequences.
      */
