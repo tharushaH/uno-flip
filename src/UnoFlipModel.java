@@ -618,4 +618,12 @@ public class UnoFlipModel {
         this.skipEveryone = true;
     }
 
+    /**
+     * Returns the current status of the game, specified by constants defined as fields
+     * in this class.
+     * @return Current status of the game
+     */
+    public String getStatus() {
+        return status;
+    }
 }
