@@ -29,7 +29,7 @@ public class Player {
         this.name = name;
         this.hand = new Hand();
         this.playerScore = 0;
-        addCardToHand(1); // Initialize 7 cards for each player
+        addCardToHand(7); // Initialize 7 cards for each player
 
     }
 

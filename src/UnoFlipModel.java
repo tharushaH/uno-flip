@@ -264,7 +264,6 @@ public class UnoFlipModel {
         if (player.getHandSize() == 0) {
             getCurrentPlayer().setPlayerScore(getWinnerScore());
             this.status = "WINNER:" + getCurrentPlayer().getName() + " HAS WON !"; // (EX. "WINNER: Player 1 HAS WON!")
-
             updatePlayerScores();
             notifyViews();
             return true;
@@ -386,7 +385,7 @@ public class UnoFlipModel {
     }
 
     /**
-     * Gets all player's score
+     * Update each player's score
      */
     public void updatePlayerScores(){
         for( int i=0; i < numPlayers ; i ++){

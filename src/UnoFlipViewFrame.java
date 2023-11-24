@@ -13,6 +13,8 @@ import java.util.HashMap;
 public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private UnoFlipController controller;
     private JPanel handPanel;
+
+    private JPanel buttonPanel;
     private JLabel topCardLabel;
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
@@ -86,7 +88,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         nextTurn.addActionListener(controller);
 
         // create a panel for draw card and next turn buttons
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2,1));
         buttonPanel.add(drawCard);
         buttonPanel.add(nextTurn);
@@ -154,7 +156,20 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
             statusArea.append("\nSelected Colour: " + e.getStatus());
         } else if (e.getStatus().startsWith("WINNER:")) {
+
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
+
+            //show player scores
+            for(int i =0; i < e.getPlayersScores().size(); i ++){
+                statusArea.append(e.getPlayersScores().get(i)+ "\n");
+            }
+
+            //disable buttons
+            drawCard.setEnabled(false);
+            handPanel.removeAll();
+            buttonPanel.removeAll();
+            this.repaint();
+
 
         } else if (e.getStatus().equals(UnoFlipModel.STATUS_CHALLENGE_INNOCENT) || e.getStatus().equals((UnoFlipModel.STATUS_CHALLENGE_GUILTY))){
             statusArea.append(e.getStatus());
@@ -195,14 +210,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             // update the current player
             currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
             currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
-
         }
-
-        ArrayList<String> scores = e.getPlayersScores();
-        for(int i =0; i < scores.size(); i ++){
-            System.out.println(scores.get(i));
-        }
-        System.out.println("");
 
     }
 
