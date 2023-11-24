@@ -399,6 +399,23 @@ public class UnoFlipModel {
         this.turnFinished = false;
     }
 
+    /**
+     * Return a boolean of if the next player is an AI or not
+     *
+     * @return true if the next player is an AI, false otherwise
+     */
+    public boolean isNextPlayerAI(){
+        int nextIndex = currentTurn;
+        if (this.turnDirection) {
+            nextIndex = (this.currentTurn + 1) % this.numPlayers;
+            //counterclockwise (ex. 0->3->2->1)
+        } else {
+            nextIndex = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
+        }
+
+        return this.getPlayers().get(nextIndex) instanceof AI;
+    }
+
 
     /**
      * Method addUnoFlipView adds a view to the view list
