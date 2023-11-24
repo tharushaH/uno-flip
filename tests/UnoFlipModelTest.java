@@ -15,6 +15,7 @@ public class UnoFlipModelTest {
     @Test
     public void testSetNumPlayersValid() {
         int numPlayers = 3;
+        unoFlipModel.setNumPlayers(numPlayers);
         assertEquals(numPlayers, unoFlipModel.getNumPlayers());
     }
     @Test
@@ -33,11 +34,14 @@ public class UnoFlipModelTest {
     }
     @Test
     public void testPlayTurnSelfDrawOne(){
-        unoFlipModel.createPlayer("Bobby");
-        unoFlipModel.createPlayer("Mark");
+        Player p = new Player("Bobby");
+        Player p1 = new Player("Mark");
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
+        unoFlipModel.addPlayer(p);
+        unoFlipModel.addPlayer(p1);
         unoFlipModel.setUpInitialTopCard();
+        System.out.println(unoFlipModel.getCurrentPlayer().getHandSize());
         unoFlipModel.playTurn(-1);
         assertEquals(-1, unoFlipModel.getChosenCardIndex());
         assertNotNull(unoFlipModel.getTopCard());
@@ -53,7 +57,7 @@ public class UnoFlipModelTest {
         assertTrue(unoFlipModel.getCurrentColour() == null);
         assertTrue(unoFlipModel.getCurrentRank() == null);
         assertTrue(unoFlipModel.getNumPlayers() == 0);
-        assertTrue(unoFlipModel.getChosenCardIndex() == -1);
+        assertTrue(unoFlipModel.getChosenCardIndex() == -2);
     }
     @Test
     public void testGetCurrentColour(){

@@ -3,7 +3,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class WildTest {
+public class NumberTest {
     private UnoFlipModel unoFlipModel;
     private Card testCard;
 
@@ -18,14 +18,16 @@ public class WildTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(12).executeSequence(testCard);
+        unoFlipModel.getTurnSeqs().get(0).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
         assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
         assertEquals(0, unoFlipModel.getCurrentTurn());
         assertEquals(1, unoFlipModel.getNextTurn());
+
     }
 
 }
+
 
