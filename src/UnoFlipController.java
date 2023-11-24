@@ -107,7 +107,7 @@ public class UnoFlipController implements ActionListener {
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
-                    // Makes the current player is the one that placed the wild card and not the next player.
+                    // Makes sure the current player is the one that placed the wild card and not the next player.
                     if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
 
                         // Colour options for Player to chose from
@@ -145,9 +145,11 @@ public class UnoFlipController implements ActionListener {
                             }
                         }
 
-                        // User places a Wild Draw 2 and prompts the next player to challenge
-                        if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
-                            result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                        // User places a Wild Draw 2 or Wild Draw Colour and prompts the next player to challenge
+                        if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 ||
+                                this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
+                            result = JOptionPane.showConfirmDialog(null,
+                                    "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
                             boolean challenge = result == JOptionPane.YES_OPTION;
 
