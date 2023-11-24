@@ -154,8 +154,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         } else if (e.getStatus().startsWith("WINNER:")) {
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
             this.dispose();
-        } else if (e.getStatus().equals(UnoFlipModel.STATUS_LIGHT_CHALLENGE_INNOCENT) || e.getStatus().equals((UnoFlipModel.STATUS_LIGHT_CHALLENGE_GUILTY))){
-            statusArea.append(e.getStatus());
         } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
             statusArea.append("\nSelecting Colour...");
         }
