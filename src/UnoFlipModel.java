@@ -1,7 +1,6 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 /**
  * The Game class represent a game of Uno Flip. Uno Flip can be played with 2-4 players.
  * This class initializes and manages a game of Uno Flip by managing player turns, displaying
@@ -42,8 +41,10 @@ public class UnoFlipModel {
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
     public static final String STATUS_STANDARD = " ";
-    public static final String STATUS_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS 4 CARDS";
-    public static final String STATUS_CHALLENGE_GUILTY = "GUILTY:YOU DRAW 2 CARDS";
+    public static final String STATUS_LIGHT_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS 4 CARDS"; // for wild draw 2
+    public static final String STATUS_LIGHT_CHALLENGE_GUILTY = "GUILTY: YOU DRAW 2 CARDS";   // for wild draw 2
+    public static final String STATUS_DARK_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS AN ADDITIONAL 2 CARDS"; // for wild draw colour
+    public static final String STATUS_DARK_CHALLENGE_GUILTY = "GUILTY: YOU DRAW CARDS UNTIL DRAWING YOUR CHOSEN COLOUR";   // for wild draw colour
     public static final String STATUS_PLAYABLE_CARD = "YOU HAVE PLAYABLE CARD";
     public static final String DRAW_CARD = "YOU HAVE DRAWN A CARD";
     public static final String STATUS_INVALID_CARD_BEING_PLACED = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
@@ -158,7 +159,7 @@ public class UnoFlipModel {
         //make sure there are views in the view arraylist to send UnoFlipEvents to
         if(!this.views.isEmpty()){
 
-            boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY);
+            boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_LIGHT_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_LIGHT_CHALLENGE_GUILTY);
 
 
 
@@ -320,10 +321,10 @@ public class UnoFlipModel {
         if(challenge) { // If next player challenges
             if(isWildDrawTwoValid()) { // IF WILD DRAW 2 is valid
                 this.drawNCards(4, this.getNextTurn());
-                status = STATUS_CHALLENGE_INNOCENT;
+                status = STATUS_LIGHT_CHALLENGE_INNOCENT;
             } else {                    // If WILD DRAW 2 is not valid
                 this.drawNCards(2, this.getCurrentTurn());
-                status = STATUS_CHALLENGE_GUILTY;
+                status = STATUS_LIGHT_CHALLENGE_GUILTY;
             }
         } else {
             this.drawNCards(2, this.getNextTurn());
