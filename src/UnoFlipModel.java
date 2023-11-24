@@ -174,7 +174,7 @@ public class UnoFlipModel {
 
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.currentColour));
             }
         }
         this.status = STATUS_STANDARD;
