@@ -17,7 +17,7 @@ public class AI extends Player{
      * @param currentRank current rank of the game
      * @return the index of a playable card that the AI has.
      */
-    public int playTurn(Card.Colour currentColour, Card.Rank currentRank){
+    public int playAICard(Card.Colour currentColour, Card.Rank currentRank){
         HashMap<Card, Integer> playAbleCards = new HashMap<>();
 
         // Get the card and the index of the card that are playable, by matching colour, rank, and if it is wild

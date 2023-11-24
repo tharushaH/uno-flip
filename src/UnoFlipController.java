@@ -42,51 +42,99 @@ public class UnoFlipController implements ActionListener {
 
             // User starts the game and is prompted for amount of players and names for each player
             case UnoFlipViewFrame.START_CMD:
+                int numTotalPlayers = 0;
+                boolean notFirstTime = false;
+                int numPlayers = 0;
 
-                // Amount of players options for drop down menu
-                String[] numPlayerOptions = {"2", "3", "4"};
-
-                comboBox = new JComboBox<>(numPlayerOptions);
-
-
-                result = JOptionPane.showOptionDialog(
-
-                        null,
-                        comboBox,
-                        "Select number of players:",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
-                        null);
-
-                // initialize the number of players with the inputted amount from the drop-down menu
-                if (result == JOptionPane.OK_OPTION) {
-                    int numPlayers = 0;
-
-                    String option = (String) comboBox.getSelectedItem();
-                    numPlayers = Integer.parseInt(option);
-
-                    this.model.setNumPlayers(numPlayers);
-                } else { // Exit the game if the user cancels, absolutely must select an option, otherwise, do not start the game
-                    System.exit(0);
-                }
-
-                // Prompt the user for the name of each player
-                for (int i = 0; i < this.model.getNumPlayers(); i++) {
-                    String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
-                    Player player;
-
-                    // If player does not select name, give a default name (Player + player number) ex. Player 2
-                    if (name == null || name.equals("")) {
-                        player = this.model.createPlayer("Player " + (i+1));
+                do{
+                    if (notFirstTime){
+                        JOptionPane.showMessageDialog(null,
+                                "There needs to be more than 2 total players.",
+                                "Player creation error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
-                    else {
-                        player =this.model.createPlayer(name);
-                    }
-                    this.model.addPlayer(player);
-                }
+                    // Amount of players options for drop down menu
+                    String[] numPlayerOptions = {"1", "2", "3", "4", "5", "6"};
 
+                    comboBox = new JComboBox<>(numPlayerOptions);
+
+
+                    result = JOptionPane.showOptionDialog(
+
+                            null,
+                            comboBox,
+                            "Select number of players:",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            null);
+
+                    // initialize the number of players with the inputted amount from the drop-down menu
+                    if (result == JOptionPane.OK_OPTION) {
+
+                        String option = (String) comboBox.getSelectedItem();
+                        numPlayers = Integer.parseInt(option);
+                        numTotalPlayers += numPlayers;
+
+                    } else { // Exit the game if the user cancels, absolutely must select an option, otherwise, do not start the game
+                        System.exit(0);
+                    }
+
+                    // Prompt the user for the name of each player
+                    for (int i = 0; i < numPlayers; i++) {
+                        String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
+                        Player player;
+
+                        // If player does not select name, give a default name (Player + player number) ex. Player 2
+                        if (name == null || name.equals("")) {
+                            player = this.model.createPlayer("Player " + (i+1));
+                        }
+                        else {
+                            player =this.model.createPlayer(name);
+                        }
+                        this.model.addPlayer(player);
+                    }
+
+
+
+                    // Amount of AI players options for drop down menu
+                    String[] numAIPlayerOptions = {"0", "1", "2", "3", "4", "5", "6"};
+
+                    comboBox = new JComboBox<>(numAIPlayerOptions);
+
+
+                    result = JOptionPane.showOptionDialog(
+
+                            null,
+                            comboBox,
+                            "Select number of AI players:",
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            null);
+
+                    // initialize the number of players with the inputted amount from the drop-down menu
+                    if (result == JOptionPane.OK_OPTION) {
+                        String option = (String) comboBox.getSelectedItem();
+                        numPlayers = Integer.parseInt(option);
+                        numTotalPlayers += numPlayers;
+
+                    } else { // Exit the game if the user cancels, absolutely must select an option, otherwise, do not start the game
+                        System.exit(0);
+                    }
+
+                    // Prompt the user for the name of each player
+                    for (int i = 0; i < numPlayers; i++) {
+                        AI aiPlayer = this.model.createAIPlayer();
+
+                        this.model.addPlayer(aiPlayer);
+                    }
+                    notFirstTime = true;
+                } while (numTotalPlayers < 2);
+
+                this.model.setNumPlayers(numTotalPlayers);
                 this.model.setUpInitialTopCard();
                 break;
 
@@ -100,6 +148,12 @@ public class UnoFlipController implements ActionListener {
                 this.model.nextTurn();
                 break;
 
+            // AI plays or draws card
+            case UnoFlipViewFrame.AI_CMD:
+                System.out.println("here2");
+                this.model.playAITurn();
+                break;
+
             // A card is selected from the hand
             default:
                 // Try Catch Exception to catch NumberFormatException if the given command was not an Integer value
@@ -110,50 +164,63 @@ public class UnoFlipController implements ActionListener {
                     // Makes the current player is the one that placed the wild card and not the next player.
                     if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
 
-                        // Colour options for Player to chose from
-                        String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
-                                Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
-                        String[] darkColourOptions = {Card.Colour.ORANGE.toString(), Card.Colour.PINK.toString(),
-                                Card.Colour.PURPLE.toString(), Card.Colour.TEAL.toString()};
+                        if(this.model.isNextPlayerAI()){
+                            AI aiPlayer = (AI) this.model.getCurrentPlayer();
 
-                        if (model.getCardSide() == Card.LIGHT) {
-                            comboBox = new JComboBox<>(lightColourOptions);
-                        } else {
-                            comboBox = new JComboBox<>(darkColourOptions);
-                        }
+                            this.model.setCurrentColour(aiPlayer.wildPickColour());
 
-                        while(true) {
-                            result = JOptionPane.showOptionDialog(
-                                    null,
-                                    comboBox,
-                                    "Select colour:",
-                                    JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null,
-                                    null,
-                                    null);
-
-                            // User chooses colour and selects okay to change the current colour
-                            if (result == JOptionPane.OK_OPTION) {
-                                Card.Colour colour;
-
-                                String option = (String) comboBox.getSelectedItem();
-                                colour = Card.Colour.valueOf(option);
-
-                                this.model.setCurrentColour(colour);
-                                break;
+                            if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
+                                this.model.setChallengeFlag(false);
+                                this.model.challenge();
                             }
+                        } else{
+                            // Colour options for Player to chose from
+                            String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
+                                    Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
+                            String[] darkColourOptions = {Card.Colour.ORANGE.toString(), Card.Colour.PINK.toString(),
+                                    Card.Colour.PURPLE.toString(), Card.Colour.TEAL.toString()};
+
+                            if (model.getCardSide() == Card.LIGHT) {
+                                comboBox = new JComboBox<>(lightColourOptions);
+                            } else {
+                                comboBox = new JComboBox<>(darkColourOptions);
+                            }
+
+                            while(true) {
+                                result = JOptionPane.showOptionDialog(
+                                        null,
+                                        comboBox,
+                                        "Select colour:",
+                                        JOptionPane.DEFAULT_OPTION,
+                                        JOptionPane.PLAIN_MESSAGE,
+                                        null,
+                                        null,
+                                        null);
+
+                                // User chooses colour and selects okay to change the current colour
+                                if (result == JOptionPane.OK_OPTION) {
+                                    Card.Colour colour;
+
+                                    String option = (String) comboBox.getSelectedItem();
+                                    colour = Card.Colour.valueOf(option);
+
+                                    this.model.setCurrentColour(colour);
+                                    break;
+                                }
+                            }
+
+                            // User places a Wild Draw 2 and prompts the next player to challenge
+                            if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
+                                result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                                boolean challenge = result == JOptionPane.YES_OPTION;
+
+                                this.model.setChallengeFlag(challenge);
+                                this.model.challenge();
+                            }
+
                         }
 
-                        // User places a Wild Draw 2 and prompts the next player to challenge
-                        if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
-                            result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
-
-                            boolean challenge = result == JOptionPane.YES_OPTION;
-
-                            this.model.setChallengeFlag(challenge);
-                            this.model.challenge();
-                        }
                     }
 
                 }

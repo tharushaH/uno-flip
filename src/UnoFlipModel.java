@@ -109,9 +109,19 @@ public class UnoFlipModel {
     /**
      * Creates player and adds them to the game
      * @param playerName - the name of the player that will be created and added to the players list
+     * @return new player created
      */
     public Player createPlayer(String playerName){
         return new Player(playerName);
+    }
+
+    /**
+     * Creates AI and adds them to the game
+     *
+     * @return new AI created
+     */
+    public AI createAIPlayer(){
+        return new AI();
     }
 
     /**
@@ -172,9 +182,10 @@ public class UnoFlipModel {
                 statusToUpdate = this.status;
             }
 
+            System.out.println("here3");
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.players.get(currentTurn) instanceof AI));
             }
         }
         this.status = STATUS_STANDARD;
@@ -236,6 +247,41 @@ public class UnoFlipModel {
         } else {
            this.status = STATUS_TURN_FINISHED;
 
+        }
+        notifyViews();
+    }
+
+    /**
+     * playAITurn method is used to handle game logic request sent by UnoFlipController to play a card or
+     * draw a card for the AI player.
+     */
+    public void playAITurn(){
+        AI aiPlayer = (AI) this.players.get(currentTurn);
+        int chosenCardIndex = aiPlayer.playAICard(this.currentColour, this.currentRank);
+
+        if(chosenCardIndex == DRAW_ONE_BUTTON){
+            this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
+            this.status = DRAW_CARD;
+            this.turnFinished = true;
+        } else {
+            int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
+            if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
+                this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
+                this.turnFinished = true;
+
+            } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
+                Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
+
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
+
+                this.turnSeqs.get(rank).executeSequence(playCard);
+                this.status = STATUS_STANDARD;
+
+                this.turnFinished = true;
+            }
         }
         notifyViews();
     }

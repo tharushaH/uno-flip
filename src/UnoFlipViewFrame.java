@@ -21,6 +21,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
     public final static String START_CMD = "start";
+    public final static String AI_CMD = "ai_start";
     public final static String WILD_CMD = "wild";
     public final static String CHALLENGE_CMD = "challenge";
 
@@ -141,13 +142,18 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
      */
     @Override
     public void handleUnoFlipStatusUpdate(UnoFlipEvent e) {
-        if(e.getTurnFinished()){
+        if(e.getTurnFinished() || e.getIsAI()){
             drawCard.setEnabled(false);
         } else {
             drawCard.setEnabled(true);
         }
         // clear status area
         statusArea.setText("");
+
+        // AI specific message
+        if(e.getIsAI()){
+            statusArea.setText(e.getCurrPlayerName() + " is playing:");
+        }
 
         // check wild to select colour
         if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
@@ -179,7 +185,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));
             newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
             newCard.addActionListener(controller);
-            if(e.getTurnFinished()){
+            if(e.getTurnFinished() || e.getIsAI()){
                 newCard.setEnabled(false);
             }
             handPanel.add(newCard);
@@ -196,6 +202,11 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         // update the current player
         currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
         currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+
+        if(e.getIsAI() && !e.getTurnFinished()){
+            ActionEvent aiEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, AI_CMD);
+            controller.actionPerformed(aiEvent);
+        }
     }
 
     public static void main(String[] args) {
