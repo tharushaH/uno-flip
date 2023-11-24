@@ -24,9 +24,11 @@ public class Hand {
      * Adds a Card object to the hand.
      *
      * @param card the Card object to be added to the hand
+     * @return the card added to the hand
      */
-    public void addCard(Card card) {
+    public Card addCard(Card card) {
         this.cards.add(card);
+        return cards.get(size()-1);
     }
 
     /**
