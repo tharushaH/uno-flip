@@ -2,9 +2,6 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.Collections;
-import java.util.Objects;
-
 
 
 /**
@@ -104,12 +101,12 @@ public class UnoFlipController implements ActionListener {
             default:
                 // Try Catch Exception to catch NumberFormatException if the given command was not an Integer value
                 try {
+                    model.setPreviousColour(model.getCurrentColour()); // hold the current colour before playing next card
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
-                    // Makes the current player is the one that placed the wild card and not the next player.
+                    // Makes sure the current player is the one that placed the wild card and not the next player.
                     if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
-
                         // Colour options for Player to chose from
                         String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
                                 Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
@@ -140,19 +137,38 @@ public class UnoFlipController implements ActionListener {
                                 String option = (String) comboBox.getSelectedItem();
                                 colour = Card.Colour.valueOf(option);
 
-                                this.model.setCurrentColour(colour);
+                                model.setCurrentColour(colour);
                                 break;
                             }
                         }
 
-                        // User places a Wild Draw 2 and prompts the next player to challenge
-                        if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
-                            result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                        // User places a Wild Draw 2 or Wild Draw Colour and prompts the next player to challenge
+                        if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 ||
+                                this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
+                            result = JOptionPane.showConfirmDialog(null,
+                                    "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
                             boolean challenge = result == JOptionPane.YES_OPTION;
 
-                            this.model.setChallengeFlag(challenge);
-                            this.model.challenge();
+                            if (challenge) {
+                                boolean guilty = model.challenge(); // returns true if guilty, false if innocent
+                                if (guilty) {
+                                    model.guiltyConsequences();
+                                } else {
+                                    model.innocentConsequences();
+                                }
+                            } else {
+                                // standard flow of the game if no challenge
+                                if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                    // wild draw 2 flow of events
+                                    model.drawNCards(2, model.getNextTurn());
+                                    model.setStatus(UnoFlipModel.STATUS_DONE);
+                                } else {
+                                    // wild draw colour flow of events
+                                    model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                    model.setStatus(UnoFlipModel.STATUS_DONE);
+                                }
+                            }
                         }
                     }
 

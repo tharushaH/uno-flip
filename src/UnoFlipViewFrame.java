@@ -20,6 +20,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JLabel topCardNameLabel;
     private JTextArea statusArea;
     private JButton drawCard;
+    private JPanel currentColourPanel;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
@@ -120,10 +121,23 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         EmptyBorder marginBorder = new EmptyBorder(10, 0, 10, 10);
         statusScrollPanel.setBorder(marginBorder);
 
+        // create current colour area to hold the current colour
+        JLabel colourLabel = new JLabel(("Current colour: "));
+        currentColourPanel = new JPanel();
+        currentColourPanel.setPreferredSize(new Dimension(100,100));
+        currentColourPanel.setBackground(Color.WHITE);
+        JPanel colourPanel = new JPanel(new BorderLayout());
+        colourPanel.setBorder(marginBorder);
+        colourPanel.add(colourLabel, BorderLayout.WEST);
+        colourPanel.add(currentColourPanel, BorderLayout.CENTER);
+
+
+
         JLabel label = new JLabel("GAME STATUS: ");
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.add(label, BorderLayout.NORTH);
         statusPanel.add(statusScrollPanel, BorderLayout.CENTER);
+        statusPanel.add(colourPanel, BorderLayout.SOUTH);
 
 
         this.add(statusPanel, BorderLayout.EAST);
@@ -152,27 +166,34 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         // clear status area
         statusArea.setText("");
 
+        // Change the currentColourPanel to match the current colour of the game
+        switch (e.getCurrColour()){
+            case RED -> currentColourPanel.setBackground(Color.RED);
+            case BLUE -> currentColourPanel.setBackground(Color.BLUE);
+            case YELLOW -> currentColourPanel.setBackground(Color.YELLOW);
+            case GREEN -> currentColourPanel.setBackground(Color.GREEN);
+            case ORANGE -> currentColourPanel.setBackground(Color.ORANGE);
+            case PINK -> currentColourPanel.setBackground(Color.PINK);
+            case PURPLE -> currentColourPanel.setBackground(Color.decode("#800080"));
+            case TEAL -> currentColourPanel.setBackground(Color.decode("#008080"));
+        }
+
         // check wild to select colour
         if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
             statusArea.append("\nSelected Colour: " + e.getStatus());
         } else if (e.getStatus().startsWith("WINNER:")) {
 
             JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
-
             //show player scores
             for(int i =0; i < e.getPlayersScores().size(); i ++){
                 statusArea.append(e.getPlayersScores().get(i)+ "\n");
             }
-
             //disable buttons
             drawCard.setEnabled(false);
             handPanel.removeAll();
             buttonPanel.removeAll();
             this.repaint();
 
-
-        } else if (e.getStatus().equals(UnoFlipModel.STATUS_CHALLENGE_INNOCENT) || e.getStatus().equals((UnoFlipModel.STATUS_CHALLENGE_GUILTY))){
-            statusArea.append(e.getStatus());
         } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
             statusArea.append("\nSelecting Colour...");
         } else {
