@@ -1,9 +1,10 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class WildDrawTwoTest {
+public class SkipTest {
     private UnoFlipModel unoFlipModel;
     private Card testCard;
 
@@ -18,14 +19,19 @@ public class WildDrawTwoTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(13).executeSequence(testCard);
+        unoFlipModel.getTurnSeqs().get(11).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
         assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
         assertEquals(0, unoFlipModel.getCurrentTurn());
         assertEquals(1, unoFlipModel.getNextTurn());
-        assertEquals(9, unoFlipModel.getPlayers().get(1).getHandSize());
+
+    }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+        testCard=null;
 
     }
 

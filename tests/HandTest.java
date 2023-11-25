@@ -1,5 +1,4 @@
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -70,11 +69,11 @@ public class HandTest {
         assertEquals("", hand.toString());
 
         hand.addCard(testCard1);
-        assertEquals("1. RED ONE\n", hand.toString());
+        assertEquals("red_1 ", hand.toString());
         hand.addCard(testCard2);
-        assertEquals("1. RED ONE\n2. WILD CARD\n", hand.toString());
+        assertEquals("red_1 wild_card ", hand.toString());
         hand.popCard(0);
-        assertEquals("1. WILD CARD\n", hand.toString());
+        assertEquals("wild_card ", hand.toString());
 
     }
 

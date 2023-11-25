@@ -74,8 +74,8 @@ public class PlayerTest extends junit.framework.TestCase{
 
         //Play each of the cards in the hand, and check the number of cards in the hand
         for(int i=0; i < 6; i++){
-            p1.playCard(0);
-            assertEquals(i%6, p1.getHandSize());
+           p1.playCard(0);
+            assertEquals(5-i, p1.getHandSize());
         }
 
     }
@@ -92,7 +92,7 @@ public class PlayerTest extends junit.framework.TestCase{
         //Play each of the cards in the hand, and check the number of cards in the hand
         for(int i=0; i < 6; i++){
             p1.playCard(0);
-            assertEquals(i%6, p1.getHandSize());
+            assertEquals(5-i, p1.getHandSize());
         }
 
     }
@@ -112,7 +112,7 @@ public class PlayerTest extends junit.framework.TestCase{
             p1.playCard(0);
         }
 
-        assertEquals("YourCards:", p1.toString());
+        assertEquals("", p1.toString());
     }
 
 
@@ -129,11 +129,14 @@ public class PlayerTest extends junit.framework.TestCase{
 
     @Test
     public void testGetCard(){
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
+        Card c = p1.getCard(0);
+        assertEquals(p1.playCard(0), c);
+        c = p1.getCard(0);
+        assertEquals(p1.playCard(0), c);
+        c = p1.getCard(0);
+        assertEquals(p1.playCard(0), c);
+        c = p1.getCard(0);
+
     }
 
     @Test

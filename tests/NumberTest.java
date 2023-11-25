@@ -3,7 +3,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ReverseTest {
+public class NumberTest {
     private UnoFlipModel unoFlipModel;
     private Card testCard;
 
@@ -18,16 +18,16 @@ public class ReverseTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(10).executeSequence(testCard);
-        assertFalse(unoFlipModel.getTurnDirection());
+        unoFlipModel.getTurnSeqs().get(0).executeSequence(testCard);
+        assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
         assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
-        assertEquals(1, unoFlipModel.getCurrentTurn());
-        assertEquals(0, unoFlipModel.getNextTurn());
-        assertEquals(7, unoFlipModel.getPlayers().get(1).getHandSize());
+        assertEquals(0, unoFlipModel.getCurrentTurn());
+        assertEquals(1, unoFlipModel.getNextTurn());
 
     }
 
 }
+
 
