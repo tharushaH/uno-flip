@@ -20,6 +20,7 @@ import org.junit.runners.Suite;
         SkipTest.class,
         UnoFlipModelTest.class,
         WildDrawTwoTest.class,
+        WilDrawColourTest.class,
         WildTest.class
 })
 

@@ -25,8 +25,8 @@ public class UnoFlipModelTest {
     }
     @Test
     public void testSetUpInitialTopCard(){
-        unoFlipModel.createPlayer("Bobby");
-        unoFlipModel.createPlayer("Mark");
+        unoFlipModel.addPlayer(new Player("Bobby"));
+        unoFlipModel.addPlayer(new Player("Mark"));
         unoFlipModel.setNumPlayers(2);
         assertEquals(2,unoFlipModel.getNumPlayers());
         unoFlipModel.setUpInitialTopCard();
