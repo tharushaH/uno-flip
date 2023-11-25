@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -276,19 +277,16 @@ public class UnoFlipModel {
     public void playAITurn(){
         AI aiPlayer = (AI) this.players.get(currentTurn);
         int chosenAICardIndex = aiPlayer.playAICard(this.currentColour, this.currentRank);
-        System.out.println("Chosen index: " + chosenAICardIndex);
         if(chosenAICardIndex == DRAW_ONE_BUTTON){
             this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
             this.status = AI_DRAW_CARD;
         } else {
-            System.out.println(chosenAICardIndex);
             int rank = getCurrentPlayer().getCard(chosenAICardIndex).getRank().ordinal();
 
             if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
                 Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = AI_PLAYED_CARD + playCard.toString();
-                System.out.println("here");
             } else{
                 Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
 
@@ -299,7 +297,6 @@ public class UnoFlipModel {
 
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = AI_PLAYED_CARD + playCard.toString();
-                System.out.println(AI_PLAYED_CARD + playCard);
             }
         }
         this.turnFinished = true;
@@ -524,6 +521,15 @@ public class UnoFlipModel {
         }
 
         return this.getPlayers().get(nextIndex) instanceof AI;
+    }
+
+    /**
+     * Returns boolean that represents if current player is AI or not
+     *
+     * @return true if current player is AI, otherwise false
+     */
+    public boolean isCurrentPlayerAI(){
+       return this.getPlayers().get(currentTurn) instanceof AI;
     }
 
 

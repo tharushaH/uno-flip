@@ -41,7 +41,6 @@ public class UnoFlipModelTest {
         unoFlipModel.addPlayer(p);
         unoFlipModel.addPlayer(p1);
         unoFlipModel.setUpInitialTopCard();
-        System.out.println(unoFlipModel.getCurrentPlayer().getHandSize());
         unoFlipModel.playTurn(-1);
         assertEquals(-1, unoFlipModel.getChosenCardIndex());
         assertNotNull(unoFlipModel.getTopCard());

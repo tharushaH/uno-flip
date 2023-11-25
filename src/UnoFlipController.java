@@ -22,7 +22,7 @@ public class UnoFlipController implements ActionListener {
      * @param model The UnoFlipModel instance associated with the controller.
      */
 
-    public UnoFlipController(UnoFlipModel model){
+    public UnoFlipController(UnoFlipModel model) {
         this.model = model;
     }
 
@@ -35,11 +35,11 @@ public class UnoFlipController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String actionCommand =  e.getActionCommand();
+        String actionCommand = e.getActionCommand();
         JComboBox comboBox;
         int result = 0;
 
-        switch(actionCommand){
+        switch (actionCommand) {
 
             // User starts the game and is prompted for amount of players and names for each player
             case UnoFlipViewFrame.START_CMD:
@@ -48,11 +48,11 @@ public class UnoFlipController implements ActionListener {
                 int numPlayers = 0;
                 ArrayList<Player> allPlayers = new ArrayList<>();
 
-                do{
+                do {
                     allPlayers.clear();
                     numTotalPlayers = 0;
 
-                    if (notFirstTime){
+                    if (notFirstTime) {
                         JOptionPane.showMessageDialog(null,
                                 "There needs to be more than 2 total players.",
                                 "Player creation error",
@@ -88,19 +88,17 @@ public class UnoFlipController implements ActionListener {
 
                     // Prompt the user for the name of each player
                     for (int i = 0; i < numPlayers; i++) {
-                        String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i+1) + " name");
+                        String name = (String) JOptionPane.showInputDialog("Enter player " + Integer.toString(i + 1) + " name");
                         Player player;
 
                         // If player does not select name, give a default name (Player + player number) ex. Player 2
                         if (name == null || name.equals("")) {
-                            player = this.model.createPlayer("Player " + (i+1));
-                        }
-                        else {
-                            player =this.model.createPlayer(name);
+                            player = this.model.createPlayer("Player " + (i + 1));
+                        } else {
+                            player = this.model.createPlayer(name);
                         }
                         allPlayers.add(player);
                     }
-
 
 
                     // Amount of AI players options for drop down menu
@@ -139,7 +137,7 @@ public class UnoFlipController implements ActionListener {
                     notFirstTime = true;
                 } while (numTotalPlayers < 2);
 
-                for(int i = 0; i < numTotalPlayers; i++){
+                for (int i = 0; i < numTotalPlayers; i++) {
                     this.model.addPlayer(allPlayers.get(i));
                 }
 
@@ -155,7 +153,7 @@ public class UnoFlipController implements ActionListener {
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
                 this.model.nextTurn();
-                if(this.model.getPlayers().get(this.model.getCurrentTurn()) instanceof AI){
+                if (this.model.getPlayers().get(this.model.getCurrentTurn()) instanceof AI) {
                     this.model.playAITurn();
                 }
                 break;
@@ -164,22 +162,68 @@ public class UnoFlipController implements ActionListener {
             default:
                 // Try Catch Exception to catch NumberFormatException if the given command was not an Integer value
                 try {
+                    model.setPreviousColour(model.getCurrentColour()); // hold the current colour before playing next card
+
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
                     // Makes the current player is the one that placed the wild card and not the next player.
-                    if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
+                    if ((this.model.getTopCard().isWild() && this.model.getTurnFinished())) {
 
-                        if(this.model.isNextPlayerAI()){
-                            AI aiPlayer = (AI) this.model.getPlayers().get(this.model.getNextTurn());
+                        // Check if the next player is an AI for prompting wild cards and challenges
+                        if (this.model.isCurrentPlayerAI()) {
 
+                            AI aiPlayer = (AI) this.model.getPlayers().get(this.model.getCurrentTurn());
+
+                            // AI picks a colour based on the implementation of wildPickColour
                             this.model.setCurrentColour(aiPlayer.wildPickColour());
+                            System.out.println("AI SELECTED THIS HOE: " + this.model.getCurrentColour());
+                            // If the top card is a wild draw 2 or wild draw colour, execute challenges
+                            if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 || this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
+                                // If the next player is AI do not prompt challenge, else do
+                                if (this.model.isNextPlayerAI()){
+                                    // AI always says no to challenge and wild draw 2 and wild draw colour goes with standard flow
+                                    if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                        // wild draw 2 flow of events
+                                        model.drawNCards(2, model.getNextTurn());
+                                        model.setStatus(UnoFlipModel.STATUS_DONE);
 
-                            if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
-                                this.model.setChallengeFlag(false);
-                                this.model.challenge();
+                                    } else if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
+                                        // wild draw colour flow of events
+                                        model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                        model.setStatus(UnoFlipModel.STATUS_DONE);
+
+                                    }
+                                } else {
+                                    result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                                    boolean challenge = result == JOptionPane.YES_OPTION;
+
+                                    if (challenge) {
+                                        boolean guilty = model.challenge(); // returns true if guilty, false if innocent
+                                        if (guilty) {
+                                            model.guiltyConsequences();
+                                        } else {
+                                            model.innocentConsequences();
+                                        }
+                                    } else {
+                                        // standard flow of the game if no challenge
+                                        if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                            // wild draw 2 flow of events
+                                            model.drawNCards(2, model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        } else {
+                                            // wild draw colour flow of events
+                                            model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        }
+                                    }
+                                }
                             }
-                        } else{
+
+
+
+                        } else {
                             // Colour options for Player to chose from
                             String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
                                     Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
@@ -192,7 +236,7 @@ public class UnoFlipController implements ActionListener {
                                 comboBox = new JComboBox<>(darkColourOptions);
                             }
 
-                            while(true) {
+                            while (true) {
                                 result = JOptionPane.showOptionDialog(
                                         null,
                                         comboBox,
@@ -215,40 +259,50 @@ public class UnoFlipController implements ActionListener {
                                 }
                             }
 
-                            // User places a Wild Draw 2 and prompts the next player to challenge
-                            if(this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2){
-                                result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                            if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 || this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
+                                if (this.model.isNextPlayerAI()){
+                                    // standard flow of the game if no challenge
+                                    if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                        // wild draw 2 flow of events
+                                        model.drawNCards(2, model.getNextTurn());
+                                        model.setStatus(UnoFlipModel.STATUS_DONE);
+                                    } else {
+                                        // wild draw colour flow of events
+                                        model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                        model.setStatus(UnoFlipModel.STATUS_DONE);
+                                    }
+                                } else{
+                                    result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
-                                boolean challenge = result == JOptionPane.YES_OPTION;
+                                    boolean challenge = result == JOptionPane.YES_OPTION;
 
-                            if (challenge) {
-                                boolean guilty = model.challenge(); // returns true if guilty, false if innocent
-                                if (guilty) {
-                                    model.guiltyConsequences();
-                                } else {
-                                    model.innocentConsequences();
-                                }
-                            } else {
-                                // standard flow of the game if no challenge
-                                if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
-                                    // wild draw 2 flow of events
-                                    model.drawNCards(2, model.getNextTurn());
-                                    model.setStatus(UnoFlipModel.STATUS_DONE);
-                                } else {
-                                    // wild draw colour flow of events
-                                    model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
-                                    model.setStatus(UnoFlipModel.STATUS_DONE);
+                                    if (challenge) {
+                                        boolean guilty = model.challenge(); // returns true if guilty, false if innocent
+                                        if (guilty) {
+                                            model.guiltyConsequences();
+                                        } else {
+                                            model.innocentConsequences();
+                                        }
+                                    } else {
+                                        // standard flow of the game if no challenge
+                                        if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                            // wild draw 2 flow of events
+                                            model.drawNCards(2, model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        } else {
+                                            // wild draw colour flow of events
+                                            model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        }
+                                    }
                                 }
                             }
 
                         }
 
                     }
-
-                }
-                // Catch NumberFormatException for commands that are not Integer values
-                catch (NumberFormatException err) {
-                    System.out.println("Invalid ActionCommand: " + e.getActionCommand());
+                } catch (NumberFormatException err) {
+                    System.out.println("Invalid command");
                 }
         }
     }
