@@ -139,6 +139,12 @@ public class UnoFlipModelTest {
         unoFlipModel.drawNCards(2, unoFlipModel.getCurrentTurn());
         assertTrue(unoFlipModel.getCurrentPlayer().getHandSize()==9);
     }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+
+
+    }
 
 
 

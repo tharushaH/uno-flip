@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +27,12 @@ public class WildDrawTwoTest {
         assertEquals(0, unoFlipModel.getCurrentTurn());
         assertEquals(1, unoFlipModel.getNextTurn());
         assertEquals(7, unoFlipModel.getPlayers().get(1).getHandSize());
+
+    }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+        testCard=null;
 
     }
 

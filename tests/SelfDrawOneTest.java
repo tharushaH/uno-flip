@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,5 +26,12 @@ public class SelfDrawOneTest {
         assertEquals(8, unoFlipModel.getPlayers().get(0).getHandSize());
 
     }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+        testCard=null;
+
+    }
+
 
 }
