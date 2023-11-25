@@ -147,15 +147,18 @@ public class UnoFlipModel {
             this.currentColour = this.topCard.getColour();
             this.currentRank = this.topCard.getRank();
             this.status = STATUS_STANDARD;
-            setUpInitalPlayerScore();
+
+            setUpInitialPlayerScore();
         }
 
 
         notifyViews();
     }
 
-
-    public void setUpInitalPlayerScore(){
+    /**
+     * set up Player scores at the start of the game or when a saved game is loaded.
+     */
+    public void setUpInitialPlayerScore(){
         for( int i=0; i < numPlayers ; i ++){
             playerScores.add(players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
 
