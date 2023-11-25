@@ -21,7 +21,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
     public final static String START_CMD = "start";
-    public final static String AI_CMD = "ai_start";
     public final static String WILD_CMD = "wild";
     public final static String CHALLENGE_CMD = "challenge";
 
@@ -202,11 +201,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         // update the current player
         currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
         currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
-
-        if(e.getIsAI() && !e.getTurnFinished()){
-            ActionEvent aiEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, AI_CMD);
-            controller.actionPerformed(aiEvent);
-        }
     }
 
     public static void main(String[] args) {

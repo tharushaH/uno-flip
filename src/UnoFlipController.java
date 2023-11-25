@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -45,8 +46,12 @@ public class UnoFlipController implements ActionListener {
                 int numTotalPlayers = 0;
                 boolean notFirstTime = false;
                 int numPlayers = 0;
+                ArrayList<Player> allPlayers = new ArrayList<>();
 
                 do{
+                    allPlayers.clear();
+                    numTotalPlayers = 0;
+
                     if (notFirstTime){
                         JOptionPane.showMessageDialog(null,
                                 "There needs to be more than 2 total players.",
@@ -93,7 +98,7 @@ public class UnoFlipController implements ActionListener {
                         else {
                             player =this.model.createPlayer(name);
                         }
-                        this.model.addPlayer(player);
+                        allPlayers.add(player);
                     }
 
 
@@ -129,10 +134,14 @@ public class UnoFlipController implements ActionListener {
                     for (int i = 0; i < numPlayers; i++) {
                         AI aiPlayer = this.model.createAIPlayer();
 
-                        this.model.addPlayer(aiPlayer);
+                        allPlayers.add(aiPlayer);
                     }
                     notFirstTime = true;
                 } while (numTotalPlayers < 2);
+
+                for(int i = 0; i < numTotalPlayers; i++){
+                    this.model.addPlayer(allPlayers.get(i));
+                }
 
                 this.model.setNumPlayers(numTotalPlayers);
                 this.model.setUpInitialTopCard();
@@ -146,12 +155,9 @@ public class UnoFlipController implements ActionListener {
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
                 this.model.nextTurn();
-                break;
-
-            // AI plays or draws card
-            case UnoFlipViewFrame.AI_CMD:
-                System.out.println("here2");
-                this.model.playAITurn();
+                if(this.model.getPlayers().get(this.model.getCurrentTurn()) instanceof AI){
+                    this.model.playAITurn();
+                }
                 break;
 
             // A card is selected from the hand
@@ -165,7 +171,7 @@ public class UnoFlipController implements ActionListener {
                     if((this.model.getTopCard().isWild() && this.model.getTurnFinished())){
 
                         if(this.model.isNextPlayerAI()){
-                            AI aiPlayer = (AI) this.model.getCurrentPlayer();
+                            AI aiPlayer = (AI) this.model.getPlayers().get(this.model.getNextTurn());
 
                             this.model.setCurrentColour(aiPlayer.wildPickColour());
 

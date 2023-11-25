@@ -50,6 +50,8 @@ public class UnoFlipModel {
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
     public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
     public static final String STATUS_DONE = "done";
+    public static final String AI_DRAW_CARD = "AI HAS DRAWN CARD";
+    public static final String AI_PLAYED_CARD = "AI HAS PLAYED CARD: ";
     
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
@@ -182,7 +184,6 @@ public class UnoFlipModel {
                 statusToUpdate = this.status;
             }
 
-            System.out.println("here3");
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
                 view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.players.get(currentTurn) instanceof AI));
@@ -257,20 +258,22 @@ public class UnoFlipModel {
      */
     public void playAITurn(){
         AI aiPlayer = (AI) this.players.get(currentTurn);
-        int chosenCardIndex = aiPlayer.playAICard(this.currentColour, this.currentRank);
-
-        if(chosenCardIndex == DRAW_ONE_BUTTON){
+        int chosenAICardIndex = aiPlayer.playAICard(this.currentColour, this.currentRank);
+        System.out.println("Chosen index: " + chosenAICardIndex);
+        if(chosenAICardIndex == DRAW_ONE_BUTTON){
             this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
-            this.status = DRAW_CARD;
-            this.turnFinished = true;
+            this.status = AI_DRAW_CARD;
         } else {
-            int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
-            if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
-                this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
-                this.turnFinished = true;
+            System.out.println(chosenAICardIndex);
+            int rank = getCurrentPlayer().getCard(chosenAICardIndex).getRank().ordinal();
 
-            } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
-                Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
+            if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                this.turnSeqs.get(rank).executeSequence(playCard);
+                this.status = AI_PLAYED_CARD + playCard.toString();
+                System.out.println("here");
+            } else{
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
 
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -278,11 +281,11 @@ public class UnoFlipModel {
                 }
 
                 this.turnSeqs.get(rank).executeSequence(playCard);
-                this.status = STATUS_STANDARD;
-
-                this.turnFinished = true;
+                this.status = AI_PLAYED_CARD + playCard.toString();
+                System.out.println(AI_PLAYED_CARD + playCard);
             }
         }
+        this.turnFinished = true;
         notifyViews();
     }
 
@@ -451,7 +454,7 @@ public class UnoFlipModel {
      * @return true if the next player is an AI, false otherwise
      */
     public boolean isNextPlayerAI(){
-        int nextIndex = currentTurn;
+        int nextIndex;
         if (this.turnDirection) {
             nextIndex = (this.currentTurn + 1) % this.numPlayers;
             //counterclockwise (ex. 0->3->2->1)
