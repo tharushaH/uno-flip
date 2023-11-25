@@ -221,8 +221,24 @@ public class UnoFlipController implements ActionListener {
 
                                 boolean challenge = result == JOptionPane.YES_OPTION;
 
-                                this.model.setChallengeFlag(challenge);
-                                this.model.challenge();
+                            if (challenge) {
+                                boolean guilty = model.challenge(); // returns true if guilty, false if innocent
+                                if (guilty) {
+                                    model.guiltyConsequences();
+                                } else {
+                                    model.innocentConsequences();
+                                }
+                            } else {
+                                // standard flow of the game if no challenge
+                                if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                    // wild draw 2 flow of events
+                                    model.drawNCards(2, model.getNextTurn());
+                                    model.setStatus(UnoFlipModel.STATUS_DONE);
+                                } else {
+                                    // wild draw colour flow of events
+                                    model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                    model.setStatus(UnoFlipModel.STATUS_DONE);
+                                }
                             }
 
                         }
