@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,6 +61,12 @@ public class SkipEveryoneTest {
         assertEquals(1,unoFlipModel.getCurrentTurn());
         assertEquals(2,unoFlipModel.getNextTurn());
         assertTrue(unoFlipModel.getSkipEveryoneFlag());
+    }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+        testCard=null;
+
     }
 
 }
