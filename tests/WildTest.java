@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class WildTest {
         unoFlipModel.getPlayers().add(new Player("test1"));
         unoFlipModel.getPlayers().add(new Player("test2"));
         unoFlipModel.setNumPlayers(2);
-        testCard = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
+        testCard = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.ONE, Card.Colour.ORANGE);
     }
 
     @Test
@@ -21,10 +22,16 @@ public class WildTest {
         unoFlipModel.getTurnSeqs().get(12).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
-        assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
-        assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
+        assertEquals(Card.Colour.WILD, unoFlipModel.getCurrentColour());
+        assertEquals(Card.Rank.WILD, unoFlipModel.getCurrentRank());
         assertEquals(0, unoFlipModel.getCurrentTurn());
         assertEquals(1, unoFlipModel.getNextTurn());
+    }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+        testCard=null;
+
     }
 
 }
