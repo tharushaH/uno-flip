@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.EventObject;
 
 public class UnoFlipEvent extends EventObject {
@@ -8,13 +9,17 @@ public class UnoFlipEvent extends EventObject {
     private final boolean turnFinished;
     private final Card.Colour currColour;
 
+    private final ArrayList<String> playersScores;
+
     /**
      * Constructs a Uno Flip! Event.
      *
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished, Card.Colour currColour) {
+
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished, Card.Colour currColour, ArrayList<String> playersScores) {
+
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;
@@ -22,6 +27,8 @@ public class UnoFlipEvent extends EventObject {
         this.status = status;
         this.turnFinished = turnFinished;
         this.currColour = currColour;
+        this.playersScores = playersScores;
+
     }
 
     /**
@@ -76,5 +83,16 @@ public class UnoFlipEvent extends EventObject {
      */
     public Card.Colour getCurrColour() {
         return currColour;
+
     }
+
+    /**
+     * Gets the arrayList of playerScores
+     * @return arrayList of playerScores
+     */
+    public ArrayList<String> getPlayersScores() {
+        return playersScores;
+    }
+
+
 }

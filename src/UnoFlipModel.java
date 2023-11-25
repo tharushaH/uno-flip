@@ -30,6 +30,7 @@ public class UnoFlipModel {
     private List<UnoFlipView> views;
     private ArrayList<TurnSequence> turnSeqs;
     private ArrayList<Player> players;
+    private ArrayList<String> playerScores;
 
     public static final int DRAW_ONE_BUTTON = -1;
 
@@ -60,6 +61,7 @@ public class UnoFlipModel {
         this.players = new ArrayList<Player>();
         this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
         this.views = new ArrayList<UnoFlipView>();
+        this.playerScores = new ArrayList<String>();
         this.turnDirection = true; //initialize to clockwise
         this.skipEveryone = false;
         this.currentTurn = 0;
@@ -146,8 +148,22 @@ public class UnoFlipModel {
             this.currentRank = this.topCard.getRank();
             this.status = STATUS_STANDARD;
 
+            setUpInitialPlayerScore();
         }
+
+
         notifyViews();
+    }
+
+    /**
+     * set up Player scores at the start of the game or when a saved game is loaded.
+     */
+    public void setUpInitialPlayerScore(){
+        for( int i=0; i < numPlayers ; i ++){
+            playerScores.add(players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
+
+        }
+
     }
 
 
@@ -175,7 +191,7 @@ public class UnoFlipModel {
 
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.currentColour));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.currentColour, this.playerScores));
             }
         }
         this.status = STATUS_STANDARD;
@@ -252,6 +268,7 @@ public class UnoFlipModel {
         if (player.getHandSize() == 0) {
             getCurrentPlayer().setPlayerScore(getWinnerScore());
             this.status = "WINNER:" + getCurrentPlayer().getName() + " HAS WON !"; // (EX. "WINNER: Player 1 HAS WON!")
+            updatePlayerScores();
             notifyViews();
             return true;
 
@@ -406,6 +423,15 @@ public class UnoFlipModel {
     }
 
     /**
+     * Update each player's score
+     */
+    public void updatePlayerScores(){
+        for( int i=0; i < numPlayers ; i ++){
+            playerScores.set(i,players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
+        }
+    }
+
+    /**
      * Checks to see if there is a playable card in hand before allowing player to draw a card from the deck
      * @return return true if valid to draw a card from deck, otherwise false.
      */
@@ -450,7 +476,6 @@ public class UnoFlipModel {
     public void removeUnoFlipView(UnoFlipView view){
         this.views.remove(view);
     }
-
 
     /**
      * Gets the current colour of the game.
