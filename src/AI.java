@@ -69,6 +69,12 @@ public class AI extends Player{
                 mostColour = colourEntry;
             }
         }
+        // Pick default colour if the bot only has wild cards
+        if(mostColour == null){
+            mostColour = Card.Colour.RED;
+        }
+
+
 
         return mostColour;
     }

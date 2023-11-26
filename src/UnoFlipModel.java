@@ -285,12 +285,10 @@ public class UnoFlipModel {
 
             if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
                 Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
-                System.out.println("hand size in model for "+getCurrentPlayer().getName()+": "+getCurrentPlayer().getHandSize());
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = AI_PLAYED_CARD + playCard.toString();
             } else{
                 Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
-                System.out.println("hand size in model for "+getCurrentPlayer().getName()+": "+getCurrentPlayer().getHandSize());
 
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -475,7 +473,6 @@ public class UnoFlipModel {
      */
     public void updatePlayerScores(){
         for( int i=0; i < numPlayers ; i ++){
-            System.out.println("score size"+playerScores.size());
             playerScores.set(i,players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
         }
     }
