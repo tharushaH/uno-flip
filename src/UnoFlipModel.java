@@ -31,6 +31,7 @@ public class UnoFlipModel {
     private ArrayList<TurnSequence> turnSeqs;
     private ArrayList<Player> players;
     private ArrayList<String> playerScores;
+    private Boolean isWinner;
 
     public static final int DRAW_ONE_BUTTON = -1;
 
@@ -74,6 +75,7 @@ public class UnoFlipModel {
         this.skipTurn = false;
         this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
         this.status = STATUS_STANDARD;
+        this.isWinner = false;
 
         //adding the same turn sequence 9 times because the first 9 ranks (all number cards) play out the same way
         for(int i =0;i<=8;i++){
@@ -183,7 +185,7 @@ public class UnoFlipModel {
             String statusToUpdate;
 
             // If the current top card is a Wild Draw 2 and the next player declines to challenge
-            if (isWildDraw) {
+            if (isWildDraw && !isWinner) {
                 statusToUpdate = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
             } else {
                 statusToUpdate = this.status;
@@ -231,6 +233,10 @@ public class UnoFlipModel {
             if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
                 this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
                 this.turnFinished = true;
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
                 Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
@@ -266,8 +272,9 @@ public class UnoFlipModel {
      */
     private boolean isWinner(Player player){
         if (player.getHandSize() == 0) {
-            getCurrentPlayer().setPlayerScore(getWinnerScore());
+            player.setPlayerScore(getWinnerScore());
             this.status = "WINNER:" + getCurrentPlayer().getName() + " HAS WON !"; // (EX. "WINNER: Player 1 HAS WON!")
+            this.isWinner = true;
             updatePlayerScores();
             notifyViews();
             return true;
@@ -715,5 +722,14 @@ public class UnoFlipModel {
      */
     public void setPreviousRank(Card.Rank previousRank) {
         this.previousRank = previousRank;
+    }
+
+    /**
+     * Returns the boolean representation of the games winner
+     *
+     * @return true if the game has a winner, otherwise false
+     */
+    public boolean isWinner(){
+        return this.isWinner;
     }
 }
