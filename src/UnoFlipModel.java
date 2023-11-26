@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,9 @@ public class UnoFlipModel {
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
     public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
     public static final String STATUS_DONE = "done";
-    
+    public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
+    public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
+
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
      */
@@ -106,7 +109,7 @@ public class UnoFlipModel {
      */
     public void setNumPlayers(int numPlayers) {
 
-        if( numPlayers < 2 || numPlayers > 4){
+        if( numPlayers < 2 || numPlayers > 12){
             throw new IllegalArgumentException("Number of players must be between 2-4");
         }
         this.numPlayers = numPlayers;
@@ -115,9 +118,19 @@ public class UnoFlipModel {
     /**
      * Creates player and adds them to the game
      * @param playerName - the name of the player that will be created and added to the players list
+     * @return new player created
      */
     public Player createPlayer(String playerName){
         return new Player(playerName);
+    }
+
+    /**
+     * Creates AI and adds them to the game
+     *
+     * @return new AI created
+     */
+    public AI createAIPlayer(){
+        return new AI();
     }
 
     /**
@@ -193,7 +206,7 @@ public class UnoFlipModel {
 
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.turnFinished, this.currentColour, this.playerScores));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.players.get(currentTurn) instanceof AI,  this.turnFinished, this.currentColour, this.playerScores));
             }
         }
         this.status = STATUS_STANDARD;
@@ -260,6 +273,43 @@ public class UnoFlipModel {
            this.status = STATUS_TURN_FINISHED;
 
         }
+        notifyViews();
+    }
+
+    /**
+     * playAITurn method is used to handle game logic request sent by UnoFlipController to play a card or
+     * draw a card for the AI player.
+     */
+    public void playAITurn(){
+        AI aiPlayer = (AI) this.players.get(currentTurn);
+        int chosenAICardIndex = aiPlayer.playAICard(this.currentColour, this.currentRank);
+        if(chosenAICardIndex == DRAW_ONE_BUTTON){
+            this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
+            this.status = AI_DRAW_CARD;
+        } else {
+            int rank = getCurrentPlayer().getCard(chosenAICardIndex).getRank().ordinal();
+
+            if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                this.turnSeqs.get(rank).executeSequence(playCard);
+                this.status = AI_PLAYED_CARD + playCard.toString();
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
+            } else{
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
+
+                this.turnSeqs.get(rank).executeSequence(playCard);
+                this.status = AI_PLAYED_CARD + "\n" + playCard.toString();
+            }
+        }
+        this.turnFinished = true;
         notifyViews();
     }
 
@@ -465,6 +515,32 @@ public class UnoFlipModel {
         this.skipTurn = false;
         this.skipEveryone = false;
         this.turnFinished = false;
+    }
+
+    /**
+     * Return a boolean of if the next player is an AI or not
+     *
+     * @return true if the next player is an AI, false otherwise
+     */
+    public boolean isNextPlayerAI(){
+        int nextIndex;
+        if (this.turnDirection) {
+            nextIndex = (this.currentTurn + 1) % this.numPlayers;
+            //counterclockwise (ex. 0->3->2->1)
+        } else {
+            nextIndex = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
+        }
+
+        return this.getPlayers().get(nextIndex) instanceof AI;
+    }
+
+    /**
+     * Returns boolean that represents if current player is AI or not
+     *
+     * @return true if current player is AI, otherwise false
+     */
+    public boolean isCurrentPlayerAI(){
+       return this.getPlayers().get(currentTurn) instanceof AI;
     }
 
 

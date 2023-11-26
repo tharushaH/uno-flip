@@ -158,7 +158,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
      */
     @Override
     public void handleUnoFlipStatusUpdate(UnoFlipEvent e) {
-        if(e.getTurnFinished()){
+        if(e.getTurnFinished() || e.getIsAI()){
             drawCard.setEnabled(false);
         } else {
             drawCard.setEnabled(true);
@@ -176,6 +176,11 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             case PINK -> currentColourPanel.setBackground(Color.PINK);
             case PURPLE -> currentColourPanel.setBackground(Color.decode("#800080"));
             case TEAL -> currentColourPanel.setBackground(Color.decode("#008080"));
+        }
+
+        // AI specific message
+        if(e.getIsAI()){
+            statusArea.setText(e.getCurrPlayerName() + " is playing:");
         }
 
         // check wild to select colour
@@ -216,7 +221,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
                     newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
                     newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
                     newCard.addActionListener(controller);
-                    if (e.getTurnFinished()) {
+                    if (e.getTurnFinished() || e.getIsAI()) {
                         newCard.setEnabled(false);
                     }
                     handPanel.add(newCard);

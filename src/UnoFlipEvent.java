@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.EventObject;
 
 public class UnoFlipEvent extends EventObject {
@@ -7,6 +8,7 @@ public class UnoFlipEvent extends EventObject {
     private final String currHand;                // toString() of the current hand
     private final String status;              // toString() of the current colour
     private final boolean turnFinished;
+    private final boolean isAI;
     private final Card.Colour currColour;
 
     private final ArrayList<String> playersScores;
@@ -17,18 +19,16 @@ public class UnoFlipEvent extends EventObject {
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-
-    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished, Card.Colour currColour, ArrayList<String> playersScores) {
-
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished, boolean isAI, Card.Colour currColour, ArrayList<String> playersScores) {
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;
         this.currHand = currHand;
         this.status = status;
         this.turnFinished = turnFinished;
+        this.isAI = isAI;
         this.currColour = currColour;
         this.playersScores = playersScores;
-
     }
 
     /**
@@ -74,6 +74,15 @@ public class UnoFlipEvent extends EventObject {
      */
     public boolean getTurnFinished() {
         return turnFinished;
+    }
+
+    /**
+     * Gets the boolean if the current player is AI or not
+     *
+     * @return true if player is AI, otherwise false
+     */
+    public boolean getIsAI(){
+        return this.isAI;
     }
 
     /**

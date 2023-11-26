@@ -1,11 +1,9 @@
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.*;
 import static org.junit.Assert.*;
 
 public class DeckTest {
     private Deck deck;
-    final static int MAX_SIZE = 112;    // should be 112, but not including the 8 flip cards yet
+    final static int MAX_SIZE = 112;
 
     @Before
     public void setUp() {
@@ -57,8 +55,8 @@ public class DeckTest {
 
     @Test
     public void testPutCard() {
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,Card.Rank.EIGHT, Card.Colour.PURPLE);
-        Card card2 = new Card(Card.Rank.REVERSE, Card.Colour.RED,Card.Rank.REVERSE, Card.Colour.ORANGE);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE, Card.Rank.EIGHT, Card.Colour.PINK);
+        Card card2 = new Card(Card.Rank.REVERSE, Card.Colour.RED, Card.Rank.REVERSE, Card.Colour.ORANGE);
 
         // take cards until only 3 left in deck
         for (int i = 0; i < (MAX_SIZE - 3); i++) {
@@ -74,7 +72,7 @@ public class DeckTest {
 
     @Test
     public void testPutCardWithFullDeck() {
-        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE,Card.Rank.EIGHT, Card.Colour.PINK);
+        Card card1 = new Card(Card.Rank.EIGHT, Card.Colour.BLUE, Card.Rank.EIGHT, Card.Colour.BLUE);
 
         // adding card to full deck should throw an exception
         assertThrows(IllegalStateException.class, () -> {
@@ -87,14 +85,12 @@ public class DeckTest {
     public void testPutCardWithCardAlreadyInDeck() {
         Card card1 = deck.takeCard();
         deck.putCard(card1);
-
         assertThrows(IllegalArgumentException.class, () -> {deck.putCard(card1);});
         assertEquals(MAX_SIZE - 1, deck.size());
 
-
         Card card2 = deck.takeCard();
         deck.putCard(card2);
-        //assertThrows(IllegalArgumentException.class, () -> {deck.putCard(card2);});
+        assertThrows(IllegalArgumentException.class, () -> {deck.putCard(card2);});
         assertEquals(MAX_SIZE - 2, deck.size());
     }
 
