@@ -163,10 +163,9 @@ public class UnoFlipModel {
             this.currentRank = this.topCard.getRank();
             this.status = STATUS_STANDARD;
 
-            setUpInitialPlayerScore();
+
         }
-
-
+        setUpInitialPlayerScore();
         notifyViews();
     }
 
