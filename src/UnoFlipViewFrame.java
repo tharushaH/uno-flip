@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -11,10 +13,14 @@ import java.util.HashMap;
 public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private UnoFlipController controller;
     private JPanel handPanel;
+
+    private JPanel buttonPanel;
     private JLabel topCardLabel;
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
     private JTextArea statusArea;
+    private JButton drawCard;
+    private JPanel currentColourPanel;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
@@ -73,7 +79,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         // create button to draw a card and to go to next turn
-        JButton drawCard = new JButton("Draw card");
+        drawCard = new JButton("Draw card");
         drawCard.setFont(new Font("Dialog", Font.PLAIN, 18));
         drawCard.setActionCommand(DRAW_CMD);
         drawCard.addActionListener(controller);
@@ -83,7 +89,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         nextTurn.addActionListener(controller);
 
         // create a panel for draw card and next turn buttons
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2,1));
         buttonPanel.add(drawCard);
         buttonPanel.add(nextTurn);
@@ -115,10 +121,23 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         EmptyBorder marginBorder = new EmptyBorder(10, 0, 10, 10);
         statusScrollPanel.setBorder(marginBorder);
 
+        // create current colour area to hold the current colour
+        JLabel colourLabel = new JLabel(("Current colour: "));
+        currentColourPanel = new JPanel();
+        currentColourPanel.setPreferredSize(new Dimension(100,100));
+        currentColourPanel.setBackground(Color.WHITE);
+        JPanel colourPanel = new JPanel(new BorderLayout());
+        colourPanel.setBorder(marginBorder);
+        colourPanel.add(colourLabel, BorderLayout.WEST);
+        colourPanel.add(currentColourPanel, BorderLayout.CENTER);
+
+
+
         JLabel label = new JLabel("GAME STATUS: ");
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.add(label, BorderLayout.NORTH);
         statusPanel.add(statusScrollPanel, BorderLayout.CENTER);
+        statusPanel.add(colourPanel, BorderLayout.SOUTH);
 
 
         this.add(statusPanel, BorderLayout.EAST);
@@ -139,58 +158,90 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
      */
     @Override
     public void handleUnoFlipStatusUpdate(UnoFlipEvent e) {
-
+        if(e.getTurnFinished() || e.getIsAI()){
+            drawCard.setEnabled(false);
+        } else {
+            drawCard.setEnabled(true);
+        }
         // clear status area
         statusArea.setText("");
 
-        // check wild to select colour
-        if (e.getIsWild() && e.getStatus().equals("WILD")){
-            ActionEvent wildEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, WILD_CMD);
-            controller.actionPerformed(wildEvent);
+        // Change the currentColourPanel to match the current colour of the game
+        switch (e.getCurrColour()){
+            case RED -> currentColourPanel.setBackground(Color.RED);
+            case BLUE -> currentColourPanel.setBackground(Color.BLUE);
+            case YELLOW -> currentColourPanel.setBackground(Color.YELLOW);
+            case GREEN -> currentColourPanel.setBackground(Color.GREEN);
+            case ORANGE -> currentColourPanel.setBackground(Color.ORANGE);
+            case PINK -> currentColourPanel.setBackground(Color.PINK);
+            case PURPLE -> currentColourPanel.setBackground(Color.decode("#800080"));
+            case TEAL -> currentColourPanel.setBackground(Color.decode("#008080"));
         }
-        else if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString()) || e.getStatus().equals((Card.Colour.WILD.toString()))){
-            if(e.getIsWild()){
-                statusArea.append("\nSelected Colour: " + e.getStatus());
-                if(e.getTopCard().equals("wild_draw_2")){
-                    ActionEvent challengeEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, CHALLENGE_CMD);
-                    controller.actionPerformed(challengeEvent);
+
+        // AI specific message
+        if(e.getIsAI()){
+            statusArea.setText(e.getCurrPlayerName() + " is playing:");
+        }
+
+        // check wild to select colour
+        if(e.getStatus().equals(Card.Colour.RED.toString()) || e.getStatus().equals(Card.Colour.BLUE.toString()) || e.getStatus().equals(Card.Colour.YELLOW.toString()) || e.getStatus().equals(Card.Colour.GREEN.toString())){
+            statusArea.append("\nSelected Colour: " + e.getStatus());
+        } else if (e.getStatus().startsWith("WINNER:")) {
+
+            JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
+            //show player scores
+            for(int i =0; i < e.getPlayersScores().size(); i ++){
+                statusArea.append(e.getPlayersScores().get(i)+ "\n");
+            }
+            //disable buttons
+            drawCard.setEnabled(false);
+            handPanel.removeAll();
+            buttonPanel.removeAll();
+            this.repaint();
+
+        } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
+            statusArea.append("\nSelecting Colour...");
+        } else {
+            statusArea.append(e.getStatus());
+        }
+
+        //display cards since there are still cards in current player's hand
+        if( !e.getStatus().startsWith("WINNER:")) {
+            // update the hand panel with the new hand's cards
+            handPanel.removeAll();  // remove current hand, about to replace with new one
+            String currHand = e.getCurrHand();
+            String[] currHandArray = currHand.split(" ");
+
+
+            if(!(currHandArray[0] == "")){
+                for (int i = 0; i < currHandArray.length; i++) {
+
+                    JButton newCard = new JButton();
+                    newCard.setPreferredSize(new Dimension(200, 300));
+                    newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
+                    newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
+                    newCard.addActionListener(controller);
+                    if (e.getTurnFinished() || e.getIsAI()) {
+                        newCard.setEnabled(false);
+                    }
+                    handPanel.add(newCard);
                 }
             }
-        } else if (e.getStatus().startsWith("WINNER:")) {
-            JOptionPane.showMessageDialog(this, e.getStatus(), "WINNER WINNER CHICKEN DINNER", JOptionPane.WARNING_MESSAGE);
-            this.dispose();
-        } else if (e.getStatus().equals("INNOCENT: NEXT PLAYER DRAWS 4 CARDS") || e.getStatus().equals(("GUILTY:YOU DRAW 2 CARDS"))){
-            statusArea.append(e.getStatus());
-        }else {
-            statusArea.append(e.getStatus());
+
+
+
+            this.repaint();  // prevent visual bug by resetting the frame
+
+            // update the top card
+            topCardLabel.setIcon(new ImageIcon(getClass().getResource("images/" + e.getTopCard() + ".png")));
+            topCardNameLabel.setText(e.getTopCard());
+            topCardNameLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+
+            // update the current player
+            currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
+            currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
         }
 
-
-
-        // update the hand panel with the new hand's cards
-        handPanel.removeAll();  // remove current hand, about to replace with new one
-        String currHand = e.getCurrHand();
-        String[] currHandArray = currHand.split(" ");
-
-        for (int i = 0; i < currHandArray.length; i++) {
-            JButton newCard = new JButton();
-            newCard.setPreferredSize(new Dimension(200,300));
-            newCard.setIcon(new ImageIcon(getClass().getResource("images/"+currHandArray[i]+".png")));
-            newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
-            newCard.addActionListener(controller);
-            handPanel.add(newCard);
-        }
-
-        this.repaint();  // prevent visual bug by resetting the frame
-
-        // update the top card
-        topCardLabel.setIcon(new ImageIcon(getClass().getResource("images/"+e.getTopCard()+".png")));
-        topCardNameLabel.setText(e.getTopCard());
-        topCardNameLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
-
-        // update the current player
-        currPlayerLabel.setText("Current player: " + e.getCurrPlayerName());
-        currPlayerLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
     }
 
     public static void main(String[] args) {

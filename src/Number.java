@@ -20,6 +20,5 @@ public class Number extends TurnSequence{
         unoFlipModel.setTopCard(card);
         unoFlipModel.setCurrentColour(card.getColour());
         unoFlipModel.setCurrentRank(card.getRank());
-        unoFlipModel.nextTurn();
     }
 }

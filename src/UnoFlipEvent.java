@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.EventObject;
 
 public class UnoFlipEvent extends EventObject {
@@ -5,7 +7,11 @@ public class UnoFlipEvent extends EventObject {
     private final String topCard;                 // toString() of the top card
     private final String currHand;                // toString() of the current hand
     private final String status;              // toString() of the current colour
-    private final boolean isWild;
+    private final boolean turnFinished;
+    private final boolean isAI;
+    private final Card.Colour currColour;
+
+    private final ArrayList<String> playersScores;
 
     /**
      * Constructs a Uno Flip! Event.
@@ -13,13 +19,16 @@ public class UnoFlipEvent extends EventObject {
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean isWild) {
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished, boolean isAI, Card.Colour currColour, ArrayList<String> playersScores) {
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;
         this.currHand = currHand;
         this.status = status;
-        this.isWild = isWild;
+        this.turnFinished = turnFinished;
+        this.isAI = isAI;
+        this.currColour = currColour;
+        this.playersScores = playersScores;
     }
 
     /**
@@ -63,7 +72,36 @@ public class UnoFlipEvent extends EventObject {
      *
      * @return true if wild, otherwise false
      */
-    public boolean getIsWild() {
-        return isWild;
+    public boolean getTurnFinished() {
+        return turnFinished;
     }
+
+    /**
+     * Gets the boolean if the current player is AI or not
+     *
+     * @return true if player is AI, otherwise false
+     */
+    public boolean getIsAI(){
+        return this.isAI;
+    }
+
+    /**
+     * Gets the current game colour.
+     *
+     * @return colour of the card
+     */
+    public Card.Colour getCurrColour() {
+        return currColour;
+
+    }
+
+    /**
+     * Gets the arrayList of playerScores
+     * @return arrayList of playerScores
+     */
+    public ArrayList<String> getPlayersScores() {
+        return playersScores;
+    }
+
+
 }

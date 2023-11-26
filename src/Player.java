@@ -12,13 +12,13 @@ import java.util.ArrayList;
  * Date: 2023-10-18
  */
 public class Player {
-    private Hand hand;
+    protected Hand hand;
 
-    private static Deck deck = new Deck();
+    protected static Deck deck = new Deck();
 
-    private final String name;
+    protected final String name;
 
-    private int playerScore;
+    protected int playerScore;
 
 
     /**

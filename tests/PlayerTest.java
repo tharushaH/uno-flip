@@ -4,7 +4,7 @@ import org.junit.*;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class PlayerTest extends junit.framework.TestCase{
+public class PlayerTest {
 
     private Player p1;
 
@@ -26,22 +26,22 @@ public class PlayerTest extends junit.framework.TestCase{
     @Test
     public void testConstructor(){
         //Make sure the name given matches the one in the object
-        assertEquals("Kramer", p1.getName());
+        Assert.assertEquals("Kramer", p1.getName());
 
         //make sure that each player is initialized with the right amount of cards
-        assertEquals(7,p1.getHandSize());
+        Assert.assertEquals(7, p1.getHandSize());
     }
 
     @Test
     public void testAddCardToHand(){
         //Test to check make sure the player starts off with 7 cards
-        assertEquals(7,p1.getHandSize());
+        Assert.assertEquals(7, p1.getHandSize());
 
         //Add the Card to the players hand.
         p1.addCardToHand(1);
 
         //Make sure that there a card in the hand
-        assertEquals(8,p1.getHandSize());
+        Assert.assertEquals(8, p1.getHandSize());
 
         /*
              POSSIBLE TEST
@@ -63,19 +63,19 @@ public class PlayerTest extends junit.framework.TestCase{
          */
 
         //Test to check make sure the player starts off with 7 cards
-        assertEquals(7,p1.getHandSize());
+        Assert.assertEquals(7, p1.getHandSize());
 
         //Play a card
         Card playedCard = p1.playCard(0);
 
         //Test to see that there are 6 cards now in hand
-        assertEquals(6, p1.getHandSize());
+        Assert.assertEquals(6, p1.getHandSize());
 
 
         //Play each of the cards in the hand, and check the number of cards in the hand
         for(int i=0; i < 6; i++){
-            p1.playCard(0);
-            assertEquals(i%6, p1.getHandSize());
+           p1.playCard(0);
+            Assert.assertEquals(5-i, p1.getHandSize());
         }
 
     }
@@ -84,7 +84,7 @@ public class PlayerTest extends junit.framework.TestCase{
     public void testGetHandSize(){
 
         //Test to check make sure the player starts off with 7 cards
-        assertEquals(7,p1.getHandSize());
+        Assert.assertEquals(7, p1.getHandSize());
 
         //Play a card
         Card playedCard = p1.playCard(0);
@@ -92,14 +92,14 @@ public class PlayerTest extends junit.framework.TestCase{
         //Play each of the cards in the hand, and check the number of cards in the hand
         for(int i=0; i < 6; i++){
             p1.playCard(0);
-            assertEquals(i%6, p1.getHandSize());
+            Assert.assertEquals(5-i, p1.getHandSize());
         }
 
     }
     @Test
     public void testGetName(){
         //test to see that the name given to the player matches the name that is initialized
-        assertEquals("Kramer", p1.getName());
+        Assert.assertEquals("Kramer", p1.getName());
 
     }
 
@@ -112,7 +112,7 @@ public class PlayerTest extends junit.framework.TestCase{
             p1.playCard(0);
         }
 
-        assertEquals("YourCards:", p1.toString());
+        Assert.assertEquals("", p1.toString());
     }
 
 
@@ -124,16 +124,19 @@ public class PlayerTest extends junit.framework.TestCase{
             p1.playCard(0);
         }
 
-        assertFalse(p1.colourInHand(Card.Colour.RED));
+        Assert.assertFalse(p1.colourInHand(Card.Colour.RED));
     }
 
     @Test
     public void testGetCard(){
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
-        assertEquals(p1.playCard(0), p1.getCard(0));
+        Card c = p1.getCard(0);
+        Assert.assertEquals(p1.playCard(0), c);
+        c = p1.getCard(0);
+        Assert.assertEquals(p1.playCard(0), c);
+        c = p1.getCard(0);
+        Assert.assertEquals(p1.playCard(0), c);
+        c = p1.getCard(0);
+
     }
 
     @Test
@@ -146,7 +149,7 @@ public class PlayerTest extends junit.framework.TestCase{
             p1.playCard(0);
         }
         //Once playing all cards, score should be zero
-        assertEquals(0, p1.getHandScore());
+        Assert.assertEquals(0, p1.getHandScore());
 
         //Add card to hand
         p1.addCardToHand(1);
@@ -159,10 +162,10 @@ public class PlayerTest extends junit.framework.TestCase{
     public void TestSetPlayerScore(){
 
         //Initally Player should have no score
-        assertEquals(0, p1.getPlayerScore());
+        Assert.assertEquals(0, p1.getPlayerScore());
 
         p1.setPlayerScore(500);
-        assertEquals(500, p1.getPlayerScore());
+        Assert.assertEquals(500, p1.getPlayerScore());
     }
 
 

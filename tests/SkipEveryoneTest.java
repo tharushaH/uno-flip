@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class SkipEveryoneTest {
 
     @Test
     public void testExecuteSequence(){
-        unoFlipModel.getTurnSeqs().get(15).executeSequence(testCard);
+        unoFlipModel.getTurnSeqs().get(unoFlipModel.TURN_SEQ_SKIP_EVERYONE).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
@@ -36,7 +37,7 @@ public class SkipEveryoneTest {
         unoFlipModel.setTurnFinished(true);
         unoFlipModel.nextTurn();
 
-        unoFlipModel.getTurnSeqs().get(15).executeSequence(testCard);
+        unoFlipModel.getTurnSeqs().get(unoFlipModel.TURN_SEQ_SKIP_EVERYONE).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
@@ -52,7 +53,7 @@ public class SkipEveryoneTest {
         unoFlipModel.setTurnFinished(true);
         unoFlipModel.nextTurn();
 
-        unoFlipModel.getTurnSeqs().get(16).executeSequence(testCard);
+        unoFlipModel.getTurnSeqs().get(unoFlipModel.TURN_SEQ_SKIP_EVERYONE).executeSequence(testCard);
         assertTrue(unoFlipModel.getTurnDirection());
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
@@ -60,6 +61,12 @@ public class SkipEveryoneTest {
         assertEquals(1,unoFlipModel.getCurrentTurn());
         assertEquals(2,unoFlipModel.getNextTurn());
         assertTrue(unoFlipModel.getSkipEveryoneFlag());
+    }
+    @After
+    public void teardown(){
+        unoFlipModel=null;
+        testCard=null;
+
     }
 
 }

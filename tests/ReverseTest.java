@@ -23,8 +23,8 @@ public class ReverseTest {
         assertEquals(testCard, unoFlipModel.getTopCard());
         assertEquals(Card.Colour.RED, unoFlipModel.getCurrentColour());
         assertEquals(Card.Rank.ONE, unoFlipModel.getCurrentRank());
-        assertEquals(1, unoFlipModel.getCurrentTurn());
-        assertEquals(0, unoFlipModel.getNextTurn());
+        assertEquals(0, unoFlipModel.getCurrentTurn());
+        assertEquals(1, unoFlipModel.getNextTurn());
         assertEquals(7, unoFlipModel.getPlayers().get(1).getHandSize());
 
     }

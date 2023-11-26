@@ -1,7 +1,7 @@
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 /**
  * The Game class represent a game of Uno Flip. Uno Flip can be played with 2-4 players.
  * This class initializes and manages a game of Uno Flip by managing player turns, displaying
@@ -16,8 +16,6 @@ public class UnoFlipModel {
     private boolean turnFinished;
     private boolean skipTurn;
     private boolean skipEveryone;
-    private boolean challenge; //true if next player wants to challenge a wild draw 2, false if they do not
-    private boolean dontAskChallenge; //true if game does not want give player challenge prompt, false if game want to give player challenge prompt
     private boolean turnDirection; //true is clockwise(1->2->3->4), false is counterclockwise(1->4->3->2)
     private int numPlayers;
     private int chosenCardIndex;
@@ -26,32 +24,40 @@ public class UnoFlipModel {
     private String status; //indicate the status for which the view will update to
     private Deck deck;
     private Card.Colour currentColour;
+    private Card.Colour previousColour;
     private Card.Rank currentRank;
+    private Card.Rank previousRank;
     private Card topCard;
     private List<UnoFlipView> views;
     private ArrayList<TurnSequence> turnSeqs;
     private ArrayList<Player> players;
+    private ArrayList<String> playerScores;
+    private Boolean isWinner;
 
     public static final int DRAW_ONE_BUTTON = -1;
 
     //Constants used for Turn sequence
-    public static final int TURN_SEQ_SELF_DRAW_ONE = 14;
-    public static final int TURN_SEQ_DRAW_FIVE = 15;
-
-
-    public static final int TURN_SEQ_FLIP = 15;
+    public static final int TURN_SEQ_SELF_DRAW_ONE = 18;
+    public static final int TURN_SEQ_SKIP_EVERYONE = 15;
+    public static final int TURN_SEQ_DRAW_FIVE = 14;
+    public static final int TURN_SEQ_FLIP = 17;
 
     //Constants used to indicate the current status
     public static final String STATUS_CHALLENGE_MESSAGE  = "THE NEXT PLAYER HAS THE OPTION TO CHALLENGE";
     public static final String STATUS_STANDARD = " ";
-    public static final String STATUS_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS 4 CARDS";
-    public static final String STATUS_CHALLENGE_GUILTY = "GUILTY:YOU DRAW 2 CARDS";
+    public static final String STATUS_LIGHT_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS 4 CARDS"; // for wild draw 2
+    public static final String STATUS_LIGHT_CHALLENGE_GUILTY = "GUILTY: YOU DRAW 2 CARDS";   // for wild draw 2
+    public static final String STATUS_DARK_CHALLENGE_INNOCENT = "INNOCENT: NEXT PLAYER DRAWS AN ADDITIONAL 2 CARDS"; // for wild draw colour
+    public static final String STATUS_DARK_CHALLENGE_GUILTY = "GUILTY: YOU DRAW CARDS UNTIL DRAWING YOUR CHOSEN COLOUR";   // for wild draw colour
     public static final String STATUS_PLAYABLE_CARD = "YOU HAVE PLAYABLE CARD";
+    public static final String DRAW_CARD = "YOU HAVE DRAWN A CARD";
     public static final String STATUS_INVALID_CARD_BEING_PLACED = "THE CARD YOU PLACED DOES NOT MATCH THE TOP CARD. TRY AGAIN";
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
     public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
     public static final String STATUS_DONE = "done";
-    
+    public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
+    public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
+
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
      */
@@ -59,6 +65,7 @@ public class UnoFlipModel {
         this.players = new ArrayList<Player>();
         this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
         this.views = new ArrayList<UnoFlipView>();
+        this.playerScores = new ArrayList<String>();
         this.turnDirection = true; //initialize to clockwise
         this.skipEveryone = false;
         this.currentTurn = 0;
@@ -69,9 +76,9 @@ public class UnoFlipModel {
         this.numPlayers = 0;
         this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
         this.skipTurn = false;
-        this.dontAskChallenge = false;
         this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
         this.status = STATUS_STANDARD;
+        this.isWinner = false;
 
         //adding the same turn sequence 9 times because the first 9 ranks (all number cards) play out the same way
         for(int i =0;i<=8;i++){
@@ -84,12 +91,13 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Skip(this));
         this.turnSeqs.add(new Wild(this));
         this.turnSeqs.add(new WildDrawTwo(this));
-        this.turnSeqs.add(new SelfDrawOne(this));
 
         this.turnSeqs.add(new DrawFive(this));
-        this.turnSeqs.add(new SkipEveryone(this)); //must be index 16
-
+        this.turnSeqs.add(new SkipEveryone(this));
+        this.turnSeqs.add(new WildDrawColour(this));
         this.turnSeqs.add(new Flip(this));
+
+        this.turnSeqs.add(new SelfDrawOne(this));
 
     }
 
@@ -101,7 +109,7 @@ public class UnoFlipModel {
      */
     public void setNumPlayers(int numPlayers) {
 
-        if( numPlayers < 2 || numPlayers > 4){
+        if( numPlayers < 2 || numPlayers > 12){
             throw new IllegalArgumentException("Number of players must be between 2-4");
         }
         this.numPlayers = numPlayers;
@@ -110,9 +118,19 @@ public class UnoFlipModel {
     /**
      * Creates player and adds them to the game
      * @param playerName - the name of the player that will be created and added to the players list
+     * @return new player created
      */
     public Player createPlayer(String playerName){
         return new Player(playerName);
+    }
+
+    /**
+     * Creates AI and adds them to the game
+     *
+     * @return new AI created
+     */
+    public AI createAIPlayer(){
+        return new AI();
     }
 
     /**
@@ -131,7 +149,7 @@ public class UnoFlipModel {
         this.topCard = deck.takeCard();
 
         //rules don't allow wild draw 2 to be first card, keep drawing until a different card is drawn
-        while(this.topCard.getRank().ordinal() == Card.RANK_WILD_DRAW_2){
+        while(this.topCard.getRank().ordinal() == Card.RANK_WILD_DRAW_2 || this.topCard.getRank().ordinal() == Card.Rank.WILD.ordinal()){
             this.deck.putCard(this.topCard);
             this.topCard = this.deck.takeCard();  //redraw the topCard
         }
@@ -145,8 +163,21 @@ public class UnoFlipModel {
             this.currentRank = this.topCard.getRank();
             this.status = STATUS_STANDARD;
 
+
         }
+        setUpInitialPlayerScore();
         notifyViews();
+    }
+
+    /**
+     * set up Player scores at the start of the game or when a saved game is loaded.
+     */
+    public void setUpInitialPlayerScore(){
+        for( int i=0; i < numPlayers ; i ++){
+            playerScores.add(players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
+
+        }
+
     }
 
 
@@ -159,12 +190,14 @@ public class UnoFlipModel {
         //make sure there are views in the view arraylist to send UnoFlipEvents to
         if(!this.views.isEmpty()){
 
-            boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_CHALLENGE_INNOCENT) && !this.status.equals(STATUS_CHALLENGE_GUILTY) && !this.dontAskChallenge;
+            boolean isWildDraw = this.topCard.isWild() && !this.status.equals(STATUS_LIGHT_CHALLENGE_INNOCENT) &&
+                    !this.status.equals(STATUS_LIGHT_CHALLENGE_GUILTY) && !this.status.equals(STATUS_DARK_CHALLENGE_INNOCENT)
+                    && !this.status.equals(STATUS_DARK_CHALLENGE_GUILTY);
 
             String statusToUpdate;
 
-            // If the current top card is a Wild Draw 2 and the next player declines to challenge (dontAskChallenge flag prevents repetition of this situation)
-            if (isWildDraw) {
+            // If the current top card is a Wild Draw 2 and the next player declines to challenge
+            if (isWildDraw && !isWinner) {
                 statusToUpdate = this.currentColour.toString(); //set status as the current colour chosen by the player (ex: RED)
             } else {
                 statusToUpdate = this.status;
@@ -172,9 +205,10 @@ public class UnoFlipModel {
 
             //Sends events to the view to update based on different game situations
             for (UnoFlipView view : this.views) {
-                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, isWildDraw || this.currentRank == Card.Rank.WILD || this.currentRank == Card.Rank.WILD_DRAW_2));
+                view.handleUnoFlipStatusUpdate(new UnoFlipEvent(this, getCurrentPlayer().getName(), this.topCard.toString(), getCurrentPlayer().toString(), statusToUpdate, this.players.get(currentTurn) instanceof AI,  this.turnFinished, this.currentColour, this.playerScores));
             }
         }
+        this.status = STATUS_STANDARD;
     }
 
 
@@ -194,22 +228,27 @@ public class UnoFlipModel {
 
                 if (validSelfDrawOne()){
                     this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
-                    this.status = STATUS_STANDARD;
+                    this.status = DRAW_CARD;
                     this.turnFinished = true;
 
                 //player has a playable card, player still has to complete their turn
                 } else{
                     this.status = STATUS_PLAYABLE_CARD;
                 }
+                notifyViews();
                 return;
             }
 
             int rank = getCurrentPlayer().getCard(this.chosenCardIndex).getRank().ordinal();
 
-            //if the card wanting to be placed is a Wild Draw 2
-            if (rank == Card.RANK_WILD_DRAW_2){
+            //if the card wanting to be placed is a Wild Draw 2 or Wild
+            if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
                 this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
                 this.turnFinished = true;
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
                 Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
@@ -232,8 +271,44 @@ public class UnoFlipModel {
         } else {
            this.status = STATUS_TURN_FINISHED;
 
-
         }
+        notifyViews();
+    }
+
+    /**
+     * playAITurn method is used to handle game logic request sent by UnoFlipController to play a card or
+     * draw a card for the AI player.
+     */
+    public void playAITurn(){
+        AI aiPlayer = (AI) this.players.get(currentTurn);
+        int chosenAICardIndex = aiPlayer.playAICard(this.currentColour, this.currentRank);
+        if(chosenAICardIndex == DRAW_ONE_BUTTON){
+            this.turnSeqs.get(TURN_SEQ_SELF_DRAW_ONE).executeSequence(null); // null is passed since no card is being played in this sequence, instead player will draw card from deck
+            this.status = AI_DRAW_CARD;
+        } else {
+            int rank = getCurrentPlayer().getCard(chosenAICardIndex).getRank().ordinal();
+
+            if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                this.turnSeqs.get(rank).executeSequence(playCard);
+                this.status = AI_PLAYED_CARD + playCard.toString();
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
+            } else{
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+
+                //check if winner
+                if (isWinner(getCurrentPlayer())) {
+                    return;
+                }
+
+                this.turnSeqs.get(rank).executeSequence(playCard);
+                this.status = AI_PLAYED_CARD + "\n" + playCard.toString();
+            }
+        }
+        this.turnFinished = true;
         notifyViews();
     }
 
@@ -246,8 +321,10 @@ public class UnoFlipModel {
      */
     private boolean isWinner(Player player){
         if (player.getHandSize() == 0) {
-            getCurrentPlayer().setPlayerScore(getWinnerScore());
+            player.setPlayerScore(getWinnerScore());
             this.status = "WINNER:" + getCurrentPlayer().getName() + " HAS WON !"; // (EX. "WINNER: Player 1 HAS WON!")
+            this.isWinner = true;
+            updatePlayerScores();
             notifyViews();
             return true;
 
@@ -308,6 +385,79 @@ public class UnoFlipModel {
     }
 
     /**
+     * Checks if a player is guilty/innocent after playing a wild draw 2 or
+     * wild draw colour card.
+     *
+     * @return true if the player is guilty, false if innocent
+     */
+    public boolean challenge(){
+        if (getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+            return !isWildDrawTwoValid();
+        } else {
+            return !isWildDrawColourValid();
+        }
+    }
+
+    /**
+     * Draws cards for the current player according to which challenge
+     * they were found guilty (wild draw 2 or wild draw colour)
+     */
+    public void guiltyConsequences() {
+        if (getCurrentRank() == Card.Rank.WILD_DRAW_2) {
+            drawNCards(2, getCurrentTurn());
+            status = STATUS_LIGHT_CHALLENGE_GUILTY;
+        } else {
+            // guilty for wild draw colour
+            drawCardUntilColour(getCurrentColour(), currentTurn);
+            status = STATUS_DARK_CHALLENGE_GUILTY;
+        }
+        notifyViews();
+    }
+
+    /**
+     * Draws cards for the next player according to which challenge
+     * the current player was found innocent (wild draw 2 or wild draw colour)
+     */
+    public void innocentConsequences() {
+        if (getCurrentRank() == Card.Rank.WILD_DRAW_2) {
+            this.drawNCards(4, this.getNextTurn());
+            status = STATUS_LIGHT_CHALLENGE_INNOCENT;
+        } else {
+            // innocent for wild draw colour
+            drawCardUntilColour(getCurrentColour(), nextPlayerIndex);
+            drawNCards(2, nextPlayerIndex);
+            status = STATUS_DARK_CHALLENGE_INNOCENT;
+        }
+        notifyViews();
+    }
+
+    /**
+     * Checks to see if there is a playable card in hand before allowing player to check if player is guilty or not
+     * @return return true if valid time to play wild draw 2, otherwise false.
+     */
+    private boolean isWildDrawTwoValid(){
+        for (int i = 0; i < this.getCurrentPlayer().getHandSize();i++){
+            if (this.getCurrentPlayer().getCard(i).getRank() == getPreviousRank() || this.getCurrentPlayer().getCard(i).getColour() == getPreviousColour()){
+                // If the hand contains an action card, playing wild draw 2 is still valid
+                if(this.getCurrentPlayer().getCard(i).getRank() == Card.Rank.REVERSE || this.getCurrentPlayer().getCard(i).getRank() == Card.Rank.SKIP || this.getCurrentPlayer().getCard(i).getRank() == Card.Rank.DRAW_ONE){
+                    continue;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Returns if playing the wild draw colour card was valid or not.
+     * @return true if valid, fales otherwise
+     */
+    private boolean isWildDrawColourValid() {
+        return !(getCurrentPlayer().colourInHand(getPreviousColour()));
+    }
+
+    /**
      * Returns the score of the winner, score is generated based on the cards opponents are left holding
      * @return The score of the winner
      */
@@ -326,6 +476,15 @@ public class UnoFlipModel {
             winnerScore += p.getHandScore();
         }
         return winnerScore;
+    }
+
+    /**
+     * Update each player's score
+     */
+    public void updatePlayerScores(){
+        for( int i=0; i < numPlayers ; i ++){
+            playerScores.set(i,players.get(i).getName() + "'s score: " + players.get(i).getPlayerScore());
+        }
     }
 
     /**
@@ -357,6 +516,32 @@ public class UnoFlipModel {
         this.turnFinished = false;
     }
 
+    /**
+     * Return a boolean of if the next player is an AI or not
+     *
+     * @return true if the next player is an AI, false otherwise
+     */
+    public boolean isNextPlayerAI(){
+        int nextIndex;
+        if (this.turnDirection) {
+            nextIndex = (this.currentTurn + 1) % this.numPlayers;
+            //counterclockwise (ex. 0->3->2->1)
+        } else {
+            nextIndex = (this.currentTurn - 1 + this.numPlayers) % this.numPlayers;
+        }
+
+        return this.getPlayers().get(nextIndex) instanceof AI;
+    }
+
+    /**
+     * Returns boolean that represents if current player is AI or not
+     *
+     * @return true if current player is AI, otherwise false
+     */
+    public boolean isCurrentPlayerAI(){
+       return this.getPlayers().get(currentTurn) instanceof AI;
+    }
+
 
     /**
      * Method addUnoFlipView adds a view to the view list
@@ -373,7 +558,6 @@ public class UnoFlipModel {
     public void removeUnoFlipView(UnoFlipView view){
         this.views.remove(view);
     }
-
 
     /**
      * Gets the current colour of the game.
@@ -456,19 +640,41 @@ public class UnoFlipModel {
     }
 
     /**
+     * Returns the current side of the Cards (light or dark)
+     * @return true if it's light side, false if it's dark side
+     */
+    public boolean getCardSide() {
+        return Card.getSide();
+    }
+
+    /**
+     * Flips the current side of the cards in the game.
+     */
+    public void flipCardSide() {
+        Card.flipSide();
+    }
+
+    /**
+     * Set value of skipTurn to true to indicate that the next player should be skipped
+     */
+    public void setSkipTurnFlag(){
+        this.skipTurn = true;
+    }
+
+    /**
+     * Gets the value of the skipTurn field, which indicates if the next player's turn is skipped
+     * @return true if the flag is set, false otherwise
+     */
+    public boolean getSkipTurnFlag() {
+        return skipTurn;
+    }
+
+    /**
      * Return the ArrayList of sequences, for testing.
      * @return return a list of the sequences.
      */
     public ArrayList<TurnSequence> getTurnSeqs() {
         return this.turnSeqs;
-    }
-
-    /**
-     * Gets the status of the challenge, whether the next player wants to challenge
-     * @return true if next player wants to challenge, false if next player does not want to challenge
-     */
-    public boolean getChallenge(){
-        return this.challenge;
     }
 
     /**
@@ -485,13 +691,6 @@ public class UnoFlipModel {
      */
     public void setStatus(String status ){
         this.status = status;
-    }
-
-    /**
-     * Set value of skipTurn to true to indicate that the next player should be skipped
-     */
-    public void setSkipTurnFlag(){
-        this.skipTurn = true;
     }
 
     /**
@@ -515,23 +714,24 @@ public class UnoFlipModel {
      * @param colour The colour to be set as the current colour
      */
     public void setCurrentColour(Card.Colour colour){
-        this.currentColour = colour;
+        currentColour = colour;
+        notifyViews();
     }
 
     /**
-     * Sets the challenge status for if the next player wants to challenge
-     * @param challenge - next player's decision on challenging
+     * Sets the previous colour of the game.
+     * @param colour Colour to hold
      */
-    public void setChallengeFlag(boolean challenge){
-        this.challenge = challenge;
+    public void setPreviousColour(Card.Colour colour) {
+        previousColour = colour;
     }
 
     /**
-     * Set boolean for dontAskChallenge
-     * @param dontAskChallenge set the ask permission
+     * Gets the previosu colour.
+     * @return The hold colour.
      */
-    public void setDontAskChallenge(boolean dontAskChallenge) {
-        this.dontAskChallenge = dontAskChallenge;
+    public Card.Colour getPreviousColour() {
+        return previousColour;
     }
 
     /**
@@ -543,10 +743,68 @@ public class UnoFlipModel {
     }
 
     /**
+     * Return the boolean representation of if the players turn is finished
+     *
+     * @return returns true if players turn is finished, otherwise false
+     */
+    public boolean getTurnFinished(){
+        return this.turnFinished;
+    }
+
+    /**
      * Set value of skipEveryone to true to indicate that the all players should be skipped, and current player can go again
      */
     public void setSkipEveryoneFlag(){
         this.skipEveryone = true;
     }
 
+    /**
+     * Returns the current status of the game, specified by constants defined as fields
+     * in this class.
+     * @return Current status of the game
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * Keeps drawing cards for a player until they draw a card of the chosen colour.
+     * @param chosenColour The chosen colour
+     * @param playerIndex
+     */
+    public void drawCardUntilColour(Card.Colour chosenColour, int playerIndex) {
+        boolean colourDrawn = false;    // indicates if the current colour has been drawn yet
+        do {
+            drawNCards(1, playerIndex);
+            Card cardDrawn = players.get(playerIndex).getCard(players.get(playerIndex).getHandSize()-1);    // the card just drawn is their last card
+            if (cardDrawn.getColour() == chosenColour) {
+                colourDrawn = true;
+            }
+        } while (!colourDrawn); // keep drawing until you get the chosen colour
+    }
+
+    /**
+     * Returns the previous rank of the game.
+     * @return The previous rank.
+     */
+    public Card.Rank getPreviousRank() {
+        return previousRank;
+    }
+
+    /**
+     * Sets the previous rank of the game.
+     * @param previousRank the updated previous rank.
+     */
+    public void setPreviousRank(Card.Rank previousRank) {
+        this.previousRank = previousRank;
+    }
+
+    /**
+     * Returns the boolean representation of the games winner
+     *
+     * @return true if the game has a winner, otherwise false
+     */
+    public boolean isWinner(){
+        return this.isWinner;
+    }
 }
