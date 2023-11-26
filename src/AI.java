@@ -48,7 +48,7 @@ public class AI extends Player{
      *
      * @return Card.Colour of the most occurring colour
      */
-    public Card.Colour wildPickColour(){
+    public Card.Colour wildPickColour(boolean isLight){
         HashMap<Card.Colour, Integer> countColourMap = new HashMap<>();
 
         for (Card card: this.hand.getCards()){
@@ -71,7 +71,11 @@ public class AI extends Player{
         }
         // Pick default colour if the bot only has wild cards
         if(mostColour == null){
-            mostColour = Card.Colour.RED;
+            if(isLight){
+                mostColour = Card.Colour.RED;
+            } else{
+                mostColour = Card.Colour.TEAL;
+            }
         }
 
 

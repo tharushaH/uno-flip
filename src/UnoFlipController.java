@@ -156,28 +156,41 @@ public class UnoFlipController implements ActionListener {
                 if (this.model.getPlayers().get(this.model.getCurrentTurn()) instanceof AI) {
                     this.model.playAITurn();
 
-                    model.setPreviousColour(model.getCurrentColour()); // hold the current colour before playing next card
+                    if(!(this.model.isWinner())) {
+                        model.setPreviousColour(model.getCurrentColour()); // hold the current colour before playing next card
 
-                    if ((this.model.getTopCard().isWild() && this.model.getTurnFinished()) && (this.model.getStatus() != UnoFlipModel.AI_DRAW_CARD)) {
+                        if ((this.model.getTopCard().isWild() && this.model.getTurnFinished()) && (this.model.getStatus() != UnoFlipModel.AI_DRAW_CARD)) {
 
-                        // Lets the AI pick the colour depending on wildPickColour implementation
-                        this.model.setCurrentColour(((AI) this.model.getPlayers().get(this.model.getCurrentTurn())).wildPickColour());
+                            // Lets the AI pick the colour depending on wildPickColour implementation
+                            this.model.setCurrentColour(((AI) this.model.getPlayers().get(this.model.getCurrentTurn())).wildPickColour(this.model.getCardSide()));
 
-                        // If top card is wild draw 2 or wild draw colour, prompt for challenges
-                        if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 || this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR){
+                            // If top card is wild draw 2 or wild draw colour, prompt for challenges
+                            if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 || this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
 
-                            // If next player is not an AI and is human prompt for challenge
-                            if(!this.model.isNextPlayerAI()){
-                                result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                                // If next player is not an AI and is human prompt for challenge
+                                if (!this.model.isNextPlayerAI()) {
+                                    result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
 
-                                boolean challenge = result == JOptionPane.YES_OPTION;
+                                    boolean challenge = result == JOptionPane.YES_OPTION;
 
-                                if (challenge) {
-                                    boolean guilty = model.challenge(); // returns true if guilty, false if innocent
-                                    if (guilty) {
-                                        model.guiltyConsequences();
+                                    if (challenge) {
+                                        boolean guilty = model.challenge(); // returns true if guilty, false if innocent
+                                        if (guilty) {
+                                            model.guiltyConsequences();
+                                        } else {
+                                            model.innocentConsequences();
+                                        }
                                     } else {
-                                        model.innocentConsequences();
+                                        // standard flow of the game if no challenge
+                                        if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                            // wild draw 2 flow of events
+                                            model.drawNCards(2, model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        } else {
+                                            // wild draw colour flow of events
+                                            model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        }
                                     }
                                 } else {
                                     // standard flow of the game if no challenge
@@ -190,17 +203,6 @@ public class UnoFlipController implements ActionListener {
                                         model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
                                         model.setStatus(UnoFlipModel.STATUS_DONE);
                                     }
-                                }
-                            } else {
-                                // standard flow of the game if no challenge
-                                if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
-                                    // wild draw 2 flow of events
-                                    model.drawNCards(2, model.getNextTurn());
-                                    model.setStatus(UnoFlipModel.STATUS_DONE);
-                                } else {
-                                    // wild draw colour flow of events
-                                    model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
-                                    model.setStatus(UnoFlipModel.STATUS_DONE);
                                 }
                             }
                         }
@@ -217,69 +219,47 @@ public class UnoFlipController implements ActionListener {
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));
 
-                    // Makes the current player is the one that placed the wild card and not the next player.
-                    if ((this.model.getTopCard().isWild() && this.model.getTurnFinished())) {
+                    if(!(this.model.isWinner())) {
+                        // Makes the current player is the one that placed the wild card and not the next player.
+                        if ((this.model.getTopCard().isWild() && this.model.getTurnFinished())) {
 
-                        // Colour options for Player to chose from
-                        String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
-                                Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
-                        String[] darkColourOptions = {Card.Colour.ORANGE.toString(), Card.Colour.PINK.toString(),
-                                Card.Colour.PURPLE.toString(), Card.Colour.TEAL.toString()};
+                            // Colour options for Player to chose from
+                            String[] lightColourOptions = {Card.Colour.RED.toString(), Card.Colour.BLUE.toString(),
+                                    Card.Colour.YELLOW.toString(), Card.Colour.GREEN.toString()};
+                            String[] darkColourOptions = {Card.Colour.ORANGE.toString(), Card.Colour.PINK.toString(),
+                                    Card.Colour.PURPLE.toString(), Card.Colour.TEAL.toString()};
 
-                        if (model.getCardSide() == Card.LIGHT) {
-                            comboBox = new JComboBox<>(lightColourOptions);
-                        } else {
-                            comboBox = new JComboBox<>(darkColourOptions);
-                        }
-
-                        while (true) {
-                            result = JOptionPane.showOptionDialog(
-                                    null,
-                                    comboBox,
-                                    "Select colour:",
-                                    JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null,
-                                    null,
-                                    null);
-
-                            // User chooses colour and selects okay to change the current colour
-                            if (result == JOptionPane.OK_OPTION) {
-                                Card.Colour colour;
-
-                                String option = (String) comboBox.getSelectedItem();
-                                colour = Card.Colour.valueOf(option);
-
-                                this.model.setCurrentColour(colour);
-                                break;
+                            if (model.getCardSide() == Card.LIGHT) {
+                                comboBox = new JComboBox<>(lightColourOptions);
+                            } else {
+                                comboBox = new JComboBox<>(darkColourOptions);
                             }
-                        }
 
-                        if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 || this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
-                            if (this.model.isNextPlayerAI()){
-                                // standard flow of the game if no challenge
-                                if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
-                                    // wild draw 2 flow of events
-                                    model.drawNCards(2, model.getNextTurn());
-                                    model.setStatus(UnoFlipModel.STATUS_DONE);
-                                } else {
-                                    // wild draw colour flow of events
-                                    model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
-                                    model.setStatus(UnoFlipModel.STATUS_DONE);
+                            while (true) {
+                                result = JOptionPane.showOptionDialog(
+                                        null,
+                                        comboBox,
+                                        "Select colour:",
+                                        JOptionPane.DEFAULT_OPTION,
+                                        JOptionPane.PLAIN_MESSAGE,
+                                        null,
+                                        null,
+                                        null);
+
+                                // User chooses colour and selects okay to change the current colour
+                                if (result == JOptionPane.OK_OPTION) {
+                                    Card.Colour colour;
+
+                                    String option = (String) comboBox.getSelectedItem();
+                                    colour = Card.Colour.valueOf(option);
+
+                                    this.model.setCurrentColour(colour);
+                                    break;
                                 }
-                            } else{
-                                result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                            }
 
-                                boolean challenge = result == JOptionPane.YES_OPTION;
-
-                                if (challenge) {
-                                    boolean guilty = model.challenge(); // returns true if guilty, false if innocent
-                                    if (guilty) {
-                                        model.guiltyConsequences();
-                                    } else {
-                                        model.innocentConsequences();
-                                    }
-                                } else {
+                            if (this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2 || this.model.getTopCard().getRank() == Card.Rank.WILD_DRAW_COLOUR) {
+                                if (this.model.isNextPlayerAI()) {
                                     // standard flow of the game if no challenge
                                     if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
                                         // wild draw 2 flow of events
@@ -290,12 +270,35 @@ public class UnoFlipController implements ActionListener {
                                         model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
                                         model.setStatus(UnoFlipModel.STATUS_DONE);
                                     }
+                                } else {
+                                    result = JOptionPane.showConfirmDialog(null, "Do you want to challenge?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+                                    boolean challenge = result == JOptionPane.YES_OPTION;
+
+                                    if (challenge) {
+                                        boolean guilty = model.challenge(); // returns true if guilty, false if innocent
+                                        if (guilty) {
+                                            model.guiltyConsequences();
+                                        } else {
+                                            model.innocentConsequences();
+                                        }
+                                    } else {
+                                        // standard flow of the game if no challenge
+                                        if (model.getTopCard().getRank() == Card.Rank.WILD_DRAW_2) {
+                                            // wild draw 2 flow of events
+                                            model.drawNCards(2, model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        } else {
+                                            // wild draw colour flow of events
+                                            model.drawCardUntilColour(model.getCurrentColour(), model.getNextTurn());
+                                            model.setStatus(UnoFlipModel.STATUS_DONE);
+                                        }
+                                    }
                                 }
                             }
+
                         }
-
                     }
-
 
                 } catch (NumberFormatException err) {
                     System.out.println("Invalid command");

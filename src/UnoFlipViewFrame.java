@@ -213,18 +213,22 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             String[] currHandArray = currHand.split(" ");
 
 
-            for (int i = 0; i < currHandArray.length; i++) {
+            if(!(currHandArray[0] == "")){
+                for (int i = 0; i < currHandArray.length; i++) {
 
-                JButton newCard = new JButton();
-                newCard.setPreferredSize(new Dimension(200, 300));
-                newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
-                newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
-                newCard.addActionListener(controller);
-                if (e.getTurnFinished()|| e.getIsAI()) {
-                    newCard.setEnabled(false);
+                    JButton newCard = new JButton();
+                    newCard.setPreferredSize(new Dimension(200, 300));
+                    newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
+                    newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
+                    newCard.addActionListener(controller);
+                    if (e.getTurnFinished() || e.getIsAI()) {
+                        newCard.setEnabled(false);
+                    }
+                    handPanel.add(newCard);
                 }
-                handPanel.add(newCard);
             }
+
+
 
             this.repaint();  // prevent visual bug by resetting the frame
 
