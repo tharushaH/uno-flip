@@ -223,6 +223,9 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
                 if (e.getTurnFinished()|| e.getIsAI()) {
                     newCard.setEnabled(false);
                 }
+                if (e.getIsAI()){
+                    newCard.setEnabled(true);
+                }
                 handPanel.add(newCard);
             }
 

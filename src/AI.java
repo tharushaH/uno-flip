@@ -22,11 +22,11 @@ public class AI extends Player{
 
         // Get the card and the index of the card that are playable, by matching colour, rank, and if it is wild
         for (int i = 0; i < this.hand.size(); i++){
-            if (this.hand.getCards().get(i).getColour() == currentColour || this.hand.getCards().get(i).getRank() == currentRank || this.hand.getCards().get(i).getColour() == Card.Colour.WILD){
+            if (this.hand.getCards().get(i).getColour() == currentColour || this.hand.getCards().get(i).getRank() == currentRank || this.hand.getCards().get(i).getColour() == Card.Colour.WILD || this.hand.getCards().get(i).getColour() == Card.Colour.WILD_DARK){
                 playAbleCards.put(this.hand.getCards().get(i), i);
             }
         }
-        System.out.println("CURRENT AI PLAYABLE CARDS: " + playAbleCards);
+        System.out.println("Bot name: " + this.name + "CURRENT AI PLAYABLE CARDS: " + playAbleCards + "Current Colour: " + currentColour);
 
         // If playable cards empty, AI must draw card
         if (playAbleCards.isEmpty()){

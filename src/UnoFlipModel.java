@@ -54,8 +54,8 @@ public class UnoFlipModel {
     public static final String STATUS_PLAYER_SKIPPING_TURN = "CANNOT SKIP A TURN, EITHER PLAY A CARD FROM THE HAND OR DRAW FROM THE DECK";
     public static final String STATUS_TURN_FINISHED = "YOUR TURN IS FINISHED, PRESS NEXT PLAYER";
     public static final String STATUS_DONE = "done";
-    public static final String AI_DRAW_CARD = "AI HAS DRAWN CARD";
-    public static final String AI_PLAYED_CARD = "AI HAS PLAYED CARD: ";
+    public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
+    public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
 
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
@@ -296,7 +296,7 @@ public class UnoFlipModel {
                 }
 
                 this.turnSeqs.get(rank).executeSequence(playCard);
-                this.status = AI_PLAYED_CARD + playCard.toString();
+                this.status = AI_PLAYED_CARD + "\n" + playCard.toString();
             }
         }
         this.turnFinished = true;
