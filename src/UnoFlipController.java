@@ -158,7 +158,7 @@ public class UnoFlipController implements ActionListener {
 
                     model.setPreviousColour(model.getCurrentColour()); // hold the current colour before playing next card
 
-                    if ((this.model.getTopCard().isWild() && this.model.getTurnFinished())) {
+                    if ((this.model.getTopCard().isWild() && this.model.getTurnFinished()) && (this.model.getStatus() != UnoFlipModel.AI_DRAW_CARD)) {
 
                         // Lets the AI pick the colour depending on wildPickColour implementation
                         this.model.setCurrentColour(((AI) this.model.getPlayers().get(this.model.getCurrentTurn())).wildPickColour());
@@ -213,8 +213,6 @@ public class UnoFlipController implements ActionListener {
                 // Try Catch Exception to catch NumberFormatException if the given command was not an Integer value
                 try {
                     model.setPreviousColour(model.getCurrentColour()); // hold the current colour before playing next card
-
-                    System.out.println("bot played a card here....");
 
                     // Model playTurn call to play the card at the index of the parsed integer value.
                     this.model.playTurn(Integer.parseInt(e.getActionCommand()));

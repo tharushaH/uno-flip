@@ -26,7 +26,6 @@ public class AI extends Player{
                 playAbleCards.put(this.hand.getCards().get(i), i);
             }
         }
-        System.out.println("Bot name: " + this.name + "CURRENT AI PLAYABLE CARDS: " + playAbleCards + "Current Colour: " + currentColour);
 
         // If playable cards empty, AI must draw card
         if (playAbleCards.isEmpty()){
