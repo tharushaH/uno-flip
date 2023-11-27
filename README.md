@@ -1,5 +1,5 @@
 # Uno Flip Game SYSC 3110 - Group 17
-###### Milestone 2
+###### Milestone 3
 
 ![UNO Flip Logo](https://th.bing.com/th/id/OIP.RVQRkbcpUp4QV2O-y_b7ewHaEK?w=324&h=182&c=7&r=0&o=5&pid=1.7)
 
@@ -17,8 +17,7 @@ UNO Flip is a variation of the traditional UNO card game with additional "Flip" 
   java -jar ..\artifacts\unoflip_jar\UnoFlip.jar
 ```
 3. Follow the on-screen instructions to play the game. The game rules closely follow the official UNO Flip rules.
-## Issues
-Issue with the images appearing in the JAR file. Please run the UnoFlipViewFrame.java file from IDE.
+
 
 ## Features
 
@@ -27,8 +26,8 @@ Issue with the images appearing in the JAR file. Please run the UnoFlipViewFrame
 - Easily extensible and modifiable code for future enhancements.
 - Handles 2-4 players
 - Players take turns playing cards, following the rules of matching colours or numbers.
-- Implements the special actions of Skip, Reverse, and Draw Two cards.
-- Handles the Wild and Wild Draw Two cards, allowing players to choose a colour.
+- Implements the special actions of Skip, Reverse, Skip Everyone, and Draw Five and other action cards.
+- Handles the Wild, Wild Draw Colour and Wild Draw Two cards, allowing players to choose a colour.
 - Declares a winner when a player successfully plays all their cards.
 
 ## Requirements
