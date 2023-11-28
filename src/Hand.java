@@ -67,6 +67,16 @@ public class Hand {
         return message.toString();
     }
 
+    public String toXML() {
+        StringBuilder xml = new StringBuilder();
+        xml.append("<hand>\n");
+        for (Card card : cards) {
+            xml.append("\n").append(card.toXML());
+        }
+        xml.append("</hand>");
+        return xml.toString();
+    }
+
     /**
      * Gets the list of Card objects in the hand.
      *
