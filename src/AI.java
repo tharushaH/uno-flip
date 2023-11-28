@@ -82,4 +82,18 @@ public class AI extends Player{
 
         return mostColour;
     }
+
+    /**
+     * Returns the String representation of the AI class XML format.
+     *
+     * @return the String AI class XML format
+     */
+    public String toXML(){
+        return "\t<AI>\n\t\t" +
+                "<Hand>" + this.hand.toXML() + "</Hand>\n\t\t" +
+                "<Deck>" + this.deck.toXML() + "</Deck>\n\t\t" +
+                "<name>" + this.name + "</name>\n\t\t" +
+                "<playerScore>" + this.playerScore + "</playerScore>\n\t" +
+                "</AI>";
+    }
 }
