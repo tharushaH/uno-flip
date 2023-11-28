@@ -68,8 +68,7 @@ public class Hand {
     }
 
     public String toXML() {
-        StringBuilder xml = new StringBuilder();
-        xml.append("<hand>\n");
+        StringBuilder xml = new StringBuilder("<hand>");
         for (Card card : cards) {
             xml.append("\n").append(card.toXML());
         }
@@ -124,4 +123,16 @@ public class Hand {
 
     }
 
+    public static void main(String[] args){
+
+        Hand h = new Hand();
+        System.out.println(h.toXML());
+
+        Card testCard1 = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
+        Card testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
+        h.addCard(testCard1);
+        h.addCard(testCard2);
+
+        System.out.println(h.toXML());
+    }
 }
