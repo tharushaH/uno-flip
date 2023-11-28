@@ -76,10 +76,35 @@ public class Card {
     }
 
     /**
-     * Flips the side of all cards.
+     * Returns the light rank of the card.
+     * @return The light rank of the card
      */
-    public static void flipSide() {
-        side = !side;
+    public Rank getLightRank() {
+        return lightRank;
+    }
+
+    /**
+     * Returns the light colour of the card.
+     * @return The light colour of the card
+     */
+    public Colour getLightColour() {
+        return lightColour;
+    }
+
+    /**
+     * Returns the dark rank of the card.
+     * @return The dark rank of the card
+     */
+    public Rank getDarkRank() {
+        return darkRank;
+    }
+
+    /**
+     * Returns the dark colour of the card.
+     * @return The dark colour of the card
+     */
+    public Colour getDarkColour() {
+        return darkColour;
     }
 
     /**
@@ -88,6 +113,13 @@ public class Card {
      */
     public static boolean getSide() {
         return side;
+    }
+
+    /**
+     * Flips the side of all cards.
+     */
+    public static void flipSide() {
+        side = !side;
     }
 
     /**
@@ -132,4 +164,13 @@ public class Card {
         return this.getRank() == other.getRank() && this.getColour() == other.getColour();
     }
 
+    public String toXML() {
+        return "\t<Card>\n\t\t" +
+                "<lightRank>" + this.getLightRank() + "</lightRank>\n\t\t" +
+                "<lightColour>" + this.getLightColour() + "</lightColour>\n\t\t" +
+                "<darkRank>" + this.getDarkRank() + "</darkRank>\n\t\t" +
+                "<darkColour>" + this.getDarkColour() + "</darkColour>\n\t\t" +
+                "<side>" + Card.getSide() + "</side>\n\t" +
+                "</Card>";
+    }
 }
