@@ -96,6 +96,27 @@ public class Deck {
     }
 
 
+    public String toXML(){
+        StringBuilder xml = new StringBuilder("<Deck>");
+        xml.append("\t <deck> \n \t\t");
+        for(Card c: deck){
+            xml.append(c.toXML() + "\n \t\t");
+        }
+        xml.append("\t </deck> \n \t\t");
+
+        xml.append("\t <discard> \n \t\t");
+        for(Card c: deck){
+            xml.append(c.toXML() + "\n \t\t");
+        }
+        xml.append("\t </discard> \n \t\t");
+
+        xml.append("\t <inPlay> \n \t\t");
+        for(Card c: deck){
+            xml.append(c.toXML() + "\n \t\t");
+        }
+        xml.append("\t </inPlay> \n \t\t");
+    }
+
     /**
      * Return the size of the deck to draw from (not including discard)
      * @return size of the deck to draw from
@@ -167,4 +188,14 @@ public class Deck {
             deck.push(new Card(Card.Rank.FLIP, lightColour, Card.Rank.FLIP, darkColour));
         }
     }
+
+
+    public static void main(String[] args){
+
+        Deck deck = new Deck();
+        System.out.println(deck.toXML());
+
+    }
+
+
 }
