@@ -72,7 +72,7 @@ public class Hand {
         for (Card card : cards) {
             xml.append("\n").append(card.toXML());
         }
-        xml.append("</hand>");
+        xml.append("\n</hand>");
         return xml.toString();
     }
 
@@ -126,7 +126,7 @@ public class Hand {
     public static void main(String[] args){
 
         Hand h = new Hand();
-        System.out.println(h.toXML());
+
 
         Card testCard1 = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
         Card testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
