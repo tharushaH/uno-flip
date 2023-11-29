@@ -68,11 +68,11 @@ public class Hand {
     }
 
     public String toXML() {
-        StringBuilder xml = new StringBuilder("\t<hand>");
+        StringBuilder xml = new StringBuilder("<hand>");
         for (Card card : cards) {
-            xml.append("\n\t").append(card.toXML());
+            xml.append("\n").append(card.toXML());
         }
-        xml.append("\n\t</hand>");
+        xml.append("\n</hand>");
         return xml.toString();
     }
 
@@ -120,22 +120,6 @@ public class Hand {
             }
         }
         return score;
-
-    }
-
-
-    public static void main(String[] args){
-
-        Hand hand = new Hand();
-        Card testCard1 = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
-        Card testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
-
-
-        hand.addCard(testCard1);
-        hand.addCard(testCard2);
-
-        System.out.println(hand.toXML());
-
 
     }
 }
