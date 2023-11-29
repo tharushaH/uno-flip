@@ -140,6 +140,18 @@ public class Player {
     public Hand getHand() {
         return hand;
     }
+
+    /**
+     * Returns an XML representation of the Player as a String.
+     * @return XML representation of the Player
+     */
+    public String toXML() {
+        return "\t<Player>\n\t\t" +
+                getHand().toXML(); +
+                "<name>" + getName() + "</name>\n\t\t" +
+                "<playerScore>" + getPlayerScore() + "/playerScore\n\t" +
+                "</Player>";
+    }
 }
 
 
