@@ -165,20 +165,13 @@ public class Card {
     }
 
     public String toXML() {
-
-        return "\t<Card>\n\t\t" +
-                "<lightRank>" + this.getLightRank() + "</lightRank>\n\t\t" +
-                "<lightColour>" + this.getLightColour() + "</lightColour>\n\t\t" +
-                "<darkRank>" + this.getDarkRank() + "</darkRank>\n\t\t" +
-                "<darkColour>" + this.getDarkColour() + "</darkColour>\n\t\t" +
-                "<side>" + Card.getSide() + "</side>\n\t" +
+        return "\t<Card>\n\t\t  \t" +
+                "<lightRank>" + this.getLightRank() + "</lightRank>\n\t\t  \t" +
+                "<lightColour>" + this.getLightColour() + "</lightColour>\n\t\t  \t" +
+                "<darkRank>" + this.getDarkRank() + "</darkRank>\n\t\t  \t" +
+                "<darkColour>" + this.getDarkColour() + "</darkColour>\n\t\t  \t" +
+                "<side>" + Card.getSide() + "</side>\n\t  \t" +
                 "</Card>";
-//        return "<Card>\n\t\t" +
-//                "<lightRank>" + this.getLightRank() + "</lightRank>\n\t\t" +
-//                "<lightColour>" + this.getLightColour() + "</lightColour>\n\t\t" +
-//                "<darkRank>" + this.getDarkRank() + "</darkRank>\n\t\t" +
-//                "<darkColour>" + this.getDarkColour() + "</darkColour>\n\t\t" +
-//                "<side>" + Card.getSide() + "</side>\n\t" +
-//                "</Card>";
     }
+
 }
