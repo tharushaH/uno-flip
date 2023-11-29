@@ -22,6 +22,17 @@ public class CardTest {
         }
     }
 
+    @Test
+    public void testToXML() {
+        String expectedXML = "\t<Card>\n\t\t" +
+                                "<lightRank>" + numberCard.getLightRank() + "</lightRank>\n\t\t" +
+                                "<lightColour>" + numberCard.getLightColour() + "</lightColour>\n\t\t" +
+                                "<darkRank>" + numberCard.getDarkRank() + "</darkRank>\n\t\t" +
+                                "<darkColour>" + numberCard.getDarkColour() + "</darkColour>\n\t\t" +
+                                "<side>" + Card.getSide() + "</side>\n\t" +
+                                "</Card>";
+        assertEquals(expectedXML, numberCard.toXML());
+    }
 
     @Test
     public void testIsWild() {
