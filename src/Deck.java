@@ -99,8 +99,9 @@ public class Deck {
     public String toXML() {
         StringBuilder xml = new StringBuilder("<Deck>\n\t<deck>\n");
         for (Card c : deck) {
-            xml.append("\t").append(c.toXML()).append("\n");
+            xml.append(c.toXML()).append("\n");
         }
+
         xml.append("\t</deck>\n\t<discard>\n");
         for (Card c : discard) {
             xml.append("\t").append(c.toXML()).append("\n");
@@ -110,6 +111,8 @@ public class Deck {
             xml.append("\t").append(c.toXML()).append("\n");
         }
         xml.append("\t</inPlay> \n</Deck>");
+
+
         return xml.toString();
     }
 
