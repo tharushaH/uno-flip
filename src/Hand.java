@@ -122,17 +122,4 @@ public class Hand {
         return score;
 
     }
-
-    public static void main(String[] args){
-
-        Hand h = new Hand();
-
-
-        Card testCard1 = new Card(Card.Rank.ONE, Card.Colour.RED, Card.Rank.ONE, Card.Colour.ORANGE);
-        Card testCard2 = new Card(Card.Rank.WILD, Card.Colour.WILD, Card.Rank.WILD, Card.Colour.WILD_DARK);
-        h.addCard(testCard1);
-        h.addCard(testCard2);
-
-        System.out.println(h.toXML());
-    }
 }
