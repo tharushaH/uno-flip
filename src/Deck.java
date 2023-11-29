@@ -96,26 +96,30 @@ public class Deck {
     }
 
 
-    public String toXML(){
-        StringBuilder xml = new StringBuilder("<Deck>");
-        xml.append("\t <deck> \n \t\t");
-        for(Card c: deck){
-            xml.append(c.toXML() + "\n \t\t");
+    public String toXML() {
+        StringBuilder xml = new StringBuilder("<Deck>\n\t<deck>\n");
+        for (Card c : deck) {
+            xml.append("\t").append(c.toXML()).append("\n");
         }
-        xml.append("\t </deck> \n \t\t");
+        xml.append("\t</deck>\n\t");
 
-        xml.append("\t <discard> \n \t\t");
-        for(Card c: deck){
-            xml.append(c.toXML() + "\n \t\t");
+        xml.append("<discard>\n");
+        for(Card c: discard){
+            xml.append("\t").append(c.toXML()).append("\n");
         }
-        xml.append("\t </discard> \n \t\t");
+        xml.append("\t</discard>\n\t");
 
-        xml.append("\t <inPlay> \n \t\t");
-        for(Card c: deck){
-            xml.append(c.toXML() + "\n \t\t");
+        xml.append("<inPlay>\n");
+        for(Card c: inPlay){
+            xml.append("\t").append(c.toXML()).append("\n");
         }
-        xml.append("\t </inPlay> \n \t\t");
+        xml.append("\t</inPlat>\n </Deck>");
+
+        return xml.toString();
     }
+
+
+
 
     /**
      * Return the size of the deck to draw from (not including discard)
