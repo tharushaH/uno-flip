@@ -173,12 +173,4 @@ public class Card {
                 "<side>" + Card.getSide() + "</side>\n\t\t" +
                 "</Card>";
     }
-
-    public static void main(String[] args){
-
-        Card numberCard = new Card(Card.Rank.FIVE, Card.Colour.GREEN, Card.Rank.FIVE, Card.Colour.TEAL);
-        System.out.println(numberCard.toXML());
-
-    }
-
 }

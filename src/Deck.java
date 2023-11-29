@@ -189,14 +189,4 @@ public class Deck {
             deck.push(new Card(Card.Rank.FLIP, lightColour, Card.Rank.FLIP, darkColour));
         }
     }
-
-
-    public static void main(String[] args){
-
-        Deck deck = new Deck();
-        System.out.println(deck.toXML());
-
-    }
-
-
 }
