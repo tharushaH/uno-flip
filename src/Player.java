@@ -133,7 +133,13 @@ public class Player {
         return this.playerScore;
     }
 
-
+    /**
+     * Returns the player's hand.
+     * @return The player's hand.
+     */
+    public Hand getHand() {
+        return hand;
+    }
 }
 
 
