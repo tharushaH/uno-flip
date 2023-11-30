@@ -67,12 +67,21 @@ public class Hand {
         return message.toString();
     }
 
-    public String toXML() {
-        StringBuilder xml = new StringBuilder("<hand>");
-        for (Card card : cards) {
-            xml.append("\n").append(card.toXML());
+    public String toXML(int numTabs) {
+
+        String shorterTab = "";
+        String longerTab = "\t";
+
+        for (int i=0; i < numTabs; i++){
+             shorterTab += "\t";
         }
-        xml.append("\n</hand>");
+        longerTab += shorterTab;
+
+        StringBuilder xml = new StringBuilder(shorterTab + "<Hand> \n" + longerTab);
+        for (Card card : cards) {
+            xml.append(card.toXML(numTabs + 1));
+        }
+        xml.append("</hand> \n");
         return xml.toString();
     }
 
@@ -122,4 +131,5 @@ public class Hand {
         return score;
 
     }
+
 }
