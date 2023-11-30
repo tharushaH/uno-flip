@@ -117,7 +117,7 @@ public class Deck {
 
         xml.append(longerTab + "</deck>\n" + longerTab + "<discard>\n");
         for (Card c : discard) {
-            xml.append(c.toXML()).append("\n");
+            xml.append(c.toXML(numTabs + 1)).append("\n");
 
         }
         xml.append(longerTab + "</discard>\n" + longerTab + "<inPlay>\n");
