@@ -85,10 +85,10 @@ public class AI extends Player{
 
     /**
      * Returns the String representation of the AI class XML format.
-     *
+     * @param numTabs The number of tabs the main opening tag should start with.
      * @return the String AI class XML format
      */
-    public String toXML(int tab){
+    public String toXML(int numTabs){
         String shorterTab = "";
         String longerTab = "\t";
 
@@ -107,6 +107,7 @@ public class AI extends Player{
     }
 
     public static void main(String[] args) {
-        System.out.println();
+        AI testAI = new AI();
+        System.out.println(testAI.toXML(0));
     }
 }
