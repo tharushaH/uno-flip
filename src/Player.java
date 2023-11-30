@@ -154,8 +154,7 @@ public class Player {
             baseTabLength += "\t";
         }
 
-        return baseTabLength +
-                "<Player>\n" + baseTabLength + "\t" +
+        return baseTabLength + "<Player>\n" +
                 getHand().toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
                 "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
                 "<playerScore>" + getPlayerScore() + "/playerScore\n" + baseTabLength +
