@@ -141,6 +141,10 @@ public class Player {
         return hand;
     }
 
+    public static Deck getDeck() {
+        return deck;
+    }
+
     /**
      * Returns an XML representation of the Player as a String.
      * @param numTabs The number of tabs the main opening tag should start with.
@@ -155,9 +159,10 @@ public class Player {
         }
 
         return baseTabLength + "<Player>\n" +
-                getHand().toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
+                getHand().toXML(numTabs + 1) + "\n"+
+                getDeck().toXML(numTabs+1)+"\n"+baseTabLength+"\t" +
                 "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
-                "<playerScore>" + getPlayerScore() + "/playerScore\n" + baseTabLength +
+                "<playerScore>" + getPlayerScore() + "</playerScore>\n" + baseTabLength +
                 "</Player>";
     }
 }

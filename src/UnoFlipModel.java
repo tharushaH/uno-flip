@@ -807,4 +807,69 @@ public class UnoFlipModel {
     public boolean isWinner(){
         return this.isWinner;
     }
+
+    public boolean getSkipTurn(){
+        return this.skipTurn;
+    }
+    public boolean getSkipEveryone(){
+        return this.skipEveryone;
+    }
+    public boolean getIsWinner(){
+        return this.isWinner;
+    }
+
+
+
+
+
+    /**
+     * Returns an XML representation of the model.
+     *
+     * @return xml representation of the model.
+     */
+    public String toXML(){
+        StringBuilder xml = new StringBuilder("<UnoFlipModel>");
+        xml.append("\n\t <turnFinished>"+this.getTurnFinished()+"</turnFinished>");
+        xml.append("\n\t <skipTurn>"+this.getSkipTurn()+"</skipTurn>");
+        xml.append("\n\t <skipEveryone>"+this.getSkipEveryone()+"</skipEveryone>");
+        xml.append("\n\t <turnDirection>"+this.getTurnDirection()+"</turnDirection>");
+        xml.append("\n\t <numPlayer>"+this.getNumPlayers()+"</numPlayer");
+        xml.append("\n\t <chosenCardIndex>"+this.getChosenCardIndex()+"</chosenCardIndex");
+        xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn");
+        xml.append("\n\t <nextPlayerIndex>"+this.getNextTurn()+"</nextPlayerIndex>");
+        xml.append("\n\t <status>"+this.getStatus()+"</status>");
+        xml.append("\n\t <deck>");
+        xml.append("\n"+deck.toXML(2));
+        xml.append("\n\t </deck>");
+        xml.append("\n\t <currentColour>"+this.getCurrentColour()+"</currentColour>");
+        xml.append("\n\t <previousColour>"+this.getPreviousColour()+"</previousColour>");
+        xml.append("\n\t <currentRank>"+this.getCurrentRank()+"</currentRank>");
+        xml.append("\n\t <previousRank>"+this.getPreviousRank()+"</previousRank>");
+        xml.append("\n\t <topCard>");
+        xml.append("\n"+this.topCard.toXML(2));
+        xml.append("\n\t </topCard>");
+        xml.append("\n\t <players>");
+        for(Player p : players){
+            try{
+                // check if AI with downcasting
+                AI ai = (AI) p;
+                xml.append(ai.toXML(2));
+
+            } catch(Exception ex){
+                // player object
+                xml.append("\n"+p.toXML(2));
+            }
+
+        }
+        xml.append("\n\t </players>");
+        xml.append("\n\t <isWinner>"+this.getIsWinner()+"</isWinner>");
+        xml.append("\n</UnoFlipModel>");
+
+
+
+
+        return xml.toString();
+    }
+
+
 }
