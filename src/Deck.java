@@ -95,6 +95,42 @@ public class Deck {
         }
     }
 
+    /**
+     * returns the String representation of the Hand class XML format
+     * @param numTabs the number of tabs the main opening tag should start with
+     * @return the String representation of Hand Class
+     */
+    public String toXML(int numTabs) {
+
+        String shorterTab = "";
+        String longerTab = "\t";
+
+        for (int i=0; i < numTabs; i++){
+            shorterTab += "\t";
+        }
+        longerTab += shorterTab;
+        numTabs +=1; //increment numTabs to pass to the double nested tags
+
+        StringBuilder xml = new StringBuilder(shorterTab +"<Deck>\n" + longerTab + "<deck>\n");
+        for (Card c : deck) {
+            xml.append(c.toXML( numTabs + 1)).append("\n");
+        }
+
+        xml.append(longerTab + "</deck>\n" + longerTab + "<discard>\n");
+        for (Card c : discard) {
+            xml.append(c.toXML(numTabs + 1)).append("\n");
+
+        }
+        xml.append(longerTab + "</discard>\n" + longerTab + "<inPlay>\n");
+        for (Card c : inPlay) {
+            xml.append(c.toXML(numTabs + 1)).append("\n");
+        }
+        xml.append(longerTab + "</inPlay>\n" + shorterTab + "</Deck>");
+
+        return xml.toString();
+    }
+
+
 
     /**
      * Return the size of the deck to draw from (not including discard)
