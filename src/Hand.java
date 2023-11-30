@@ -67,6 +67,12 @@ public class Hand {
         return message.toString();
     }
 
+
+    /**
+     * returns the String representation of the Hand class XML format
+     * @param numTabs the number of tabs the main opening tag should start with
+     * @return the String representation of Hand Class
+     */
     public String toXML(int numTabs) {
 
         String shorterTab = "";
