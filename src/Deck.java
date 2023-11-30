@@ -95,23 +95,36 @@ public class Deck {
         }
     }
 
+    /**
+     * returns the String representation of the Hand class XML format
+     * @param numTabs the number of tabs the main opening tag should start with
+     * @return the String representation of Hand Class
+     */
+    public String toXML(int numTabs) {
 
-    public String toXML() {
-        StringBuilder xml = new StringBuilder("<Deck>\n\t<deck>\n");
+        String shorterTab = "";
+        String longerTab = "\t";
+
+        for (int i=0; i < numTabs; i++){
+            shorterTab += "\t";
+        }
+        longerTab += shorterTab;
+
+        StringBuilder xml = new StringBuilder(shorterTab +"<Deck>\n" + longerTab + "<deck>\n");
         for (Card c : deck) {
-            xml.append(c.toXML()).append("\n");
+            xml.append(c.toXML(numTabs + 1)).append("\n");
         }
 
-        xml.append("\t</deck>\n\t<discard>\n");
+        xml.append(longerTab + "</deck>\n" + longerTab + "<discard>\n");
         for (Card c : discard) {
-            xml.append("\t").append(c.toXML()).append("\n");
-        }
-        xml.append("\t</discard>\n\t<inPlay>\n");
-        for (Card c : inPlay) {
-            xml.append("\t").append(c.toXML()).append("\n");
-        }
-        xml.append("\t</inPlay> \n</Deck>");
+            xml.append(c.toXML()).append("\n");
 
+        }
+        xml.append(longerTab + "</discard>\n" + longerTab + "<inPlay>\n");
+        for (Card c : inPlay) {
+            xml.append(c.toXML(numTabs + 1)).append("\n");
+        }
+        xml.append(longerTab + "</inPlay>" + shorterTab + "\n</Deck>");
 
         return xml.toString();
     }
