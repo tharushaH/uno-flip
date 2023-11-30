@@ -89,18 +89,19 @@ public class AI extends Player{
      * @return the String AI class XML format
      */
     public String toXML(int numTabs){
+        // shorterTab is for the parent opening and closing tag, while the longer tab is for the nested tags.
         String shorterTab = "";
         String longerTab = "\t";
 
-        for(int i = 0; i < tab; i++){
+        for(int i = 0; i < numTabs; i++){
             shorterTab += "\t";
 
         }
         longerTab += shorterTab;
 
         return  shorterTab + "<AI>\n" + longerTab +
-                this.hand.toXML(tab + 1) +
-                this.deck.toXML(tab + 1) +
+                this.hand.toXML(numTabs + 1) +
+                this.deck.toXML(numTabs + 1) +
                 shorterTab +  "<name>" + this.name + "</name>\n" + longerTab +
                 "<playerScore>" + this.playerScore + "</playerScore>\n" + shorterTab +
                 "</AI>\n";
