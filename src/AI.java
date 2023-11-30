@@ -106,9 +106,4 @@ public class AI extends Player{
                 "<playerScore>" + this.playerScore + "</playerScore>\n" + shorterTab +
                 "</AI>\n";
     }
-
-    public static void main(String[] args) {
-        AI testAI = new AI();
-        System.out.println(testAI.toXML(0));
-    }
 }
