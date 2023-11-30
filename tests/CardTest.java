@@ -31,7 +31,7 @@ public class CardTest {
                                 "<darkColour>" + numberCard.getDarkColour() + "</darkColour>\n\t\t" +
                                 "<side>" + Card.getSide() + "</side>\n\t" +
                                 "</Card>";
-        assertEquals(expectedXML, numberCard.toXML());
+        assertEquals(expectedXML, numberCard.toXML(1)); // 1 tab length as base tab length
     }
 
     @Test
