@@ -102,7 +102,7 @@ public class AI extends Player{
                 this.hand.toXML(tab + 1) +
                 this.deck.toXML(tab + 1) +
                 shorterTab +  "<name>" + this.name + "</name>\n" + longerTab +
-                "<playerScore>" + this.playerScore + "</playerScore>\n\t" +
+                "<playerScore>" + this.playerScore + "</playerScore>\n" + shorterTab +
                 "</AI>\n";
     }
 
