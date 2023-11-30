@@ -83,11 +83,11 @@ public class Hand {
         }
         longerTab += shorterTab;
 
-        StringBuilder xml = new StringBuilder(shorterTab + "<Hand> \n" + longerTab);
+        StringBuilder xml = new StringBuilder(shorterTab + "<Hand>\n" );
         for (Card card : cards) {
-            xml.append(card.toXML(numTabs + 1));
+            xml.append(card.toXML(numTabs + 1)).append("\n");
         }
-        xml.append("</hand> \n");
+        xml.append(shorterTab + "</hand> \n");
         return xml.toString();
     }
 
@@ -135,13 +135,5 @@ public class Hand {
             }
         }
         return score;
-
     }
-
-    public static void main(String[] args){
-
-
-
-    }
-
 }
