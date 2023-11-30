@@ -83,7 +83,7 @@ public class AI extends Player{
         return mostColour;
     }
 
-    //@Override
+    @Override
     /**
      * Returns the String representation of the AI class XML format.
      * @param numTabs The number of tabs the main opening tag should start with.
