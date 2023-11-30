@@ -143,13 +143,22 @@ public class Player {
 
     /**
      * Returns an XML representation of the Player as a String.
+     * @param numTabs The number of tabs the main opening tag should start with.
      * @return XML representation of the Player
      */
-    public String toXML() {
-        return "\t<Player>\n\t\t" +
-                getHand().toXML(); +
-                "<name>" + getName() + "</name>\n\t\t" +
-                "<playerScore>" + getPlayerScore() + "/playerScore\n\t" +
+    public String toXML(int numTabs) {
+        String baseTabLength = "";    // any tabs within the return String will append to this base tab length
+
+        // add tabs to the base tab length
+        for (int i = 0; i < numTabs; i++) {
+            baseTabLength += "\t";
+        }
+
+        return baseTabLength +
+                "<Player>\n" + baseTabLength + "\t" +
+                getHand().toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
+                "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
+                "<playerScore>" + getPlayerScore() + "/playerScore\n" + baseTabLength +
                 "</Player>";
     }
 }
