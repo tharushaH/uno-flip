@@ -83,11 +83,11 @@ public class Hand {
         }
         longerTab += shorterTab;
 
-        StringBuilder xml = new StringBuilder(shorterTab + "<Hand>\n" );
+        StringBuilder xml = new StringBuilder(shorterTab + "<Hand>\n");
         for (Card card : cards) {
             xml.append(card.toXML(numTabs + 1)).append("\n");
         }
-        xml.append(shorterTab + "</hand> \n");
+        xml.append(shorterTab + "</hand>");
         return xml.toString();
     }
 
