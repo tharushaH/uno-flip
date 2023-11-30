@@ -76,18 +76,18 @@ public class Hand {
     public String toXML(int numTabs) {
 
         String shorterTab = "";
-        String longerTab = "\t";
 
         for (int i=0; i < numTabs; i++){
              shorterTab += "\t";
         }
-        longerTab += shorterTab;
 
         StringBuilder xml = new StringBuilder(shorterTab + "<Hand>\n");
         for (Card card : cards) {
             xml.append(card.toXML(numTabs + 1)).append("\n");
         }
-        xml.append(shorterTab + "</hand>");
+
+        xml.append(shorterTab + "</Hand>");
+
         return xml.toString();
     }
 
