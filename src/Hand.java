@@ -67,6 +67,30 @@ public class Hand {
         return message.toString();
     }
 
+
+    /**
+     * returns the String representation of the Hand class XML format
+     * @param numTabs the number of tabs the main opening tag should start with
+     * @return the String representation of Hand Class
+     */
+    public String toXML(int numTabs) {
+
+        String shorterTab = "";
+        String longerTab = "\t";
+
+        for (int i=0; i < numTabs; i++){
+             shorterTab += "\t";
+        }
+        longerTab += shorterTab;
+
+        StringBuilder xml = new StringBuilder(shorterTab + "<Hand>\n" );
+        for (Card card : cards) {
+            xml.append(card.toXML(numTabs + 1)).append("\n");
+        }
+        xml.append(shorterTab + "</hand> \n");
+        return xml.toString();
+    }
+
     /**
      * Gets the list of Card objects in the hand.
      *
@@ -111,7 +135,5 @@ public class Hand {
             }
         }
         return score;
-
     }
-
 }
