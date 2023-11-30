@@ -83,7 +83,7 @@ public class AI extends Player{
         return mostColour;
     }
 
-    @Override
+
     /**
      * Returns the String representation of the AI class XML format.
      * @param numTabs The number of tabs the main opening tag should start with.
@@ -97,12 +97,12 @@ public class AI extends Player{
             baseTabLength += "\t";
         }
 
-        return  baseTabLength
+        return  "\n" + baseTabLength
                 + "<AI>\n" + baseTabLength +
                 this.hand.toXML(numTabs + 1) +
                 this.deck.toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
                 "<name>" + this.name + "</name>\n" + baseTabLength + "\t" +
                 "<playerScore>" + this.playerScore + "</playerScore>\n" + baseTabLength +
-                "</AI>\n";
+                "</AI>";
     }
 }
