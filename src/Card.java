@@ -164,13 +164,26 @@ public class Card {
         return this.getRank() == other.getRank() && this.getColour() == other.getColour();
     }
 
-    public String toXML() {
-        return "\t\t<Card>\n\t\t\t" +
-                "<lightRank>" + this.getLightRank() + "</lightRank>\n\t\t\t" +
-                "<lightColour>" + this.getLightColour() + "</lightColour>\n\t\t\t" +
-                "<darkRank>" + this.getDarkRank() + "</darkRank>\n\t\t\t" +
-                "<darkColour>" + this.getDarkColour() + "</darkColour>\n\t\t\t" +
-                "<side>" + Card.getSide() + "</side>\n\t\t" +
+    /**
+     * Returns an XML representation of the Card.
+     * @param numTabs The number of tabs the main opening tag should start with.
+     * @return XML representation of the card.
+     */
+    public String toXML(int numTabs) {
+        String baseTabLength = "";    // any tabs within the return String will append to this base tab length
+
+        // add tabs to the base tab length
+        for (int i = 0; i < numTabs; i++) {
+            baseTabLength += "\t";
+        }
+
+        return baseTabLength +
+                "<Card>\n" + baseTabLength + "\t" +
+                "<lightRank>" + this.getLightRank() + "</lightRank>\n" + baseTabLength + "\t" +
+                "<lightColour>" + this.getLightColour() + "</lightColour>\n" + baseTabLength + "\t" +
+                "<darkRank>" + this.getDarkRank() + "</darkRank>\n" + baseTabLength + "\t" +
+                "<darkColour>" + this.getDarkColour() + "</darkColour>\n" + baseTabLength + "\t" +
+                "<side>" + Card.getSide() + "</side>\n" + baseTabLength +
                 "</Card>";
     }
 }
