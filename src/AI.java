@@ -83,6 +83,7 @@ public class AI extends Player{
         return mostColour;
     }
 
+
     /**
      * Returns the String representation of the AI class XML format.
      * @param numTabs The number of tabs the main opening tag should start with.
@@ -90,20 +91,18 @@ public class AI extends Player{
      */
     public String toXML(int numTabs){
         // shorterTab is for the parent opening and closing tag, while the longer tab is for the nested tags.
-        String shorterTab = "";
-        String longerTab = "\t";
+        String baseTabLength = "";
 
         for(int i = 0; i < numTabs; i++){
-            shorterTab += "\t";
-
+            baseTabLength += "\t";
         }
-        longerTab += shorterTab;
 
-        return  shorterTab + "<AI>\n" + longerTab +
+        return  "\n" + baseTabLength
+                + "<AI>\n" + baseTabLength +
                 this.hand.toXML(numTabs + 1) +
-                this.deck.toXML(numTabs + 1) +
-                shorterTab +  "<name>" + this.name + "</name>\n" + longerTab +
-                "<playerScore>" + this.playerScore + "</playerScore>\n" + shorterTab +
-                "</AI>\n";
+                this.deck.toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
+                "<name>" + this.name + "</name>\n" + baseTabLength + "\t" +
+                "<playerScore>" + this.playerScore + "</playerScore>\n" + baseTabLength +
+                "</AI>";
     }
 }
