@@ -98,11 +98,16 @@ public class AI extends Player{
         }
 
         return  "\n" + baseTabLength
-                + "<AI>\n" + baseTabLength +
-                this.hand.toXML(numTabs + 1) +
+                + "<AI>\n"  +
+                this.hand.toXML(numTabs + 1) +"\n"+
                 this.deck.toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
                 "<name>" + this.name + "</name>\n" + baseTabLength + "\t" +
                 "<playerScore>" + this.playerScore + "</playerScore>\n" + baseTabLength +
                 "</AI>";
+    }
+
+    public static void main(String[] args) {
+        AI tst = new AI();
+        System.out.println(tst.toXML(1));
     }
 }

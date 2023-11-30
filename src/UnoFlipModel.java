@@ -820,6 +820,13 @@ public class UnoFlipModel {
 
 
 
+
+
+    /**
+     * Returns an XML representation of the model.
+     *
+     * @return xml representation of the model.
+     */
     public String toXML(){
         StringBuilder xml = new StringBuilder("<UnoFlipModel>");
         xml.append("\n\t <turnFinished>"+this.getTurnFinished()+"</turnFinished>");
@@ -831,34 +838,30 @@ public class UnoFlipModel {
         xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn");
         xml.append("\n\t <nextPlayerIndex>"+this.getNextTurn()+"</nextPlayerIndex>");
         xml.append("\n\t <status>"+this.getStatus()+"</status>");
-        xml.append("\n\t"+deck.toXML());
+        xml.append("\n\t <deck>");
+        xml.append("\n"+deck.toXML(2));
+        xml.append("\n\t </deck>");
         xml.append("\n\t <currentColour>"+this.getCurrentColour()+"</currentColour>");
         xml.append("\n\t <previousColour>"+this.getPreviousColour()+"</previousColour>");
         xml.append("\n\t <currentRank>"+this.getCurrentRank()+"</currentRank>");
         xml.append("\n\t <previousRank>"+this.getPreviousRank()+"</previousRank>");
-        setTopCard(new Card(Card.Rank.EIGHT, Card.Colour.BLUE, Card.Rank.ONE, Card.Colour.PURPLE));
-        xml.append("\n "+this.topCard.toXML());
-        xml.append("\n\t <views>");
-        for(UnoFlipView v: views){
-            xml.append(v);
-        }
-        xml.append("\n\t </views>");
+        xml.append("\n\t <topCard>");
+        xml.append("\n"+this.topCard.toXML(2));
+        xml.append("\n\t </topCard>");
         xml.append("\n\t <players>");
         for(Player p : players){
-            xml.append("\n"+p.toXML());
+            try{
+                // check if AI with downcasting
+                AI ai = (AI) p;
+                xml.append(ai.toXML(2));
+
+            } catch(Exception ex){
+                // player object
+                xml.append("\n"+p.toXML(2));
+            }
 
         }
         xml.append("\n\t </players>");
-        xml.append("\n\t <playerScores>");
-        playerScores.add("1");
-        playerScores.add("2");
-        playerScores.add("3");
-
-        for(String s: playerScores){
-            xml.append("\n\t\t <score>"+s+"</score>");
-
-        }
-        xml.append("\n\t </playerScores>");
         xml.append("\n\t <isWinner>"+this.getIsWinner()+"</isWinner>");
         xml.append("\n</UnoFlipModel>");
 
@@ -868,8 +871,5 @@ public class UnoFlipModel {
         return xml.toString();
     }
 
-    public static void main(String[] args) {
-        UnoFlipModel m = new UnoFlipModel();
-        System.out.println(m.toXML());
-    }
+
 }
