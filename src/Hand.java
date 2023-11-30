@@ -80,11 +80,14 @@ public class Hand {
         for (int i=0; i < numTabs; i++){
              shorterTab += "\t";
         }
+
         StringBuilder xml = new StringBuilder(shorterTab + "<Hand>\n");
         for (Card card : cards) {
             xml.append(card.toXML(numTabs + 1)).append("\n");
         }
-        xml.append(shorterTab + "</Hand> \n");
+
+        xml.append(shorterTab + "</Hand>");
+
         return xml.toString();
     }
 

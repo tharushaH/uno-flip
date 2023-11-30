@@ -133,7 +133,33 @@ public class Player {
         return this.playerScore;
     }
 
+    /**
+     * Returns the player's hand.
+     * @return The player's hand.
+     */
+    public Hand getHand() {
+        return hand;
+    }
 
+    /**
+     * Returns an XML representation of the Player as a String.
+     * @param numTabs The number of tabs the main opening tag should start with.
+     * @return XML representation of the Player
+     */
+    public String toXML(int numTabs) {
+        String baseTabLength = "";    // any tabs within the return String will append to this base tab length
+
+        // add tabs to the base tab length
+        for (int i = 0; i < numTabs; i++) {
+            baseTabLength += "\t";
+        }
+
+        return baseTabLength + "<Player>\n" +
+                getHand().toXML(numTabs + 1) + "\n" + baseTabLength + "\t" +
+                "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
+                "<playerScore>" + getPlayerScore() + "/playerScore\n" + baseTabLength +
+                "</Player>";
+    }
 }
 
 
