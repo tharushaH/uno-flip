@@ -109,10 +109,11 @@ public class Deck {
             shorterTab += "\t";
         }
         longerTab += shorterTab;
+        numTabs +=1; //increment numTabs to pass to the double nested tags
 
         StringBuilder xml = new StringBuilder(shorterTab +"<Deck>\n" + longerTab + "<deck>\n");
         for (Card c : deck) {
-            xml.append(c.toXML(numTabs + 1)).append("\n");
+            xml.append(c.toXML( numTabs + 1)).append("\n");
         }
 
         xml.append(longerTab + "</deck>\n" + longerTab + "<discard>\n");
@@ -124,7 +125,7 @@ public class Deck {
         for (Card c : inPlay) {
             xml.append(c.toXML(numTabs + 1)).append("\n");
         }
-        xml.append(longerTab + "</inPlay>" + shorterTab + "\n</Deck>");
+        xml.append(longerTab + "</inPlay>\n" + shorterTab + "</Deck>");
 
         return xml.toString();
     }
