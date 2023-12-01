@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
@@ -879,7 +883,16 @@ public class UnoFlipModel {
     public void saveGame(){}
 
     public void loadGame(){}
-    public void importFromXMLFile(String fileName){}
+    public void importFromXMLFile(String fileName){
+        ModelParser parser = new ModelParser();
+        try{
+            UnoFlipModel temp = parser.readXML(fileName);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void exportToXMLFile(String fileName){}
 
