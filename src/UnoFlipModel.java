@@ -870,6 +870,18 @@ public class UnoFlipModel {
 
         return xml.toString();
     }
+    public void undoTurn(){}
+
+    public void redoTurn(){}
+
+    public void restartGame(){}
+
+    public void saveGame(){}
+
+    public void loadGame(){}
+    public void importFromXMLFile(String fileName){}
+
+    public void exportToXMLFile(String fileName){}
 
 
 }
