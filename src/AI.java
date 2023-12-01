@@ -106,8 +106,5 @@ public class AI extends Player{
                 "</AI>";
     }
 
-    public static void main(String[] args) {
-        AI tst = new AI();
-        System.out.println(tst.toXML(1));
-    }
+
 }
