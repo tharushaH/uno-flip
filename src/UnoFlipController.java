@@ -150,6 +150,21 @@ public class UnoFlipController implements ActionListener {
                 this.model.playTurn(UnoFlipModel.DRAW_ONE_BUTTON);
                 break;
 
+            case UnoFlipViewFrame.UNDO_CMD:
+                this.model.undoTurn();
+                break;
+            case UnoFlipViewFrame.REDO_CMD:
+                this.model.redoTurn();
+                break;
+            case UnoFlipViewFrame.REPLAY_CMD:
+                //this.model.replayGame();
+                break;
+            case UnoFlipViewFrame.SAVE_CMD:
+                this.model.saveGame();
+                break;
+            case UnoFlipViewFrame.LOAD_CMD:
+                this.model.loadGame();
+                break;
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
                 this.model.nextTurn();

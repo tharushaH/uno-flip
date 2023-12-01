@@ -21,12 +21,21 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JTextArea statusArea;
     private JButton drawCard;
     private JPanel currentColourPanel;
+    private JMenuItem redo;
+    private JMenuItem undo;
+    private JMenuItem replay;
+    private JMenuItem save;
+    private JMenuItem load;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
     public final static String START_CMD = "start";
-    public final static String WILD_CMD = "wild";
-    public final static String CHALLENGE_CMD = "challenge";
+    public final static String UNDO_CMD = "undo";
+    public final static String REDO_CMD = "redo";
+    public final static String REPLAY_CMD = "replay";
+    public final static String SAVE_CMD = "save";
+    public final static String LOAD_CMD = "load";
+
 
 
     public UnoFlipViewFrame() {
@@ -40,6 +49,32 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         // make a panel to display info on the current turn
         JPanel currTurnPanel = new JPanel();
         currTurnPanel.setLayout(new BorderLayout(30,30));
+
+        // Create the JMenu for the undo,redo,replay,save,load features
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        undo = new JMenuItem("Undo");
+        redo = new JMenuItem("Redo");
+        replay = new JMenuItem("Replay");
+        save = new JMenuItem("Save");
+        load = new JMenuItem("Load");
+
+        undo.setEnabled(false);
+        redo.setEnabled(false);
+
+        undo.setActionCommand(UNDO_CMD);
+        redo.setActionCommand(REDO_CMD);
+        replay.setActionCommand(REPLAY_CMD);
+        save.setActionCommand(SAVE_CMD);
+        load.setActionCommand(LOAD_CMD);
+
+        menu.add(undo);
+        menu.add(redo);
+        menu.add(replay);
+        menu.add(save);
+        menu.add(load);
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
 
         // add player name to the current turn panel
         currPlayerLabel = new JLabel();
