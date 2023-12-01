@@ -15,6 +15,8 @@ import java.util.Objects;
 
 public class UnoFlipController implements ActionListener {
     private UnoFlipModel model;
+    private static final String SAVE_FILE_PREFIX = "src\\";
+    private static final String SERIALIZE_FILE = "game.xml";
 
     /**
      * Constructs a UnoFlipController with the specified UnoFlipModel.
@@ -149,6 +151,9 @@ public class UnoFlipController implements ActionListener {
             case UnoFlipViewFrame.DRAW_CMD:
                 this.model.playTurn(UnoFlipModel.DRAW_ONE_BUTTON);
                 break;
+
+            case UnoFlipViewFrame.SERIALIZE_XML_CMD :
+                this.model.exportToXMLFile(SAVE_FILE_PREFIX + SERIALIZE_FILE);
 
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
