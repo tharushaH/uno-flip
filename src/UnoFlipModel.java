@@ -167,7 +167,6 @@ public class UnoFlipModel {
         }
         setUpInitialPlayerScore();
         notifyViews();
-        System.out.println(toXML());
     }
 
     /**
