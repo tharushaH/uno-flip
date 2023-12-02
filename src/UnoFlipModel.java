@@ -833,9 +833,9 @@ public class UnoFlipModel {
         xml.append("\n\t <skipTurn>"+this.getSkipTurn()+"</skipTurn>");
         xml.append("\n\t <skipEveryone>"+this.getSkipEveryone()+"</skipEveryone>");
         xml.append("\n\t <turnDirection>"+this.getTurnDirection()+"</turnDirection>");
-        xml.append("\n\t <numPlayer>"+this.getNumPlayers()+"</numPlayer");
-        xml.append("\n\t <chosenCardIndex>"+this.getChosenCardIndex()+"</chosenCardIndex");
-        xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn");
+        xml.append("\n\t <numPlayer>"+this.getNumPlayers()+"</numPlayer>");
+        xml.append("\n\t <chosenCardIndex>"+this.getChosenCardIndex()+"</chosenCardIndex>");
+        xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn>");
         xml.append("\n\t <nextPlayerIndex>"+this.getNextTurn()+"</nextPlayerIndex>");
         xml.append("\n\t <status>"+this.getStatus()+"</status>");
         xml.append("\n\t <deck>");
