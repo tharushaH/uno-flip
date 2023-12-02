@@ -145,6 +145,13 @@ public class UnoFlipModelTest {
 
     }
 
+    @Test
+    public void testXML(){
+        unoFlipModel.setUpInitialTopCard();
+        //System.out.println(unoFlipModel.toXML());
+        unoFlipModel.exportToXMLFile("src\\saveGame.xml");
+
+    }
 
 
 

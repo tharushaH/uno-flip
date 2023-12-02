@@ -891,14 +891,19 @@ public class UnoFlipModel {
      * @param fileName name of the file the game XMl will be exported too
      */
     public void exportToXMLFile(String fileName){
-        try {;
+
+
+        System.out.println(fileName);
+
+        try {
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             out.write(this.toXML());
             out.close();
         } catch (IOException e) {
             e.getMessage();
         }
-    }
 
+
+    }
 
 }

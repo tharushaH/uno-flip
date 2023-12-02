@@ -16,7 +16,7 @@ import java.util.Objects;
 public class UnoFlipController implements ActionListener {
     private UnoFlipModel model;
     private static final String SAVE_FILE_PREFIX = "src\\";
-    private static final String SERIALIZE_FILE = "game.xml";
+    private static final String SERIALIZE_FILE = "saveGame.xml";
 
     /**
      * Constructs a UnoFlipController with the specified UnoFlipModel.
