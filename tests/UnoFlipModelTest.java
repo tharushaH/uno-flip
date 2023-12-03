@@ -147,17 +147,12 @@ public class UnoFlipModelTest {
 
     @Test
     public void testXML(){
-
-
         unoFlipModel.setUpInitialTopCard();
         unoFlipModel.addPlayer(new Player("Bobby"));
         unoFlipModel.addPlayer(new Player("Mark"));
-        //System.out.println(unoFlipModel.modelPlayersToXML());
-        //System.out.println(unoFlipModel.modelDataToXML());
         unoFlipModel.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
         unoFlipModel.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
         unoFlipModel.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
-
 
     }
 
