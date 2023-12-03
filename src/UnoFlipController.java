@@ -157,7 +157,7 @@ public class UnoFlipController implements ActionListener {
                 this.model.redoTurn();
                 break;
             case UnoFlipViewFrame.REPLAY_CMD:
-                //this.model.replayGame();
+                this.model.restartGame();
                 break;
             case UnoFlipViewFrame.SAVE_CMD:
                 this.model.saveGame();
