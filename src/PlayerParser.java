@@ -8,12 +8,21 @@ import java.util.ArrayList;
 public class PlayerParser extends DefaultHandler {
     private ArrayList<Player> players;
     private StringBuilder elementContent;
+    private static final String PLAYER_XML_STR = "Player";
 
     @Override
-    public void startDocument() {}
+    public void startDocument() {
+        players = new ArrayList<>();
+    }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) {}
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+        if(qName.equalsIgnoreCase(PLAYER_XML_STR)){
+            Player currentPlayer = new Player(null);
+            players.add(currentPlayer);
+        }
+        elementContent = new StringBuilder();
+    }
 
     @Override
     public void characters(char[] ch, int start, int length){
