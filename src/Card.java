@@ -76,10 +76,35 @@ public class Card {
     }
 
     /**
-     * Flips the side of all cards.
+     * Returns the light rank of the card.
+     * @return The light rank of the card
      */
-    public static void flipSide() {
-        side = !side;
+    public Rank getLightRank() {
+        return lightRank;
+    }
+
+    /**
+     * Returns the light colour of the card.
+     * @return The light colour of the card
+     */
+    public Colour getLightColour() {
+        return lightColour;
+    }
+
+    /**
+     * Returns the dark rank of the card.
+     * @return The dark rank of the card
+     */
+    public Rank getDarkRank() {
+        return darkRank;
+    }
+
+    /**
+     * Returns the dark colour of the card.
+     * @return The dark colour of the card
+     */
+    public Colour getDarkColour() {
+        return darkColour;
     }
 
     /**
@@ -88,6 +113,13 @@ public class Card {
      */
     public static boolean getSide() {
         return side;
+    }
+
+    /**
+     * Flips the side of all cards.
+     */
+    public static void flipSide() {
+        side = !side;
     }
 
     /**
@@ -132,4 +164,26 @@ public class Card {
         return this.getRank() == other.getRank() && this.getColour() == other.getColour();
     }
 
+    /**
+     * Returns an XML representation of the Card.
+     * @param numTabs The number of tabs the main opening tag should start with.
+     * @return XML representation of the card.
+     */
+    public String toXML(int numTabs) {
+        String baseTabLength = "";    // any tabs within the return String will append to this base tab length
+
+        // add tabs to the base tab length
+        for (int i = 0; i < numTabs; i++) {
+            baseTabLength += "\t";
+        }
+
+        return baseTabLength +
+                "<Card>\n" + baseTabLength + "\t" +
+                "<lightRank>" + this.getLightRank() + "</lightRank>\n" + baseTabLength + "\t" +
+                "<lightColour>" + this.getLightColour() + "</lightColour>\n" + baseTabLength + "\t" +
+                "<darkRank>" + this.getDarkRank() + "</darkRank>\n" + baseTabLength + "\t" +
+                "<darkColour>" + this.getDarkColour() + "</darkColour>\n" + baseTabLength + "\t" +
+                "<side>" + Card.getSide() + "</side>\n" + baseTabLength +
+                "</Card>";
+    }
 }
