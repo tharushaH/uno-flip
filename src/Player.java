@@ -13,9 +13,6 @@ import java.util.ArrayList;
  */
 public class Player {
     protected Hand hand;
-
-    protected static Deck deck = new Deck();
-
     protected final String name;
 
     protected int playerScore;
@@ -25,11 +22,11 @@ public class Player {
      *  Contractor for the Player Class, initialize the player's name, deck, and hand (giving them the standard 7 cards to start)
      *  @param name - a String to represent the name that the user gives that player
      */
-    public Player(String name){
+    public Player(String name, Deck deck){
         this.name = name;
         this.hand = new Hand();
         this.playerScore = 0;
-        addCardToHand(7); // Initialize 7 cards for each player
+        addCardToHand(7, deck); // Initialize 7 cards for each player
 
     }
 
@@ -47,7 +44,7 @@ public class Player {
      * @param handIndex - Index of the card which the player wants to play
      * @return - the cards that was just played
      */
-    public Card playCard(int handIndex){
+    public Card playCard(int handIndex, Deck deck){
 
         //Make sure that the user selects a valid index in the hand
         if ( (handIndex < this.getHandSize()) && (handIndex >= 0) ){
@@ -65,7 +62,7 @@ public class Player {
      *  Cards will be taken from the static deck and placed into the hand of the player
      * @param numCards - The number of cards that the user will add to their deck
      */
-    public void addCardToHand(int numCards){
+    public void addCardToHand(int numCards, Deck deck){
         for(int i=0; i <numCards; i++){
             Card newCard = deck.takeCard();
             this.hand.addCard(newCard);
@@ -141,10 +138,6 @@ public class Player {
         return hand;
     }
 
-    public static Deck getDeck() {
-        return deck;
-    }
-
     /**
      * Returns an XML representation of the Player as a String.
      * @param numTabs The number of tabs the main opening tag should start with.
@@ -159,8 +152,7 @@ public class Player {
         }
 
         return baseTabLength + "<Player>\n" +
-                getHand().toXML(numTabs + 1) + "\n"+
-                getDeck().toXML(numTabs+1)+"\n"+baseTabLength+"\t" +
+                getHand().toXML(numTabs + 1) + "\n"+ baseTabLength+"\t" +
                 "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
                 "<playerScore>" + getPlayerScore() + "</playerScore>\n" + baseTabLength +
                 "</Player>";
