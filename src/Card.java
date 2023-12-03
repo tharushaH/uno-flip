@@ -18,10 +18,10 @@ public class Card {
     public static final int RANK_DRAW_ONE = 9;  // ordinal of the draw one enum in Rank enums
     public static final boolean LIGHT = true;
     public static final boolean DARK = false;
-    private final Rank lightRank;
-    private final Colour lightColour;
-    private final Rank darkRank;
-    private final Colour darkColour;
+    private Rank lightRank;
+    private Colour lightColour;
+    private Rank darkRank;
+    private Colour darkColour;
     private static boolean side;
 
 
@@ -185,5 +185,25 @@ public class Card {
                 "<darkColour>" + this.getDarkColour() + "</darkColour>\n" + baseTabLength + "\t" +
                 "<side>" + Card.getSide() + "</side>\n" + baseTabLength +
                 "</Card>";
+    }
+
+    public void setLightRank(Rank lightRank) {
+        this.lightRank = lightRank;
+    }
+
+    public void setLightColour(Colour lightColour) {
+        this.lightColour = lightColour;
+    }
+
+    public void setDarkRank(Rank darkRank) {
+        this.darkRank = darkRank;
+    }
+
+    public void setDarkColour(Colour darkColour) {
+        this.darkColour = darkColour;
+    }
+
+    public static void setSide(boolean side) {
+        Card.side = side;
     }
 }
