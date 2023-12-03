@@ -61,6 +61,13 @@ public class UnoFlipModel {
     public static final String STATUS_DONE = "done";
     public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
     public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
+    public static final String SAVE_FILE_PREFIX = "src\\";
+    public static final String CURRENT_STATE_MODEL_DATA = "CurrentStateModelData.xml";
+    public static final String CURRENT_STATE_MODEL_DECK = "CurrentStateModelDeck.xml";
+    public static final String CURRENT_STATE_MODEL_PLAYERS = "CurrentStateModelPlayers.xml";
+    public static final String XML_MODEL_DATA_FLAG = "ModelData";
+    public static final String XML_MODEL_DECK_FLAG = "ModelDeck";
+    public static final String XML_MODEL_PLAYERS_FLAG = "ModelPlayers";
 
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
@@ -822,16 +829,42 @@ public class UnoFlipModel {
         return this.isWinner;
     }
 
+    /**
+     * Returns an XML representation of the players in model.
+     * @return xml representation of the players in model.
+     */
+    public String modelPlayersToXML(){
+        StringBuilder xml = new StringBuilder("<players>");
 
+        for(Player p : players){
+            try{
+                // check if AI with downcasting
+                AI ai = (AI) p;
+                xml.append(ai.toXML(1));
 
+            } catch(Exception ex){
+                // player object
+                xml.append("\n"+p.toXML(1));
+            }
 
+        }
+        xml.append("\n </players>");
+        return  xml.toString();
+    }
 
     /**
-     * Returns an XML representation of the model.
-     *
-     * @return xml representation of the model.
+     * Returns an XML representation of the deck in model.
+     * @return xml representation of the deck in model.
      */
-    public String toXML(){
+    public String modelDeckToXML(){
+        return deck.toXML(0);
+    }
+
+    /**
+     * Returns an XML representation of the data in model.
+     * @return xml representation of the data in model.
+     */
+    public String modelDataToXML(){
         StringBuilder xml = new StringBuilder("<UnoFlipModel>");
         xml.append("\n\t <turnFinished>"+this.getTurnFinished()+"</turnFinished>");
         xml.append("\n\t <skipTurn>"+this.getSkipTurn()+"</skipTurn>");
@@ -842,9 +875,6 @@ public class UnoFlipModel {
         xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn>");
         xml.append("\n\t <nextPlayerIndex>"+this.getNextTurn()+"</nextPlayerIndex>");
         xml.append("\n\t <status>"+this.getStatus()+"</status>");
-        xml.append("\n\t <deck>");
-        xml.append("\n"+deck.toXML(2));
-        xml.append("\n\t </deck>");
         xml.append("\n\t <currentColour>"+this.getCurrentColour()+"</currentColour>");
         xml.append("\n\t <previousColour>"+this.getPreviousColour()+"</previousColour>");
         xml.append("\n\t <currentRank>"+this.getCurrentRank()+"</currentRank>");
@@ -852,28 +882,11 @@ public class UnoFlipModel {
         xml.append("\n\t <topCard>");
         xml.append("\n"+this.topCard.toXML(2));
         xml.append("\n\t </topCard>");
-        xml.append("\n\t <players>");
-        for(Player p : players){
-            try{
-                // check if AI with downcasting
-                AI ai = (AI) p;
-                xml.append(ai.toXML(2));
-
-            } catch(Exception ex){
-                // player object
-                xml.append("\n"+p.toXML(2));
-            }
-
-        }
-        xml.append("\n\t </players>");
         xml.append("\n\t <isWinner>"+this.getIsWinner()+"</isWinner>");
         xml.append("\n</UnoFlipModel>");
-
-
-
-
         return xml.toString();
     }
+
     public void undoTurn(){}
 
     public void redoTurn(){}
@@ -890,15 +903,21 @@ public class UnoFlipModel {
      * Exports the game XML to File
      * @param fileName name of the file the game XMl will be exported too
      */
-    public void exportToXMLFile(String fileName){
-
-
-        System.out.println(fileName);
-
+    public void exportToXMLFile(String fileName, String xmlFlag){
         try {
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-            out.write(this.toXML());
-            out.close();
+            switch (xmlFlag){
+                case XML_MODEL_DATA_FLAG:
+                    out.write(this.modelDataToXML());
+                    out.close();
+                case XML_MODEL_DECK_FLAG:
+                    out.write(this.modelDeckToXML());
+                    out.close();
+                case XML_MODEL_PLAYERS_FLAG:
+                    out.write(this.modelPlayersToXML());
+                    out.close();
+            }
+
         } catch (IOException e) {
             e.getMessage();
         }
