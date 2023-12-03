@@ -15,7 +15,7 @@ public class CardParser extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         if(qName.equalsIgnoreCase("Card")){
-            Card card = new Card(null, null, null, null);
+            card = new Card(null, null, null, null);
         }
         elementContent = new StringBuilder();
     }
