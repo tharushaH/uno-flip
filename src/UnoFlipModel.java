@@ -57,6 +57,7 @@ public class UnoFlipModel {
     public static final String STATUS_DONE = "done";
     public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
     public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
+    public static final int STARTING_NUM_CARDS = 7;
 
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
@@ -79,6 +80,11 @@ public class UnoFlipModel {
         this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
         this.status = STATUS_STANDARD;
         this.isWinner = false;
+
+        // give each player 7 cards at the start of the game
+        for (Player p: players) {
+            p.addCardToHand(STARTING_NUM_CARDS);
+        }
 
         //adding the same turn sequence 9 times because the first 9 ranks (all number cards) play out the same way
         for(int i =0;i<=8;i++){
