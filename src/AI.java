@@ -4,8 +4,8 @@ import java.util.HashMap;
 public class AI extends Player{
     private static int id = 1;
     private static final int DRAW = -1;
-    public AI (Deck deck){
-        super("Bot " + id, deck);
+    public AI (){
+        super("Bot " + id);
         id++;
     }
 

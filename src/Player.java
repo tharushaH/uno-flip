@@ -22,11 +22,10 @@ public class Player {
      *  Contractor for the Player Class, initialize the player's name, deck, and hand (giving them the standard 7 cards to start)
      *  @param name - a String to represent the name that the user gives that player
      */
-    public Player(String name, Deck deck){
+    public Player(String name){
         this.name = name;
         this.hand = new Hand();
         this.playerScore = 0;
-        addCardToHand(7, deck); // Initialize 7 cards for each player
 
     }
 

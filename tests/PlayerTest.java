@@ -15,10 +15,9 @@ public class PlayerTest {
      */
     @Before
     public void setUp(){
-        p1 = new Player("Kramer", deck);
+        p1 = new Player("Kramer");
         deck = new Deck();
-
-
+        p1.addCardToHand(UnoFlipModel.NUM_STARTING_CARDS,deck);
 
     }
 

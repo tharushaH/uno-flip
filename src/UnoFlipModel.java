@@ -34,6 +34,7 @@ public class UnoFlipModel {
     private ArrayList<String> playerScores;
     private Boolean isWinner;
 
+    public static final int NUM_STARTING_CARDS = 7;
     public static final int DRAW_ONE_BUTTON = -1;
 
     //Constants used for Turn sequence
@@ -121,7 +122,10 @@ public class UnoFlipModel {
      * @return new player created
      */
     public Player createPlayer(String playerName){
-        return new Player(playerName, this.deck);
+        Player player = new Player(playerName);
+        player.addCardToHand(NUM_STARTING_CARDS, this.deck); // Initialize 7 cards for each player
+
+        return player;
     }
 
     /**
@@ -130,7 +134,9 @@ public class UnoFlipModel {
      * @return new AI created
      */
     public AI createAIPlayer(){
-        return new AI(this.deck);
+        AI ai = new AI();
+        ai.addCardToHand(NUM_STARTING_CARDS, this.deck);
+        return ai;
     }
 
     /**
