@@ -921,8 +921,6 @@ public class UnoFlipModel {
         } catch (IOException e) {
             e.getMessage();
         }
-
-
     }
 
 }

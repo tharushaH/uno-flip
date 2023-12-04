@@ -8,16 +8,16 @@
 	 <currentTurn>0</currentTurn>
 	 <nextPlayerIndex>1</nextPlayerIndex>
 	 <status> </status>
-	 <currentColour>RED</currentColour>
+	 <currentColour>YELLOW</currentColour>
 	 <previousColour>null</previousColour>
 	 <currentRank>SKIP</currentRank>
 	 <previousRank>null</previousRank>
 	 <topCard>
 		<Card>
 			<lightRank>SKIP</lightRank>
-			<lightColour>RED</lightColour>
+			<lightColour>YELLOW</lightColour>
 			<darkRank>SKIP_EVERYONE</darkRank>
-			<darkColour>ORANGE</darkColour>
+			<darkColour>PURPLE</darkColour>
 			<side>true</side>
 		</Card>
 	 </topCard>
