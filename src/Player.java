@@ -69,6 +69,16 @@ public class Player {
     }
 
     /**
+     * Adds a card to the player's hand.
+     * @param card The card to add.
+     */
+    public void addCardToHand(Card card) {
+        if (card != null) {
+            hand.addCard(card);
+        }
+    }
+
+    /**
      * Method toString(), returns the player's hand of cards.
      * @return - a String containing the player's hand
      */
@@ -157,6 +167,10 @@ public class Player {
                 "</Player>";
     }
 
+    /**
+     * Sets the player's name.
+     * @param name The name to set.
+     */
     public void setName(String name) {
         this.name = name;
     }
