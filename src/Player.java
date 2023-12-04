@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Player {
     protected Hand hand;
-    protected final String name;
+    protected String name;
 
     protected int playerScore;
 
@@ -155,6 +155,10 @@ public class Player {
                 "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
                 "<playerScore>" + getPlayerScore() + "</playerScore>\n" + baseTabLength +
                 "</Player>";
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
 
