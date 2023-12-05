@@ -30,7 +30,12 @@ public class Deck {
         deck = new Stack<Card>();
         discard = new Stack<Card>();
         inPlay = new ArrayList<Card>();
+    }
 
+    /**
+     * Inits the deck to its starting state (full).
+     */
+    public void initStartingDeck() {
         // add all the non-wild cards of each light/dark pairing to deck
         addNonWildCardsToDeck(Card.Colour.BLUE, Card.Colour.PINK);
         addNonWildCardsToDeck(Card.Colour.GREEN, Card.Colour.TEAL);

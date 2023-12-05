@@ -72,6 +72,7 @@ public class UnoFlipModel {
         this.currentTurn = 0;
         this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
+        this.deck.initStartingDeck(); // need to initialize with starting cards
         this.currentColour = null;
         this.currentRank = null;
         this.numPlayers = 0;
