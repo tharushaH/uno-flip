@@ -42,17 +42,19 @@ public class ModelPlayersParser extends DefaultHandler {
     public void endElement(String uri, String localName, String qName){
         if (qName.equalsIgnoreCase("name")) {
             players.get(players.size()-1).setName(elementContent.toString());
-        } else if(qName.equalsIgnoreCase("Card")){
+        } else if (qName.equalsIgnoreCase("Card")){
             // by now, currentCard has been fully initialized
             players.get(players.size()-1).addCardToHand(currentCard);
-        } else if(qName.equalsIgnoreCase("lightRank")) {
+        } else if (qName.equalsIgnoreCase("lightRank")) {
             currentCard.setLightRank(Card.Rank.valueOf(elementContent.toString()));
-        } else if(qName.equalsIgnoreCase("lightColour")) {
+        } else if (qName.equalsIgnoreCase("lightColour")) {
             currentCard.setLightColour(Card.Colour.valueOf(elementContent.toString()));
-        } else if(qName.equalsIgnoreCase("darkRank")) {
+        } else if (qName.equalsIgnoreCase("darkRank")) {
             currentCard.setDarkRank(Card.Rank.valueOf(elementContent.toString()));
-        } else if(qName.equalsIgnoreCase("darkColour")) {
+        } else if (qName.equalsIgnoreCase("darkColour")) {
             currentCard.setDarkColour(Card.Colour.valueOf(elementContent.toString()));
+        } else if (qName.equalsIgnoreCase("side")) {
+            Card.setSide(Boolean.parseBoolean(elementContent.toString()));
         } else if(qName.equalsIgnoreCase("playerScore")) {
             players.get(players.size()-1).setPlayerScore(Integer.parseInt(elementContent.toString()));
         }
