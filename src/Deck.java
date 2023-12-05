@@ -208,4 +208,28 @@ public class Deck {
             deck.push(new Card(Card.Rank.FLIP, lightColour, Card.Rank.FLIP, darkColour));
         }
     }
+
+    /**
+     * Sets the deck (deck to draw from)
+     * @param deck The deck to set with
+     */
+    public void setDeck(Stack<Card> deck) {
+        this.deck = deck;
+    }
+
+    /**
+     * Sets the discard pile
+     * @param discard The discard pile to set with
+     */
+    public void setDiscard(Stack<Card> discard) {
+        this.discard = discard;
+    }
+
+    /**
+     * Sets the inPlay ArrayList
+     * @param inPlay The ArrayList to set with
+     */
+    public void setInPlay(ArrayList<Card> inPlay) {
+        this.inPlay = inPlay;
+    }
 }
