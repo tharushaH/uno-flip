@@ -34,6 +34,7 @@ public class UnoFlipModel {
     private ArrayList<String> playerScores;
     private Boolean isWinner;
 
+    public static final int NUM_STARTING_CARDS = 7;
     public static final int DRAW_ONE_BUTTON = -1;
 
     //Constants used for Turn sequence
@@ -121,7 +122,10 @@ public class UnoFlipModel {
      * @return new player created
      */
     public Player createPlayer(String playerName){
-        return new Player(playerName);
+        Player player = new Player(playerName);
+        player.addCardToHand(NUM_STARTING_CARDS, this.deck); // Initialize 7 cards for each player
+
+        return player;
     }
 
     /**
@@ -130,7 +134,9 @@ public class UnoFlipModel {
      * @return new AI created
      */
     public AI createAIPlayer(){
-        return new AI();
+        AI ai = new AI();
+        ai.addCardToHand(NUM_STARTING_CARDS, this.deck);
+        return ai;
     }
 
     /**
@@ -243,7 +249,7 @@ public class UnoFlipModel {
 
             //if the card wanting to be placed is a Wild Draw 2 or Wild
             if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
-                this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
+                this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex, this.deck));
                 this.turnFinished = true;
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -251,7 +257,7 @@ public class UnoFlipModel {
                 }
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
-                Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
+                Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex, this.deck);
 
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -289,7 +295,7 @@ public class UnoFlipModel {
             int rank = getCurrentPlayer().getCard(chosenAICardIndex).getRank().ordinal();
 
             if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
-                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex, this.deck);
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = AI_PLAYED_CARD + playCard.toString();
                 //check if winner
@@ -297,7 +303,7 @@ public class UnoFlipModel {
                     return;
                 }
             } else{
-                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex, this.deck);
 
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -339,7 +345,7 @@ public class UnoFlipModel {
      * @param playerIndex The index of the player that will be receiving cards
      */
     public void drawNCards(int n,int playerIndex){
-        this.players.get(playerIndex).addCardToHand(n);
+        this.players.get(playerIndex).addCardToHand(n, this.deck);
     }
 
     /**
