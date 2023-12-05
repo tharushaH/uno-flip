@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Player {
     protected Hand hand;
-    protected final String name;
+    protected String name;
 
     protected int playerScore;
 
@@ -65,6 +65,16 @@ public class Player {
         for(int i=0; i <numCards; i++){
             Card newCard = deck.takeCard();
             this.hand.addCard(newCard);
+        }
+    }
+
+    /**
+     * Adds a card to the player's hand.
+     * @param card The card to add.
+     */
+    public void addCardToHand(Card card) {
+        if (card != null) {
+            hand.addCard(card);
         }
     }
 
@@ -155,6 +165,14 @@ public class Player {
                 "<name>" + getName() + "</name>\n" + baseTabLength + "\t" +
                 "<playerScore>" + getPlayerScore() + "</playerScore>\n" + baseTabLength +
                 "</Player>";
+    }
+
+    /**
+     * Sets the player's name.
+     * @param name The name to set.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 }
 
