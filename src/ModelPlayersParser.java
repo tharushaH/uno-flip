@@ -60,7 +60,7 @@ public class ModelPlayersParser extends DefaultHandler {
         }
     }
 
-    public ArrayList<Player> readXMLBuddyInfoFile(String fileName) throws IOException {
+    public ArrayList<Player> readXMLModelPlayersFile(String fileName) throws IOException {
         try {
             SAXParserFactory spf = SAXParserFactory.newInstance();
             SAXParser parser = spf.newSAXParser();
