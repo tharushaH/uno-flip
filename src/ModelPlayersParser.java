@@ -24,8 +24,11 @@ public class ModelPlayersParser extends DefaultHandler {
         if(qName.equalsIgnoreCase("Player")){
             Player currentPlayer = new Player(null);
             players.add(currentPlayer);
+        } else if (qName.equalsIgnoreCase("AI")) {
+            AI currentAI = new AI();
+            players.add(currentAI);
         } else if (qName.equalsIgnoreCase("Card")) {
-            currentCard = new Card(null, null, null, null);
+                currentCard = new Card(null, null, null, null);
         }
         elementContent = new StringBuilder();
     }
