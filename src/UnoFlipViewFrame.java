@@ -25,6 +25,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
     public final static String START_CMD = "start";
+    public static final String SERIALIZE_XML_CMD = "serialize XML";
     public final static String WILD_CMD = "wild";
     public final static String CHALLENGE_CMD = "challenge";
 
