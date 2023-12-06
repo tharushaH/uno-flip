@@ -66,6 +66,12 @@ public class UnoFlipModel {
     public static final String CURRENT_STATE_MODEL_DATA = "CurrentStateModelData.xml";
     public static final String CURRENT_STATE_MODEL_DECK = "CurrentStateModelDeck.xml";
     public static final String CURRENT_STATE_MODEL_PLAYERS = "CurrentStateModelPlayers.xml";
+    public static final String PAST_STATE_MODEL_DATA = "PastStateModelData.xml";
+    public static final String PAST_STATE_MODEL_DECK = "PastStateModelDeck.xml";
+    public static final String PAST_STATE_MODEL_PLAYERS = "PastStateModelPlayers.xml";
+    public static final String TEMP_STATE_MODEL_DATA = "TempStateModelData.xml";
+    public static final String TEMP_STATE_MODEL_DECK = "TempStateModelDeck.xml";
+    public static final String TEMP_STATE_MODEL_PLAYERS = "TempStateModelPlayers.xml";
     public static final String XML_MODEL_DATA_FLAG = "ModelData";
     public static final String XML_MODEL_DECK_FLAG = "ModelDeck";
     public static final String XML_MODEL_PLAYERS_FLAG = "ModelPlayers";
