@@ -515,6 +515,46 @@ public class UnoFlipModel {
     }
 
     /**
+     * Sets the turn direction of the game to clockwise or counter-clockwise.
+     * @param turnDirection true to set clockwise, false to set counter-clockwise.
+     */
+    public void setTurnDirection(boolean turnDirection) {
+        this.turnDirection = turnDirection;
+    }
+
+    /**
+     * Sets the chosen card index.
+     * @param chosenCardIndex The index of the chosen card.
+     */
+    public void setChosenCardIndex(int chosenCardIndex) {
+        this.chosenCardIndex = chosenCardIndex;
+    }
+
+    /**
+     * Sets the current turn.
+     * @param currentTurn The index of the current turn.
+     */
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    /**
+     * Sets the index of the next player.
+     * @param nextPlayerIndex The index of the next player.
+     */
+    public void setNextPlayerIndex(int nextPlayerIndex) {
+        this.nextPlayerIndex = nextPlayerIndex;
+    }
+
+    /**
+     * Sets isWinner to indicate if there is a winner in this game.
+     * @param winner true if there is a winner, false otherwise
+     */
+    public void setWinner(Boolean winner) {
+        isWinner = winner;
+    }
+
+    /**
      * Clear action card flags
      */
     public void clearActionCardFlags(){
@@ -669,6 +709,14 @@ public class UnoFlipModel {
     }
 
     /**
+     * Sets the value of skipTurn to true or false.
+     * @param skipTurn Boolean to set skipTurn to.
+     */
+    public void setSkipTurn(boolean skipTurn) {
+        this.skipTurn = skipTurn;
+    }
+
+    /**
      * Gets the value of the skipTurn field, which indicates if the next player's turn is skipped
      * @return true if the flag is set, false otherwise
      */
@@ -763,6 +811,14 @@ public class UnoFlipModel {
      */
     public void setSkipEveryoneFlag(){
         this.skipEveryone = true;
+    }
+
+    /**
+     * Sets the value of skipEveryone to true or false.
+     * @param skipEveryone The boolean to set skipEveryone to
+     */
+    public void setSkipEveryone(boolean skipEveryone) {
+        this.skipEveryone = skipEveryone;
     }
 
     /**
