@@ -555,6 +555,22 @@ public class UnoFlipModel {
     }
 
     /**
+     * Sets the game's deck
+     * @param deck The game's deck
+     */
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    /**
+     * Sets the game's players
+     * @param players The game's players
+     */
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    /**
      * Clear action card flags
      */
     public void clearActionCardFlags(){
