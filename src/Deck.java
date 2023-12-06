@@ -30,7 +30,12 @@ public class Deck {
         deck = new Stack<Card>();
         discard = new Stack<Card>();
         inPlay = new ArrayList<Card>();
+    }
 
+    /**
+     * Inits the deck to its starting state (full).
+     */
+    public void initStartingDeck() {
         // add all the non-wild cards of each light/dark pairing to deck
         addNonWildCardsToDeck(Card.Colour.BLUE, Card.Colour.PINK);
         addNonWildCardsToDeck(Card.Colour.GREEN, Card.Colour.TEAL);
@@ -202,5 +207,29 @@ public class Deck {
             deck.push(new Card(Card.Rank.SKIP, lightColour, Card.Rank.SKIP_EVERYONE, darkColour));
             deck.push(new Card(Card.Rank.FLIP, lightColour, Card.Rank.FLIP, darkColour));
         }
+    }
+
+    /**
+     * Sets the deck (deck to draw from)
+     * @param deck The deck to set with
+     */
+    public void setDeck(Stack<Card> deck) {
+        this.deck = deck;
+    }
+
+    /**
+     * Sets the discard pile
+     * @param discard The discard pile to set with
+     */
+    public void setDiscard(Stack<Card> discard) {
+        this.discard = discard;
+    }
+
+    /**
+     * Sets the inPlay ArrayList
+     * @param inPlay The ArrayList to set with
+     */
+    public void setInPlay(ArrayList<Card> inPlay) {
+        this.inPlay = inPlay;
     }
 }
