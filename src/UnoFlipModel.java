@@ -77,44 +77,7 @@ public class UnoFlipModel {
      * Constructs a new game of Uno Flip by initializing fields with default settings.
      */
     public UnoFlipModel(){
-        this.players = new ArrayList<Player>();
-        this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
-        this.views = new ArrayList<UnoFlipView>();
-        this.playerScores = new ArrayList<String>();
-        this.turnDirection = true; //initialize to clockwise
-        this.skipEveryone = false;
-        this.currentTurn = 0;
-        this.nextPlayerIndex = currentTurn +1;
-        this.deck = new Deck();
-        this.deck.initStartingDeck(); // need to initialize with starting cards
-        this.currentColour = Card.Colour.NULL;
-        this.currentRank = Card.Rank.NULL;
-        this.numPlayers = 0;
-        this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
-        this.skipTurn = false;
-        this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
-        this.status = STATUS_STANDARD;
-        this.isWinner = false;
-
-        //adding the same turn sequence 9 times because the first 9 ranks (all number cards) play out the same way
-        for(int i =0;i<=8;i++){
-            this.turnSeqs.add(new Number(this)); //Number
-        }
-
-        //adding the turn sequence for the action cards into turnSeqs Arraylist
-        this.turnSeqs.add(new DrawOne(this));
-        this.turnSeqs.add(new Reverse(this));
-        this.turnSeqs.add(new Skip(this));
-        this.turnSeqs.add(new Wild(this));
-        this.turnSeqs.add(new WildDrawTwo(this));
-
-        this.turnSeqs.add(new DrawFive(this));
-        this.turnSeqs.add(new SkipEveryone(this));
-        this.turnSeqs.add(new WildDrawColour(this));
-        this.turnSeqs.add(new Flip(this));
-
-        this.turnSeqs.add(new SelfDrawOne(this));
-
+        initStartingGameState();
     }
 
 
@@ -991,8 +954,61 @@ public class UnoFlipModel {
         notifyViews();
     }
 
-    public void restartGame(){
+    /**
+     * Restarts the game by setting the game state to the initial game state
+     * while preserving each player's score.
+     */
+    public void restartGame() {
+        initStartingGameState();
+        ModelPlayersParser playersParser = new ModelPlayersParser();
+        try {
+            this.players = playersParser.readXMLModelPlayersFile(SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_PLAYERS);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (Player p: players) {
+            p.emptyHand();
+        }
+    }
 
+    private void initStartingGameState() {
+        this.players = new ArrayList<Player>();
+        this.turnSeqs = new ArrayList<TurnSequence>(); // list of game sequences based on the different card ranks played
+        this.views = new ArrayList<UnoFlipView>();
+        this.playerScores = new ArrayList<String>();
+        this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
+        this.currentTurn = 0;
+        this.nextPlayerIndex = currentTurn +1;
+        this.deck = new Deck();
+        this.deck.initStartingDeck(); // need to initialize with starting cards
+        this.currentColour = Card.Colour.NULL;
+        this.currentRank = Card.Rank.NULL;
+        this.numPlayers = 0;
+        this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
+        this.skipTurn = false;
+        this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
+        this.status = STATUS_STANDARD;
+        this.isWinner = false;
+
+        //adding the same turn sequence 9 times because the first 9 ranks (all number cards) play out the same way
+        for(int i =0;i<=8;i++){
+            this.turnSeqs.add(new Number(this)); //Number
+        }
+
+        //adding the turn sequence for the action cards into turnSeqs Arraylist
+        this.turnSeqs.add(new DrawOne(this));
+        this.turnSeqs.add(new Reverse(this));
+        this.turnSeqs.add(new Skip(this));
+        this.turnSeqs.add(new Wild(this));
+        this.turnSeqs.add(new WildDrawTwo(this));
+
+        this.turnSeqs.add(new DrawFive(this));
+        this.turnSeqs.add(new SkipEveryone(this));
+        this.turnSeqs.add(new WildDrawColour(this));
+        this.turnSeqs.add(new Flip(this));
+
+        this.turnSeqs.add(new SelfDrawOne(this));
     }
 
     public void loadGame(){
