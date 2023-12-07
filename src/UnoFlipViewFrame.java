@@ -36,6 +36,9 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String SAVE_CMD = "save";
     public final static String LOAD_CMD = "load";
 
+    public static final String SERIALIZE_XML_CMD = "serialize XML";
+    public final static String WILD_CMD = "wild";
+    public final static String CHALLENGE_CMD = "challenge";
 
 
     public UnoFlipViewFrame() {
