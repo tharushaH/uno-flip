@@ -90,8 +90,8 @@ public class UnoFlipModel {
         this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
         this.deck.initStartingDeck(); // need to initialize with starting cards
-        this.currentColour = null;
-        this.currentRank = null;
+        this.currentColour = Card.Colour.NULL;
+        this.currentRank = Card.Rank.NULL;
         this.numPlayers = 0;
         this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
         this.skipTurn = false;
@@ -914,6 +914,14 @@ public class UnoFlipModel {
         return this.isWinner;
     }
 
+    public void setIsWinner(boolean isWinner){
+        this.isWinner = isWinner;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
     /**
      * Returns an XML representation of the players in model.
      * @return xml representation of the players in model.
@@ -981,15 +989,34 @@ public class UnoFlipModel {
     public void saveGame(){}
 
     public void loadGame(){}
-    public void importFromXMLFile(String fileName){
-        ModelParser parser = new ModelParser();
+    public void importFromXMLFile(String dataFileName, String playersFileName, String deckFileName){
+        ModelDataParser parser = new ModelDataParser();
         try{
-            UnoFlipModel temp = parser.readXML(fileName);
+            UnoFlipModel temp = parser.readXMLModelDataFile(dataFileName,playersFileName, deckFileName);
+            this.setTurnFinished(temp.getTurnFinished());
+            this.setSkipTurn(temp.getSkipTurn());
+            this.setSkipEveryone(temp.getSkipEveryone());
+            this.setTurnDirection(temp.getTurnDirection());
+            this.setNumPlayers(temp.getNumPlayers());
+            this.setChosenCardIndex(temp.getChosenCardIndex());
+            this.setCurrentTurn(temp.getCurrentTurn());
+            this.setNextPlayerIndex(temp.getNextTurn());
+            this.setStatus(temp.getStatus());
+            this.setCurrentColour(temp.getCurrentColour());
+            this.setPreviousColour(temp.getPreviousColour());
+            this.setCurrentRank(temp.getCurrentRank());
+            this.setPreviousRank(temp.getPreviousRank());
+            this.setTopCard(temp.getTopCard());
+            this.setIsWinner(temp.getIsWinner());
+            this.players = temp.getPlayers();
+            this.deck = temp.getDeck();
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 
 

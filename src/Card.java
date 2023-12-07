@@ -8,9 +8,9 @@
  */
 
 public class Card {
-    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE, WILD_DARK};
+    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE, WILD_DARK,NULL};
     public enum Rank {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, DRAW_ONE, REVERSE, SKIP, WILD, WILD_DRAW_2,
-        DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOUR, FLIP};
+        DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOUR, FLIP,NULL};
 
     public static final int RANK_NUMBER_CARDS = 8; //Indicate the ordinal of the last number card in the enum Rank
     public static final int RANK_WILD_DRAW_2 = 13; // Indicate the ordinal of the WILD_DRAW_2 card in the enum Rank
