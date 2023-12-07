@@ -150,17 +150,26 @@ public class UnoFlipController implements ActionListener {
                 this.model.playTurn(UnoFlipModel.DRAW_ONE_BUTTON);
                 break;
 
-            case UnoFlipViewFrame.UNDO_CMD, UnoFlipViewFrame.REDO_CMD:
+            case UnoFlipViewFrame.UNDO_CMD:
                 this.model.undoRedoTurn();
+                UnoFlipViewFrame.redo.setEnabled(true);
+                UnoFlipViewFrame.undo.setEnabled(false);
+                break;
+            case UnoFlipViewFrame.REDO_CMD:
+                this.model.undoRedoTurn();
+                UnoFlipViewFrame.redo.setEnabled(false);
+                UnoFlipViewFrame.undo.setEnabled(true);
                 break;
             case UnoFlipViewFrame.REPLAY_CMD:
                 this.model.restartGame();
                 break;
             case UnoFlipViewFrame.SAVE_CMD:
                 this.model.saveGame();
+                JOptionPane.showMessageDialog(null, "Current game saved...", "Game Save", JOptionPane.INFORMATION_MESSAGE);
                 break;
             case UnoFlipViewFrame.LOAD_CMD:
                 this.model.loadGame();
+                JOptionPane.showMessageDialog(null, "Loaded saved game...", "Game loaded", JOptionPane.INFORMATION_MESSAGE);
                 break;
 
             // User selects the next turn button to go to the next turn

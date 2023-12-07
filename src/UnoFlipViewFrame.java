@@ -21,8 +21,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private JTextArea statusArea;
     private JButton drawCard;
     private JPanel currentColourPanel;
-    private JMenuItem redo;
-    private JMenuItem undo;
+    public static JMenuItem redo;
+    public static JMenuItem undo;
     private JMenuItem replay;
     private JMenuItem save;
     private JMenuItem load;
@@ -59,9 +59,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         replay = new JMenuItem("Replay");
         save = new JMenuItem("Save");
         load = new JMenuItem("Load");
-
-        undo.setEnabled(false);
-        redo.setEnabled(false);
 
         undo.setActionCommand(UNDO_CMD);
         redo.setActionCommand(REDO_CMD);

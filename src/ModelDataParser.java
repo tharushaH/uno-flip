@@ -56,11 +56,11 @@ public class ModelDataParser extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("currentColour")) {
             model.setCurrentColour(Card.Colour.valueOf(elementContent.toString()));
         } else if (qName.equalsIgnoreCase("previousColour")) {
-            model.setPreviousColour(Card.Colour.valueOf(elementContent.toString()));
+            model.setPreviousColour(Card.Colour.valueOf(elementContent.toString().toUpperCase()));
         } else if (qName.equalsIgnoreCase("currentRank")) {
             model.setCurrentRank(Card.Rank.valueOf(elementContent.toString()));
         } else if (qName.equalsIgnoreCase("previousRank")) {
-            model.setPreviousRank(Card.Rank.valueOf(elementContent.toString()));
+            model.setPreviousRank(Card.Rank.valueOf(elementContent.toString().toUpperCase()));
         } else if (qName.equalsIgnoreCase("isWinner")) {
             model.setWinner(Boolean.parseBoolean(elementContent.toString()));
         } else if (qName.equalsIgnoreCase("Card")){
