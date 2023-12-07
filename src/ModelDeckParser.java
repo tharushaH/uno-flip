@@ -23,6 +23,9 @@ public class ModelDeckParser extends DefaultHandler {
 
     @Override
     public void startDocument() {
+        deck = new Stack<Card>();
+        discard = new Stack<>();
+        inPlay = new ArrayList<>();
         modelDeck = new Deck();
         deckFlag = false;
         discardFlag = false;
@@ -85,13 +88,8 @@ public class ModelDeckParser extends DefaultHandler {
             File file = new File(fileName);
             parser.parse(file, this);
 
-            // reverse the deck to draw from (order matters here) because we added cards to it in reverse order
-            Stack<Card> correctOrderDeck = new Stack<Card>();
-            for (Card c: deck) {
-                correctOrderDeck.push(deck.pop());
-            }
 
-            modelDeck.setDeck(correctOrderDeck);
+            modelDeck.setDeck(deck);
             modelDeck.setDiscard(discard);
             modelDeck.setInPlay(inPlay);
 
