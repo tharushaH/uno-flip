@@ -35,8 +35,6 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     public final static String REPLAY_CMD = "replay";
     public final static String SAVE_CMD = "save";
     public final static String LOAD_CMD = "load";
-
-    public static final String SERIALIZE_XML_CMD = "serialize XML";
     public final static String WILD_CMD = "wild";
     public final static String CHALLENGE_CMD = "challenge";
 
@@ -70,6 +68,12 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         replay.setActionCommand(REPLAY_CMD);
         save.setActionCommand(SAVE_CMD);
         load.setActionCommand(LOAD_CMD);
+
+        undo.addActionListener(controller);
+        redo.addActionListener(controller);
+        replay.addActionListener(controller);
+        save.addActionListener(controller);
+        load.addActionListener(controller);
 
         menu.add(undo);
         menu.add(redo);

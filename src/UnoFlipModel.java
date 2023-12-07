@@ -972,15 +972,39 @@ public class UnoFlipModel {
         return xml.toString();
     }
 
-    public void undoTurn(){}
+    public void undoRedoTurn(){
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
 
-    public void redoTurn(){}
+        //importFromXML - import previous state
 
-    public void restartGame(){}
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
 
-    public void saveGame(){}
+        notifyViews();
+    }
 
-    public void loadGame(){}
+    public void restartGame(){
+        //importFromXML - idk what to import
+    }
+
+    public void saveGame(){
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+    }
+
+    public void loadGame(){
+        //importFromXML - everything
+    }
+
+    public void savePrev(){
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+    }
     public void importFromXMLFile(String fileName){}
 
 

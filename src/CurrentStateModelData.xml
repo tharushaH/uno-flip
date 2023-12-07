@@ -3,22 +3,22 @@
 	 <skipTurn>false</skipTurn>
 	 <skipEveryone>false</skipEveryone>
 	 <turnDirection>true</turnDirection>
-	 <numPlayer>0</numPlayer>
+	 <numPlayer>2</numPlayer>
 	 <chosenCardIndex>-2</chosenCardIndex>
 	 <currentTurn>0</currentTurn>
 	 <nextPlayerIndex>1</nextPlayerIndex>
 	 <status> </status>
-	 <currentColour>TEAL</currentColour>
+	 <currentColour>BLUE</currentColour>
 	 <previousColour>null</previousColour>
-	 <currentRank>FLIP</currentRank>
+	 <currentRank>FIVE</currentRank>
 	 <previousRank>null</previousRank>
 	 <topCard>
 		<Card>
-			<lightRank>FLIP</lightRank>
-			<lightColour>GREEN</lightColour>
-			<darkRank>FLIP</darkRank>
-			<darkColour>TEAL</darkColour>
-			<side>false</side>
+			<lightRank>FIVE</lightRank>
+			<lightColour>BLUE</lightColour>
+			<darkRank>FIVE</darkRank>
+			<darkColour>PINK</darkColour>
+			<side>true</side>
 		</Card>
 	 </topCard>
 	 <isWinner>false</isWinner>
