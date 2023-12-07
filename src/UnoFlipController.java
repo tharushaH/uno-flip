@@ -157,7 +157,6 @@ public class UnoFlipController implements ActionListener {
                 this.model.restartGame();
                 break;
             case UnoFlipViewFrame.SAVE_CMD:
-                System.out.println("Saved game.");
                 this.model.saveGame();
                 break;
             case UnoFlipViewFrame.LOAD_CMD:

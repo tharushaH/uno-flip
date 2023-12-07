@@ -8,10 +8,10 @@
 	 <currentTurn>0</currentTurn>
 	 <nextPlayerIndex>1</nextPlayerIndex>
 	 <status> </status>
-	 <currentColour>BLUE</currentColour>
-	 <previousColour>null</previousColour>
-	 <currentRank>FIVE</currentRank>
-	 <previousRank>null</previousRank>
+	 <currentColour>TEAL</currentColour>
+	 <previousColour>NULL</previousColour>
+	 <currentRank>FLIP</currentRank>
+	 <previousRank>NULL</previousRank>
 	 <topCard>
 		<Card>
 			<lightRank>FIVE</lightRank>
