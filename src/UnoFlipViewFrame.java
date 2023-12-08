@@ -13,13 +13,13 @@ import java.util.HashMap;
 public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private UnoFlipController controller;
     private JPanel handPanel;
-
     private JPanel buttonPanel;
     private JLabel topCardLabel;
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
     private JTextArea statusArea;
     private JButton drawCard;
+    private JButton nextTurn;
     private JPanel currentColourPanel;
     public static JMenuItem redo;
     public static JMenuItem undo;
@@ -125,7 +125,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         drawCard.setFont(new Font("Dialog", Font.PLAIN, 18));
         drawCard.setActionCommand(DRAW_CMD);
         drawCard.addActionListener(controller);
-        JButton nextTurn = new JButton(("Next turn"));
+        nextTurn = new JButton(("Next turn"));
         nextTurn.setFont(new Font("Dialog", Font.PLAIN, 18));
         nextTurn.setActionCommand(NEXT_CMD);
         nextTurn.addActionListener(controller);
@@ -247,8 +247,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             }
             //disable buttons
             drawCard.setEnabled(false);
+            nextTurn.setEnabled(false);
             handPanel.removeAll();
-            buttonPanel.removeAll();
             this.repaint();
 
         } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
@@ -259,6 +259,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
 
         //display cards since there are still cards in current player's hand
         if( !e.getStatus().startsWith("WINNER:")) {
+            drawCard.setEnabled(true);
+            nextTurn.setEnabled(true);
             // update the hand panel with the new hand's cards
             handPanel.removeAll();  // remove current hand, about to replace with new one
             String currHand = e.getCurrHand();

@@ -114,7 +114,6 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Flip(this));
 
         this.turnSeqs.add(new SelfDrawOne(this));
-
     }
 
 
@@ -991,8 +990,33 @@ public class UnoFlipModel {
         notifyViews();
     }
 
-    public void restartGame(){
+    /**
+     * Restarts the game by setting the game state to the initial game state
+     * while preserving each player's score.
+     */
+    public void restartGame() {
+        this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
+        this.currentTurn = 0;
+        this.nextPlayerIndex = currentTurn +1;
+        this.deck = new Deck();
+        this.deck.initStartingDeck(); // need to initialize with starting cards
+        this.currentColour = Card.Colour.NULL;
+        this.currentRank = Card.Rank.NULL;
+        this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
+        this.skipTurn = false;
+        this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
+        this.status = STATUS_STANDARD;
+        this.isWinner = false;
 
+        setUpInitialTopCard();
+
+        for (Player p: players) {
+            p.emptyHand();
+            p.addCardToHand(NUM_STARTING_CARDS, deck);
+            System.out.println(p);
+        }
+        notifyViews();
     }
 
     public void loadGame(){
