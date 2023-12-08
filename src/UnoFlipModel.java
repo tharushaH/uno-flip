@@ -35,7 +35,7 @@ public class UnoFlipModel {
     private ArrayList<String> playerScores;
     private Boolean isWinner;
 
-    public static final int NUM_STARTING_CARDS = 3;
+    public static final int NUM_STARTING_CARDS = 7;
     public static final int DRAW_ONE_BUTTON = -1;
 
     //Constants used for Turn sequence
