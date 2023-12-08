@@ -13,19 +13,28 @@ import java.util.HashMap;
 public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
     private UnoFlipController controller;
     private JPanel handPanel;
-
     private JPanel buttonPanel;
     private JLabel topCardLabel;
     private JLabel currPlayerLabel;
     private JLabel topCardNameLabel;
     private JTextArea statusArea;
     private JButton drawCard;
+    private JButton nextTurn;
     private JPanel currentColourPanel;
+    public static JMenuItem redo;
+    public static JMenuItem undo;
+    private JMenuItem replay;
+    private JMenuItem save;
+    private JMenuItem load;
     private HashMap<String,ImageIcon> imageIconHashMap;
     public final static String DRAW_CMD = "draw";
     public final static String NEXT_CMD = "next";
     public final static String START_CMD = "start";
-    public static final String SERIALIZE_XML_CMD = "serialize XML";
+    public final static String UNDO_CMD = "undo";
+    public final static String REDO_CMD = "redo";
+    public final static String REPLAY_CMD = "replay";
+    public final static String SAVE_CMD = "save";
+    public final static String LOAD_CMD = "load";
     public final static String WILD_CMD = "wild";
     public final static String CHALLENGE_CMD = "challenge";
 
@@ -41,6 +50,38 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         // make a panel to display info on the current turn
         JPanel currTurnPanel = new JPanel();
         currTurnPanel.setLayout(new BorderLayout(30,30));
+
+        // Create the JMenu for the undo,redo,replay,save,load features
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        undo = new JMenuItem("Undo");
+        redo = new JMenuItem("Redo");
+        replay = new JMenuItem("Replay");
+        save = new JMenuItem("Save");
+        load = new JMenuItem("Load");
+
+        undo.setEnabled(false);
+        redo.setEnabled(false);
+
+        undo.setActionCommand(UNDO_CMD);
+        redo.setActionCommand(REDO_CMD);
+        replay.setActionCommand(REPLAY_CMD);
+        save.setActionCommand(SAVE_CMD);
+        load.setActionCommand(LOAD_CMD);
+
+        undo.addActionListener(controller);
+        redo.addActionListener(controller);
+        replay.addActionListener(controller);
+        save.addActionListener(controller);
+        load.addActionListener(controller);
+
+        menu.add(undo);
+        menu.add(redo);
+        menu.add(replay);
+        menu.add(save);
+        menu.add(load);
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
 
         // add player name to the current turn panel
         currPlayerLabel = new JLabel();
@@ -84,7 +125,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         drawCard.setFont(new Font("Dialog", Font.PLAIN, 18));
         drawCard.setActionCommand(DRAW_CMD);
         drawCard.addActionListener(controller);
-        JButton nextTurn = new JButton(("Next turn"));
+        nextTurn = new JButton(("Next turn"));
         nextTurn.setFont(new Font("Dialog", Font.PLAIN, 18));
         nextTurn.setActionCommand(NEXT_CMD);
         nextTurn.addActionListener(controller);
@@ -164,6 +205,16 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         } else {
             drawCard.setEnabled(true);
         }
+
+        if(e.getIsAI()){
+            undo.setEnabled(false);
+            redo.setEnabled(false);
+        }
+
+        if(e.getTurnFinished() && !undo.isEnabled() && !redo.isEnabled() && !e.getIsAI()){
+            undo.setEnabled(true);
+        }
+
         // clear status area
         statusArea.setText("");
 
@@ -196,8 +247,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
             }
             //disable buttons
             drawCard.setEnabled(false);
+            nextTurn.setEnabled(false);
             handPanel.removeAll();
-            buttonPanel.removeAll();
             this.repaint();
 
         } else if (e.getStatus().equals("WILD") || e.getStatus().equals("WILD_DRAW_2")){
@@ -208,6 +259,8 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
 
         //display cards since there are still cards in current player's hand
         if( !e.getStatus().startsWith("WINNER:")) {
+            drawCard.setEnabled(true);
+            nextTurn.setEnabled(true);
             // update the hand panel with the new hand's cards
             handPanel.removeAll();  // remove current hand, about to replace with new one
             String currHand = e.getCurrHand();
@@ -222,6 +275,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
                     newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
                     newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
                     newCard.addActionListener(controller);
+
                     if (e.getTurnFinished() || e.getIsAI()) {
                         newCard.setEnabled(false);
                     }

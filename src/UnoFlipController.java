@@ -143,6 +143,7 @@ public class UnoFlipController implements ActionListener {
 
                 this.model.setNumPlayers(numTotalPlayers);
                 this.model.setUpInitialTopCard();
+                this.model.savePrev();
                 break;
 
             // User selects the draw button option to draw a card
@@ -150,14 +151,32 @@ public class UnoFlipController implements ActionListener {
                 this.model.playTurn(UnoFlipModel.DRAW_ONE_BUTTON);
                 break;
 
-            case UnoFlipViewFrame.SERIALIZE_XML_CMD :
-                //serialize current state of game
-                this.model.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
-                this.model.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
-                this.model.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+            case UnoFlipViewFrame.UNDO_CMD:
+                this.model.undoRedoTurn();
+                UnoFlipViewFrame.redo.setEnabled(true);
+                UnoFlipViewFrame.undo.setEnabled(false);
+                break;
+            case UnoFlipViewFrame.REDO_CMD:
+                this.model.undoRedoTurn();
+                UnoFlipViewFrame.redo.setEnabled(false);
+                UnoFlipViewFrame.undo.setEnabled(true);
+                break;
+            case UnoFlipViewFrame.REPLAY_CMD:
+                this.model.restartGame();
+                break;
+            case UnoFlipViewFrame.SAVE_CMD:
+                this.model.saveGame();
+                JOptionPane.showMessageDialog(null, "Current game saved...", "Game Save", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            case UnoFlipViewFrame.LOAD_CMD:
+                this.model.loadGame();
+                JOptionPane.showMessageDialog(null, "Loaded saved game...", "Game loaded", JOptionPane.INFORMATION_MESSAGE);
+                break;
 
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
+                UnoFlipViewFrame.redo.setEnabled(false);
+                UnoFlipViewFrame.undo.setEnabled(false);
                 this.model.nextTurn();
                 if (this.model.getPlayers().get(this.model.getCurrentTurn()) instanceof AI) {
                     this.model.playAITurn();
@@ -213,7 +232,9 @@ public class UnoFlipController implements ActionListener {
                             }
                         }
                     }
+
                 }
+                this.model.savePrev();
                 break;
 
             // A card is selected from the hand

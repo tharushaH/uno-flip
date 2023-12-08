@@ -27,4 +27,12 @@ public abstract class TurnSequence {
         }
         return unoFlipModel.getCurrentRank() == card.getRank() || unoFlipModel.getCurrentColour() == card.getColour();
     }
+
+    /**
+     * Sets the model with the passed model
+     * @param model
+     */
+    public static void setUnoFlipModel(UnoFlipModel model){
+        unoFlipModel = model;
+    }
 }

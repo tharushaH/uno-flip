@@ -79,6 +79,13 @@ public class Player {
     }
 
     /**
+     * Empties the player's hand.
+     */
+    public void emptyHand() {
+        hand.empty();
+    }
+
+    /**
      * Method toString(), returns the player's hand of cards.
      * @return - a String containing the player's hand
      */

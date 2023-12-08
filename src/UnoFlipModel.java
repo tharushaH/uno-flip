@@ -1,7 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +114,6 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Flip(this));
 
         this.turnSeqs.add(new SelfDrawOne(this));
-
     }
 
 
@@ -129,7 +125,7 @@ public class UnoFlipModel {
     public void setNumPlayers(int numPlayers) {
 
         if( numPlayers < 2 || numPlayers > 12){
-            throw new IllegalArgumentException("Number of players must be between 2-4");
+            throw new IllegalArgumentException("Number of players must be between 2-12");
         }
         this.numPlayers = numPlayers;
     }
@@ -210,7 +206,6 @@ public class UnoFlipModel {
      *  Notify views subscribed to that model about the game state changes
      */
     public void notifyViews(){
-
         //make sure there are views in the view arraylist to send UnoFlipEvents to
         if(!this.views.isEmpty()){
 
@@ -276,12 +271,10 @@ public class UnoFlipModel {
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
                 Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex, this.deck);
-
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
                     return;
                 }
-
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = STATUS_STANDARD;
 
@@ -980,15 +973,76 @@ public class UnoFlipModel {
         return xml.toString();
     }
 
-    public void undoTurn(){}
+    /**
+    * Undo players last turn 
+    */
+    public void undoRedoTurn(){
+        // Save current state to temp files
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
 
-    public void redoTurn(){}
+        // Import previous state
+        importFromXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + PAST_STATE_MODEL_DATA, UnoFlipModel.SAVE_FILE_PREFIX + PAST_STATE_MODEL_PLAYERS, UnoFlipModel.SAVE_FILE_PREFIX + PAST_STATE_MODEL_DECK);
 
-    public void restartGame(){}
+        // Update previous state with temp
+        swapTempPrevXML(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DATA);
+        swapTempPrevXML(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DECK);
+        swapTempPrevXML(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_PLAYERS);
 
-    public void saveGame(){}
+        notifyViews();
+    }
 
-    public void loadGame(){}
+    /**
+     * Restarts the game by setting the game state to the initial game state
+     * while preserving each player's score.
+     */
+    public void restartGame() {
+        this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
+        this.currentTurn = 0;
+        this.nextPlayerIndex = currentTurn +1;
+        this.deck = new Deck();
+        this.deck.initStartingDeck(); // need to initialize with starting cards
+        this.currentColour = Card.Colour.NULL;
+        this.currentRank = Card.Rank.NULL;
+        this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
+        this.skipTurn = false;
+        this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
+        this.status = STATUS_STANDARD;
+        this.isWinner = false;
+
+        setUpInitialTopCard();
+
+        for (Player p: players) {
+            p.emptyHand();
+            p.addCardToHand(NUM_STARTING_CARDS, deck);
+            System.out.println(p);
+        }
+        notifyViews();
+    }
+
+    public void loadGame(){
+        importFromXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_DATA,UnoFlipModel.SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_DECK);
+
+        notifyViews();
+    }
+
+    public void savePrev(){
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+    }
+
+
+
+
+    public void saveGame(){
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+    }
+
     public void importFromXMLFile(String dataFileName, String playersFileName, String deckFileName){
         ModelDataParser parser = new ModelDataParser();
         try{
@@ -1010,15 +1064,12 @@ public class UnoFlipModel {
             this.setIsWinner(temp.getIsWinner());
             this.players = temp.getPlayers();
             this.deck = temp.getDeck();
-
+            TurnSequence.setUnoFlipModel(this);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
 
     /**
      * Exports the game XML to File
@@ -1044,4 +1095,27 @@ public class UnoFlipModel {
         }
     }
 
+    /**
+     * Swap the contents of the temp files to the previous files.
+     */
+    private void swapTempPrevXML(String sourcePath, String destPath){
+        try {
+
+            // Use BufferedReader to read from the source file
+            try (BufferedReader reader = new BufferedReader(new FileReader(sourcePath))) {
+                // Use BufferedWriter to write to the destination file
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(destPath))) {
+                    // Read each line from the source and write it to the destination
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        writer.write(line);
+                        writer.newLine(); // Add a newline after each line (adjust if needed)
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
