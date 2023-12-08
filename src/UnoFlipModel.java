@@ -973,6 +973,9 @@ public class UnoFlipModel {
         return xml.toString();
     }
 
+    /**
+    * Undo players last turn 
+    */
     public void undoRedoTurn(){
         // Save current state to temp files
         exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
