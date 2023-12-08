@@ -1,24 +1,24 @@
 <UnoFlipModel>
-	 <turnFinished>true</turnFinished>
+	 <turnFinished>false</turnFinished>
 	 <skipTurn>false</skipTurn>
 	 <skipEveryone>false</skipEveryone>
-	 <turnDirection>true</turnDirection>
-	 <numPlayer>3</numPlayer>
-	 <chosenCardIndex>1</chosenCardIndex>
-	 <currentTurn>0</currentTurn>
-	 <nextPlayerIndex>1</nextPlayerIndex>
+	 <turnDirection>false</turnDirection>
+	 <numPlayer>2</numPlayer>
+	 <chosenCardIndex>4</chosenCardIndex>
+	 <currentTurn>1</currentTurn>
+	 <nextPlayerIndex>0</nextPlayerIndex>
 	 <status> </status>
-	 <currentColour>ORANGE</currentColour>
-	 <previousColour>ORANGE</previousColour>
-	 <currentRank>FOUR</currentRank>
-	 <previousRank>null</previousRank>
+	 <currentColour>GREEN</currentColour>
+	 <previousColour>GREEN</previousColour>
+	 <currentRank>REVERSE</currentRank>
+	 <previousRank>NULL</previousRank>
 	 <topCard>
 		<Card>
-			<lightRank>FOUR</lightRank>
-			<lightColour>RED</lightColour>
-			<darkRank>FOUR</darkRank>
-			<darkColour>ORANGE</darkColour>
-			<side>false</side>
+			<lightRank>REVERSE</lightRank>
+			<lightColour>GREEN</lightColour>
+			<darkRank>REVERSE</darkRank>
+			<darkColour>TEAL</darkColour>
+			<side>true</side>
 		</Card>
 	 </topCard>
 	 <isWinner>false</isWinner>

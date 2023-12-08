@@ -143,6 +143,7 @@ public class UnoFlipController implements ActionListener {
 
                 this.model.setNumPlayers(numTotalPlayers);
                 this.model.setUpInitialTopCard();
+                this.model.savePrev();
                 break;
 
             // User selects the draw button option to draw a card
@@ -174,6 +175,8 @@ public class UnoFlipController implements ActionListener {
 
             // User selects the next turn button to go to the next turn
             case UnoFlipViewFrame.NEXT_CMD:
+                UnoFlipViewFrame.redo.setEnabled(false);
+                UnoFlipViewFrame.undo.setEnabled(false);
                 this.model.nextTurn();
                 if (this.model.getPlayers().get(this.model.getCurrentTurn()) instanceof AI) {
                     this.model.playAITurn();
@@ -229,7 +232,9 @@ public class UnoFlipController implements ActionListener {
                             }
                         }
                     }
+
                 }
+                this.model.savePrev();
                 break;
 
             // A card is selected from the hand

@@ -19,7 +19,7 @@ public class UnoFlipEvent extends EventObject {
      * @param model the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean turnFinished, boolean isAI, Card.Colour currColour, ArrayList<String> playersScores) {
+    public UnoFlipEvent(UnoFlipModel model, String currPlayerName, String topCard, String currHand, String status, boolean isAI, boolean turnFinished, Card.Colour currColour, ArrayList<String> playersScores) {
         super(model);
         this.currPlayerName = currPlayerName;
         this.topCard = topCard;

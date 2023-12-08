@@ -60,6 +60,9 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         save = new JMenuItem("Save");
         load = new JMenuItem("Load");
 
+        undo.setEnabled(false);
+        redo.setEnabled(false);
+
         undo.setActionCommand(UNDO_CMD);
         redo.setActionCommand(REDO_CMD);
         replay.setActionCommand(REPLAY_CMD);
@@ -202,6 +205,16 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
         } else {
             drawCard.setEnabled(true);
         }
+
+        if(e.getIsAI()){
+            undo.setEnabled(false);
+            redo.setEnabled(false);
+        }
+
+        if(e.getTurnFinished() && !undo.isEnabled() && !redo.isEnabled() && !e.getIsAI()){
+            undo.setEnabled(true);
+        }
+
         // clear status area
         statusArea.setText("");
 
@@ -260,6 +273,7 @@ public class UnoFlipViewFrame extends JFrame implements UnoFlipView {
                     newCard.setIcon(new ImageIcon(getClass().getResource("images/" + currHandArray[i] + ".png")));
                     newCard.setActionCommand(Integer.toString(i));  // each card's action command is based on their hand index
                     newCard.addActionListener(controller);
+
                     if (e.getTurnFinished() || e.getIsAI()) {
                         newCard.setEnabled(false);
                     }
