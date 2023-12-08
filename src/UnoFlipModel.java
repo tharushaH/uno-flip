@@ -1096,9 +1096,9 @@ public class UnoFlipModel {
     }
 
     /**
-     * Swap
+     * Swap the contents of the temp files to the previous files.
      */
-    public void swapTempPrevXML(String sourcePath, String destPath){
+    private void swapTempPrevXML(String sourcePath, String destPath){
         try {
 
             // Use BufferedReader to read from the source file
