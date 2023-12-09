@@ -1,5 +1,5 @@
 # Uno Flip Game SYSC 3110 - Group 17
-###### Milestone 3
+###### Milestone 4
 
 ![UNO Flip Logo](https://th.bing.com/th/id/OIP.RVQRkbcpUp4QV2O-y_b7ewHaEK?w=324&h=182&c=7&r=0&o=5&pid=1.7)
 
@@ -24,11 +24,12 @@ UNO Flip is a variation of the traditional UNO card game with additional "Flip" 
 - Classic UNO gameplay with UNO Flip rules.
 - Interactive user interface.
 - Easily extensible and modifiable code for future enhancements.
-- Handles 2-4 players
+- Handles 2-12players
 - Players take turns playing cards, following the rules of matching colours or numbers.
 - Implements the special actions of Skip, Reverse, Skip Everyone, and Draw Five and other action cards.
 - Handles the Wild, Wild Draw Colour and Wild Draw Two cards, allowing players to choose a colour.
 - Declares a winner when a player successfully plays all their cards.
+- Interactive menu bar that can undo turn, redo turn, replay game, save and load game states.
 
 ## Requirements
 
