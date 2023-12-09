@@ -2,30 +2,202 @@
 	<Player>
 		<Hand>
 			<Card>
-				<lightRank>THREE</lightRank>
+				<lightRank>NINE</lightRank>
+				<lightColour>YELLOW</lightColour>
+				<darkRank>NINE</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>WILD</lightRank>
+				<lightColour>WILD</lightColour>
+				<darkRank>WILD</darkRank>
+				<darkColour>WILD_DARK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>WILD</lightRank>
+				<lightColour>WILD</lightColour>
+				<darkRank>WILD</darkRank>
+				<darkColour>WILD_DARK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>SIX</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>SIX</darkRank>
+				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>DRAW_ONE</lightRank>
+				<lightColour>YELLOW</lightColour>
+				<darkRank>DRAW_FIVE</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>WILD_DRAW_2</lightRank>
+				<lightColour>WILD</lightColour>
+				<darkRank>WILD_DRAW_COLOUR</darkRank>
+				<darkColour>WILD_DARK</darkColour>
+				<side>true</side>
+			</Card>
+		</Hand>
+		<name>Player 1</name>
+		<playerScore>0</playerScore>
+	</Player>
+	<Player>
+		<Hand>
+			<Card>
+				<lightRank>FIVE</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>FIVE</darkRank>
+				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>EIGHT</lightRank>
+				<lightColour>YELLOW</lightColour>
+				<darkRank>EIGHT</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>FLIP</lightRank>
 				<lightColour>RED</lightColour>
-				<darkRank>THREE</darkRank>
+				<darkRank>FLIP</darkRank>
 				<darkColour>ORANGE</darkColour>
 				<side>true</side>
 			</Card>
 			<Card>
-				<lightRank>FOUR</lightRank>
-				<lightColour>RED</lightColour>
-				<darkRank>FOUR</darkRank>
-				<darkColour>ORANGE</darkColour>
+				<lightRank>WILD_DRAW_2</lightRank>
+				<lightColour>WILD</lightColour>
+				<darkRank>WILD_DRAW_COLOUR</darkRank>
+				<darkColour>WILD_DARK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>FIVE</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>FIVE</darkRank>
+				<darkColour>TEAL</darkColour>
 				<side>true</side>
 			</Card>
 			<Card>
 				<lightRank>TWO</lightRank>
-				<lightColour>RED</lightColour>
+				<lightColour>YELLOW</lightColour>
 				<darkRank>TWO</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>FIVE</lightRank>
+				<lightColour>RED</lightColour>
+				<darkRank>FIVE</darkRank>
 				<darkColour>ORANGE</darkColour>
 				<side>true</side>
 			</Card>
 			<Card>
-				<lightRank>ONE</lightRank>
+				<lightRank>REVERSE</lightRank>
+				<lightColour>RED</lightColour>
+				<darkRank>REVERSE</darkRank>
+				<darkColour>ORANGE</darkColour>
+				<side>true</side>
+			</Card>
+		</Hand>
+		<name>Player 2</name>
+		<playerScore>0</playerScore>
+	</Player>
+	<Player>
+		<Hand>
+			<Card>
+				<lightRank>DRAW_ONE</lightRank>
+				<lightColour>RED</lightColour>
+				<darkRank>DRAW_FIVE</darkRank>
+				<darkColour>ORANGE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>SEVEN</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>SEVEN</darkRank>
+				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>TWO</lightRank>
 				<lightColour>YELLOW</lightColour>
-				<darkRank>ONE</darkRank>
+				<darkRank>TWO</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>FOUR</lightRank>
+				<lightColour>YELLOW</lightColour>
+				<darkRank>FOUR</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>TWO</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>TWO</darkRank>
+				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>SKIP</lightRank>
+				<lightColour>BLUE</lightColour>
+				<darkRank>SKIP_EVERYONE</darkRank>
+				<darkColour>PINK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>REVERSE</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>REVERSE</darkRank>
+				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+		</Hand>
+		<name>Player 3</name>
+		<playerScore>0</playerScore>
+	</Player>
+	<Player>
+		<Hand>
+			<Card>
+				<lightRank>FLIP</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>FLIP</darkRank>
+				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>WILD</lightRank>
+				<lightColour>WILD</lightColour>
+				<darkRank>WILD</darkRank>
+				<darkColour>WILD_DARK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>FIVE</lightRank>
+				<lightColour>BLUE</lightColour>
+				<darkRank>FIVE</darkRank>
+				<darkColour>PINK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>THREE</lightRank>
+				<lightColour>YELLOW</lightColour>
+				<darkRank>THREE</darkRank>
+				<darkColour>PURPLE</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>REVERSE</lightRank>
+				<lightColour>YELLOW</lightColour>
+				<darkRank>REVERSE</darkRank>
 				<darkColour>PURPLE</darkColour>
 				<side>true</side>
 			</Card>
@@ -37,30 +209,23 @@
 				<side>true</side>
 			</Card>
 			<Card>
-				<lightRank>NINE</lightRank>
-				<lightColour>YELLOW</lightColour>
-				<darkRank>NINE</darkRank>
-				<darkColour>PURPLE</darkColour>
+				<lightRank>TWO</lightRank>
+				<lightColour>RED</lightColour>
+				<darkRank>TWO</darkRank>
+				<darkColour>ORANGE</darkColour>
 				<side>true</side>
 			</Card>
 		</Hand>
-		<name>Player 1</name>
+		<name>Player 4</name>
 		<playerScore>0</playerScore>
 	</Player>
 	<Player>
 		<Hand>
 			<Card>
-				<lightRank>WILD_DRAW_2</lightRank>
-				<lightColour>WILD</lightColour>
-				<darkRank>WILD_DRAW_COLOUR</darkRank>
-				<darkColour>WILD_DARK</darkColour>
-				<side>true</side>
-			</Card>
-			<Card>
-				<lightRank>SEVEN</lightRank>
-				<lightColour>BLUE</lightColour>
-				<darkRank>SEVEN</darkRank>
-				<darkColour>PINK</darkColour>
+				<lightRank>REVERSE</lightRank>
+				<lightColour>GREEN</lightColour>
+				<darkRank>REVERSE</darkRank>
+				<darkColour>TEAL</darkColour>
 				<side>true</side>
 			</Card>
 			<Card>
@@ -71,10 +236,31 @@
 				<side>true</side>
 			</Card>
 			<Card>
+				<lightRank>SKIP</lightRank>
+				<lightColour>BLUE</lightColour>
+				<darkRank>SKIP_EVERYONE</darkRank>
+				<darkColour>PINK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>THREE</lightRank>
+				<lightColour>BLUE</lightColour>
+				<darkRank>THREE</darkRank>
+				<darkColour>PINK</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
 				<lightRank>NINE</lightRank>
 				<lightColour>GREEN</lightColour>
 				<darkRank>NINE</darkRank>
 				<darkColour>TEAL</darkColour>
+				<side>true</side>
+			</Card>
+			<Card>
+				<lightRank>EIGHT</lightRank>
+				<lightColour>BLUE</lightColour>
+				<darkRank>EIGHT</darkRank>
+				<darkColour>PINK</darkColour>
 				<side>true</side>
 			</Card>
 			<Card>
@@ -84,22 +270,8 @@
 				<darkColour>PINK</darkColour>
 				<side>true</side>
 			</Card>
-			<Card>
-				<lightRank>SKIP</lightRank>
-				<lightColour>GREEN</lightColour>
-				<darkRank>SKIP_EVERYONE</darkRank>
-				<darkColour>TEAL</darkColour>
-				<side>true</side>
-			</Card>
-			<Card>
-				<lightRank>SKIP</lightRank>
-				<lightColour>YELLOW</lightColour>
-				<darkRank>SKIP_EVERYONE</darkRank>
-				<darkColour>PURPLE</darkColour>
-				<side>true</side>
-			</Card>
 		</Hand>
-		<name>Player 2</name>
+		<name>Player 5</name>
 		<playerScore>0</playerScore>
 	</Player>
  </players>

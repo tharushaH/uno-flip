@@ -149,8 +149,8 @@ public class UnoFlipModelTest {
         unoFlipModel.addPlayer(unoFlipModel.createPlayer("Bobby"));
         unoFlipModel.addPlayer(unoFlipModel.createPlayer("mordy"));
         unoFlipModel.addPlayer(unoFlipModel.createAIPlayer());
-        unoFlipModel.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
-        unoFlipModel.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
-        unoFlipModel.exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+        unoFlipModel.exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        unoFlipModel.exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        unoFlipModel.exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
     }
 }

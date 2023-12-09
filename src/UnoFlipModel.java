@@ -59,7 +59,6 @@ public class UnoFlipModel {
     public static final String STATUS_DONE = "done";
     public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
     public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
-    public static final String SAVE_FILE_PREFIX = "src\\";
     public static final String CURRENT_STATE_MODEL_DATA = "CurrentStateModelData.xml";
     public static final String CURRENT_STATE_MODEL_DECK = "CurrentStateModelDeck.xml";
     public static final String CURRENT_STATE_MODEL_PLAYERS = "CurrentStateModelPlayers.xml";
@@ -978,17 +977,17 @@ public class UnoFlipModel {
     */
     public void undoRedoTurn(){
         // Save current state to temp files
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+        exportToXMLFile(UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
 
         // Import previous state
-        importFromXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + PAST_STATE_MODEL_DATA, UnoFlipModel.SAVE_FILE_PREFIX + PAST_STATE_MODEL_PLAYERS, UnoFlipModel.SAVE_FILE_PREFIX + PAST_STATE_MODEL_DECK);
+        importFromXMLFile( PAST_STATE_MODEL_DATA,  PAST_STATE_MODEL_PLAYERS, PAST_STATE_MODEL_DECK);
 
         // Update previous state with temp
-        swapTempPrevXML(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DATA);
-        swapTempPrevXML(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DECK);
-        swapTempPrevXML(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_PLAYERS);
+        swapTempPrevXML(UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.PAST_STATE_MODEL_DATA);
+        swapTempPrevXML(UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.PAST_STATE_MODEL_DECK);
+        swapTempPrevXML(UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.PAST_STATE_MODEL_PLAYERS);
 
         notifyViews();
     }
@@ -1017,30 +1016,29 @@ public class UnoFlipModel {
         for (Player p: players) {
             p.emptyHand();
             p.addCardToHand(NUM_STARTING_CARDS, deck);
-            System.out.println(p);
         }
         notifyViews();
     }
 
     public void loadGame(){
-        importFromXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_DATA,UnoFlipModel.SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.SAVE_FILE_PREFIX + CURRENT_STATE_MODEL_DECK);
+        importFromXMLFile(CURRENT_STATE_MODEL_DATA,CURRENT_STATE_MODEL_PLAYERS, CURRENT_STATE_MODEL_DECK);
 
         notifyViews();
     }
 
     public void savePrev(){
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.PAST_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+        exportToXMLFile(UnoFlipModel.PAST_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.PAST_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.PAST_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
     }
 
 
 
 
     public void saveGame(){
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
-        exportToXMLFile(UnoFlipModel.SAVE_FILE_PREFIX + UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+        exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
     }
 
     public void importFromXMLFile(String dataFileName, String playersFileName, String deckFileName){
@@ -1082,12 +1080,15 @@ public class UnoFlipModel {
                 case XML_MODEL_DATA_FLAG:
                     out.write(this.modelDataToXML());
                     out.close();
+                    break;
                 case XML_MODEL_DECK_FLAG:
                     out.write(this.modelDeckToXML());
                     out.close();
+                    break;
                 case XML_MODEL_PLAYERS_FLAG:
                     out.write(this.modelPlayersToXML());
                     out.close();
+                    break;
             }
 
         } catch (IOException e) {
