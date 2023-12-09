@@ -8,9 +8,9 @@
  */
 
 public class Card {
-    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE, WILD_DARK};
+    public enum Colour {RED, BLUE, YELLOW, GREEN, WILD, TEAL, PINK, PURPLE, ORANGE, WILD_DARK,NULL};
     public enum Rank {ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, DRAW_ONE, REVERSE, SKIP, WILD, WILD_DRAW_2,
-        DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOUR, FLIP};
+        DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOUR, FLIP,NULL};
 
     public static final int RANK_NUMBER_CARDS = 8; //Indicate the ordinal of the last number card in the enum Rank
     public static final int RANK_WILD_DRAW_2 = 13; // Indicate the ordinal of the WILD_DRAW_2 card in the enum Rank
@@ -18,10 +18,10 @@ public class Card {
     public static final int RANK_DRAW_ONE = 9;  // ordinal of the draw one enum in Rank enums
     public static final boolean LIGHT = true;
     public static final boolean DARK = false;
-    private final Rank lightRank;
-    private final Colour lightColour;
-    private final Rank darkRank;
-    private final Colour darkColour;
+    private Rank lightRank;
+    private Colour lightColour;
+    private Rank darkRank;
+    private Colour darkColour;
     private static boolean side;
 
 
@@ -185,5 +185,25 @@ public class Card {
                 "<darkColour>" + this.getDarkColour() + "</darkColour>\n" + baseTabLength + "\t" +
                 "<side>" + Card.getSide() + "</side>\n" + baseTabLength +
                 "</Card>";
+    }
+
+    public void setLightRank(Rank lightRank) {
+        this.lightRank = lightRank;
+    }
+
+    public void setLightColour(Colour lightColour) {
+        this.lightColour = lightColour;
+    }
+
+    public void setDarkRank(Rank darkRank) {
+        this.darkRank = darkRank;
+    }
+
+    public void setDarkColour(Colour darkColour) {
+        this.darkColour = darkColour;
+    }
+
+    public static void setSide(boolean side) {
+        Card.side = side;
     }
 }

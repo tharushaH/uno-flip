@@ -1,3 +1,4 @@
+import java.io.*;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class UnoFlipModel {
     private ArrayList<String> playerScores;
     private Boolean isWinner;
 
+    public static final int NUM_STARTING_CARDS = 7;
     public static final int DRAW_ONE_BUTTON = -1;
 
     //Constants used for Turn sequence
@@ -57,6 +59,18 @@ public class UnoFlipModel {
     public static final String STATUS_DONE = "done";
     public static final String AI_DRAW_CARD = "\nAI HAS DRAWN CARD";
     public static final String AI_PLAYED_CARD = "\nAI HAS PLAYED CARD: ";
+    public static final String CURRENT_STATE_MODEL_DATA = "CurrentStateModelData.xml";
+    public static final String CURRENT_STATE_MODEL_DECK = "CurrentStateModelDeck.xml";
+    public static final String CURRENT_STATE_MODEL_PLAYERS = "CurrentStateModelPlayers.xml";
+    public static final String PAST_STATE_MODEL_DATA = "PastStateModelData.xml";
+    public static final String PAST_STATE_MODEL_DECK = "PastStateModelDeck.xml";
+    public static final String PAST_STATE_MODEL_PLAYERS = "PastStateModelPlayers.xml";
+    public static final String TEMP_STATE_MODEL_DATA = "TempStateModelData.xml";
+    public static final String TEMP_STATE_MODEL_DECK = "TempStateModelDeck.xml";
+    public static final String TEMP_STATE_MODEL_PLAYERS = "TempStateModelPlayers.xml";
+    public static final String XML_MODEL_DATA_FLAG = "ModelData";
+    public static final String XML_MODEL_DECK_FLAG = "ModelDeck";
+    public static final String XML_MODEL_PLAYERS_FLAG = "ModelPlayers";
 
     /**
      * Constructs a new game of Uno Flip by initializing fields with default settings.
@@ -71,8 +85,9 @@ public class UnoFlipModel {
         this.currentTurn = 0;
         this.nextPlayerIndex = currentTurn +1;
         this.deck = new Deck();
-        this.currentColour = null;
-        this.currentRank = null;
+        this.deck.initStartingDeck(); // need to initialize with starting cards
+        this.currentColour = Card.Colour.NULL;
+        this.currentRank = Card.Rank.NULL;
         this.numPlayers = 0;
         this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
         this.skipTurn = false;
@@ -98,7 +113,6 @@ public class UnoFlipModel {
         this.turnSeqs.add(new Flip(this));
 
         this.turnSeqs.add(new SelfDrawOne(this));
-
     }
 
 
@@ -110,7 +124,7 @@ public class UnoFlipModel {
     public void setNumPlayers(int numPlayers) {
 
         if( numPlayers < 2 || numPlayers > 12){
-            throw new IllegalArgumentException("Number of players must be between 2-4");
+            throw new IllegalArgumentException("Number of players must be between 2-12");
         }
         this.numPlayers = numPlayers;
     }
@@ -121,7 +135,10 @@ public class UnoFlipModel {
      * @return new player created
      */
     public Player createPlayer(String playerName){
-        return new Player(playerName);
+        Player player = new Player(playerName);
+        player.addCardToHand(NUM_STARTING_CARDS, this.deck); // Initialize 7 cards for each player
+
+        return player;
     }
 
     /**
@@ -130,7 +147,9 @@ public class UnoFlipModel {
      * @return new AI created
      */
     public AI createAIPlayer(){
-        return new AI();
+        AI ai = new AI();
+        ai.addCardToHand(NUM_STARTING_CARDS, this.deck);
+        return ai;
     }
 
     /**
@@ -186,7 +205,6 @@ public class UnoFlipModel {
      *  Notify views subscribed to that model about the game state changes
      */
     public void notifyViews(){
-
         //make sure there are views in the view arraylist to send UnoFlipEvents to
         if(!this.views.isEmpty()){
 
@@ -243,7 +261,7 @@ public class UnoFlipModel {
 
             //if the card wanting to be placed is a Wild Draw 2 or Wild
             if (getCurrentPlayer().getCard(this.chosenCardIndex).isWild()){
-                this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex));
+                this.turnSeqs.get(rank).executeSequence(getCurrentPlayer().playCard(this.chosenCardIndex, this.deck));
                 this.turnFinished = true;
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -251,13 +269,11 @@ public class UnoFlipModel {
                 }
 
             } else if (this.turnSeqs.get(rank).isValid(getCurrentPlayer().getCard(this.chosenCardIndex))) {
-                Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex);
-
+                Card playCard = getCurrentPlayer().playCard(this.chosenCardIndex, this.deck);
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
                     return;
                 }
-
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = STATUS_STANDARD;
 
@@ -289,7 +305,7 @@ public class UnoFlipModel {
             int rank = getCurrentPlayer().getCard(chosenAICardIndex).getRank().ordinal();
 
             if (getCurrentPlayer().getCard(chosenAICardIndex).isWild()){
-                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex, this.deck);
                 this.turnSeqs.get(rank).executeSequence(playCard);
                 this.status = AI_PLAYED_CARD + playCard.toString();
                 //check if winner
@@ -297,7 +313,7 @@ public class UnoFlipModel {
                     return;
                 }
             } else{
-                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex);
+                Card playCard = getCurrentPlayer().playCard(chosenAICardIndex, this.deck);
 
                 //check if winner
                 if (isWinner(getCurrentPlayer())) {
@@ -339,7 +355,7 @@ public class UnoFlipModel {
      * @param playerIndex The index of the player that will be receiving cards
      */
     public void drawNCards(int n,int playerIndex){
-        this.players.get(playerIndex).addCardToHand(n);
+        this.players.get(playerIndex).addCardToHand(n, this.deck);
     }
 
     /**
@@ -508,6 +524,62 @@ public class UnoFlipModel {
     }
 
     /**
+     * Sets the turn direction of the game to clockwise or counter-clockwise.
+     * @param turnDirection true to set clockwise, false to set counter-clockwise.
+     */
+    public void setTurnDirection(boolean turnDirection) {
+        this.turnDirection = turnDirection;
+    }
+
+    /**
+     * Sets the chosen card index.
+     * @param chosenCardIndex The index of the chosen card.
+     */
+    public void setChosenCardIndex(int chosenCardIndex) {
+        this.chosenCardIndex = chosenCardIndex;
+    }
+
+    /**
+     * Sets the current turn.
+     * @param currentTurn The index of the current turn.
+     */
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
+    /**
+     * Sets the index of the next player.
+     * @param nextPlayerIndex The index of the next player.
+     */
+    public void setNextPlayerIndex(int nextPlayerIndex) {
+        this.nextPlayerIndex = nextPlayerIndex;
+    }
+
+    /**
+     * Sets isWinner to indicate if there is a winner in this game.
+     * @param winner true if there is a winner, false otherwise
+     */
+    public void setWinner(Boolean winner) {
+        isWinner = winner;
+    }
+
+    /**
+     * Sets the game's deck
+     * @param deck The game's deck
+     */
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    /**
+     * Sets the game's players
+     * @param players The game's players
+     */
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    /**
      * Clear action card flags
      */
     public void clearActionCardFlags(){
@@ -662,6 +734,14 @@ public class UnoFlipModel {
     }
 
     /**
+     * Sets the value of skipTurn to true or false.
+     * @param skipTurn Boolean to set skipTurn to.
+     */
+    public void setSkipTurn(boolean skipTurn) {
+        this.skipTurn = skipTurn;
+    }
+
+    /**
      * Gets the value of the skipTurn field, which indicates if the next player's turn is skipped
      * @return true if the flag is set, false otherwise
      */
@@ -759,6 +839,14 @@ public class UnoFlipModel {
     }
 
     /**
+     * Sets the value of skipEveryone to true or false.
+     * @param skipEveryone The boolean to set skipEveryone to
+     */
+    public void setSkipEveryone(boolean skipEveryone) {
+        this.skipEveryone = skipEveryone;
+    }
+
+    /**
      * Returns the current status of the game, specified by constants defined as fields
      * in this class.
      * @return Current status of the game
@@ -818,29 +906,60 @@ public class UnoFlipModel {
         return this.isWinner;
     }
 
+    public void setIsWinner(boolean isWinner){
+        this.isWinner = isWinner;
+    }
 
-
-
+    public Deck getDeck() {
+        return deck;
+    }
 
     /**
-     * Returns an XML representation of the model.
-     *
-     * @return xml representation of the model.
+     * Returns an XML representation of the players in model.
+     * @return xml representation of the players in model.
      */
-    public String toXML(){
+    public String modelPlayersToXML(){
+        StringBuilder xml = new StringBuilder("<players>");
+
+        for(Player p : players){
+            try{
+                // check if AI with downcasting
+                AI ai = (AI) p;
+                xml.append(ai.toXML(1));
+
+            } catch(Exception ex){
+                // player object
+                xml.append("\n"+p.toXML(1));
+            }
+
+        }
+        xml.append("\n </players>");
+        return  xml.toString();
+    }
+
+    /**
+     * Returns an XML representation of the deck in model.
+     * @return xml representation of the deck in model.
+     */
+    public String modelDeckToXML(){
+        return deck.toXML(0);
+    }
+
+    /**
+     * Returns an XML representation of the data in model.
+     * @return xml representation of the data in model.
+     */
+    public String modelDataToXML(){
         StringBuilder xml = new StringBuilder("<UnoFlipModel>");
         xml.append("\n\t <turnFinished>"+this.getTurnFinished()+"</turnFinished>");
         xml.append("\n\t <skipTurn>"+this.getSkipTurn()+"</skipTurn>");
         xml.append("\n\t <skipEveryone>"+this.getSkipEveryone()+"</skipEveryone>");
         xml.append("\n\t <turnDirection>"+this.getTurnDirection()+"</turnDirection>");
-        xml.append("\n\t <numPlayer>"+this.getNumPlayers()+"</numPlayer");
-        xml.append("\n\t <chosenCardIndex>"+this.getChosenCardIndex()+"</chosenCardIndex");
-        xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn");
+        xml.append("\n\t <numPlayer>"+this.getNumPlayers()+"</numPlayer>");
+        xml.append("\n\t <chosenCardIndex>"+this.getChosenCardIndex()+"</chosenCardIndex>");
+        xml.append("\n\t <currentTurn>"+this.getCurrentTurn()+"</currentTurn>");
         xml.append("\n\t <nextPlayerIndex>"+this.getNextTurn()+"</nextPlayerIndex>");
         xml.append("\n\t <status>"+this.getStatus()+"</status>");
-        xml.append("\n\t <deck>");
-        xml.append("\n"+deck.toXML(2));
-        xml.append("\n\t </deck>");
         xml.append("\n\t <currentColour>"+this.getCurrentColour()+"</currentColour>");
         xml.append("\n\t <previousColour>"+this.getPreviousColour()+"</previousColour>");
         xml.append("\n\t <currentRank>"+this.getCurrentRank()+"</currentRank>");
@@ -848,28 +967,156 @@ public class UnoFlipModel {
         xml.append("\n\t <topCard>");
         xml.append("\n"+this.topCard.toXML(2));
         xml.append("\n\t </topCard>");
-        xml.append("\n\t <players>");
-        for(Player p : players){
-            try{
-                // check if AI with downcasting
-                AI ai = (AI) p;
-                xml.append(ai.toXML(2));
-
-            } catch(Exception ex){
-                // player object
-                xml.append("\n"+p.toXML(2));
-            }
-
-        }
-        xml.append("\n\t </players>");
         xml.append("\n\t <isWinner>"+this.getIsWinner()+"</isWinner>");
         xml.append("\n</UnoFlipModel>");
-
-
-
-
         return xml.toString();
     }
 
+    /**
+    * Undo players last turn 
+    */
+    public void undoRedoTurn(){
+        // Save current state to temp files
+        exportToXMLFile(UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
 
+        // Import previous state
+        importFromXMLFile( PAST_STATE_MODEL_DATA,  PAST_STATE_MODEL_PLAYERS, PAST_STATE_MODEL_DECK);
+
+        // Update previous state with temp
+        swapTempPrevXML(UnoFlipModel.TEMP_STATE_MODEL_DATA, UnoFlipModel.PAST_STATE_MODEL_DATA);
+        swapTempPrevXML(UnoFlipModel.TEMP_STATE_MODEL_DECK, UnoFlipModel.PAST_STATE_MODEL_DECK);
+        swapTempPrevXML(UnoFlipModel.TEMP_STATE_MODEL_PLAYERS, UnoFlipModel.PAST_STATE_MODEL_PLAYERS);
+
+        notifyViews();
+    }
+
+    /**
+     * Restarts the game by setting the game state to the initial game state
+     * while preserving each player's score.
+     */
+    public void restartGame() {
+        this.turnDirection = true; //initialize to clockwise
+        this.skipEveryone = false;
+        this.currentTurn = 0;
+        this.nextPlayerIndex = currentTurn +1;
+        this.deck = new Deck();
+        this.deck.initStartingDeck(); // need to initialize with starting cards
+        this.currentColour = Card.Colour.NULL;
+        this.currentRank = Card.Rank.NULL;
+        this.chosenCardIndex = -2; // initialize to -2 to indicate that it has not been set to a valid index yet
+        this.skipTurn = false;
+        this.turnFinished = false;    //initialize false to ensure first player can play/draw a card
+        this.status = STATUS_STANDARD;
+        this.isWinner = false;
+
+        setUpInitialTopCard();
+
+        for (Player p: players) {
+            p.emptyHand();
+            p.addCardToHand(NUM_STARTING_CARDS, deck);
+        }
+        notifyViews();
+    }
+
+    public void loadGame(){
+        importFromXMLFile(CURRENT_STATE_MODEL_DATA,CURRENT_STATE_MODEL_PLAYERS, CURRENT_STATE_MODEL_DECK);
+
+        notifyViews();
+    }
+
+    public void savePrev(){
+        exportToXMLFile(UnoFlipModel.PAST_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.PAST_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.PAST_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+    }
+
+
+
+
+    public void saveGame(){
+        exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_DATA, UnoFlipModel.XML_MODEL_DATA_FLAG);
+        exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_DECK, UnoFlipModel.XML_MODEL_DECK_FLAG);
+        exportToXMLFile(UnoFlipModel.CURRENT_STATE_MODEL_PLAYERS, UnoFlipModel.XML_MODEL_PLAYERS_FLAG);
+    }
+
+    public void importFromXMLFile(String dataFileName, String playersFileName, String deckFileName){
+        ModelDataParser parser = new ModelDataParser();
+        try{
+            UnoFlipModel temp = parser.readXMLModelDataFile(dataFileName,playersFileName, deckFileName);
+            this.setTurnFinished(temp.getTurnFinished());
+            this.setSkipTurn(temp.getSkipTurn());
+            this.setSkipEveryone(temp.getSkipEveryone());
+            this.setTurnDirection(temp.getTurnDirection());
+            this.setNumPlayers(temp.getNumPlayers());
+            this.setChosenCardIndex(temp.getChosenCardIndex());
+            this.setCurrentTurn(temp.getCurrentTurn());
+            this.setNextPlayerIndex(temp.getNextTurn());
+            this.setStatus(temp.getStatus());
+            this.setCurrentColour(temp.getCurrentColour());
+            this.setPreviousColour(temp.getPreviousColour());
+            this.setCurrentRank(temp.getCurrentRank());
+            this.setPreviousRank(temp.getPreviousRank());
+            this.setTopCard(temp.getTopCard());
+            this.setIsWinner(temp.getIsWinner());
+            this.players = temp.getPlayers();
+            this.deck = temp.getDeck();
+            TurnSequence.setUnoFlipModel(this);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Exports the game XML to File
+     * @param fileName name of the file the game XMl will be exported too
+     */
+    public void exportToXMLFile(String fileName, String xmlFlag){
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+            switch (xmlFlag){
+                case XML_MODEL_DATA_FLAG:
+                    out.write(this.modelDataToXML());
+                    out.close();
+                    break;
+                case XML_MODEL_DECK_FLAG:
+                    out.write(this.modelDeckToXML());
+                    out.close();
+                    break;
+                case XML_MODEL_PLAYERS_FLAG:
+                    out.write(this.modelPlayersToXML());
+                    out.close();
+                    break;
+            }
+
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+
+    /**
+     * Swap the contents of the temp files to the previous files.
+     */
+    private void swapTempPrevXML(String sourcePath, String destPath){
+        try {
+
+            // Use BufferedReader to read from the source file
+            try (BufferedReader reader = new BufferedReader(new FileReader(sourcePath))) {
+                // Use BufferedWriter to write to the destination file
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(destPath))) {
+                    // Read each line from the source and write it to the destination
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        writer.write(line);
+                        writer.newLine(); // Add a newline after each line (adjust if needed)
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

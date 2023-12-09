@@ -116,6 +116,13 @@ public class Hand {
     }
 
     /**
+     * Empties the hand.
+     */
+    public void empty() {
+        this.cards.clear();
+    }
+
+    /**
      * Method getScore returns the score of the player's hand based on Uno game wiki scoring system.
      * Scoring:
      *      Number card are counted as their face value.

@@ -1,0 +1,25 @@
+<UnoFlipModel>
+	 <turnFinished>true</turnFinished>
+	 <skipTurn>true</skipTurn>
+	 <skipEveryone>false</skipEveryone>
+	 <turnDirection>true</turnDirection>
+	 <numPlayer>5</numPlayer>
+	 <chosenCardIndex>2</chosenCardIndex>
+	 <currentTurn>0</currentTurn>
+	 <nextPlayerIndex>1</nextPlayerIndex>
+	 <status> </status>
+	 <currentColour>YELLOW</currentColour>
+	 <previousColour>YELLOW</previousColour>
+	 <currentRank>DRAW_ONE</currentRank>
+	 <previousRank>null</previousRank>
+	 <topCard>
+		<Card>
+			<lightRank>DRAW_ONE</lightRank>
+			<lightColour>YELLOW</lightColour>
+			<darkRank>DRAW_FIVE</darkRank>
+			<darkColour>PURPLE</darkColour>
+			<side>true</side>
+		</Card>
+	 </topCard>
+	 <isWinner>false</isWinner>
+</UnoFlipModel>

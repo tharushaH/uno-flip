@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 public class PlayerTest {
 
     private Player p1;
+    private Deck deck;
 
     /**
      *  Sets up the Player objects.
@@ -15,8 +16,8 @@ public class PlayerTest {
     @Before
     public void setUp(){
         p1 = new Player("Kramer");
-
-
+        deck = new Deck();
+        p1.addCardToHand(UnoFlipModel.NUM_STARTING_CARDS,deck);
 
     }
 
@@ -38,7 +39,7 @@ public class PlayerTest {
         Assert.assertEquals(7, p1.getHandSize());
 
         //Add the Card to the players hand.
-        p1.addCardToHand(1);
+        p1.addCardToHand(1, deck);
 
         //Make sure that there a card in the hand
         Assert.assertEquals(8, p1.getHandSize());
@@ -66,7 +67,7 @@ public class PlayerTest {
         Assert.assertEquals(7, p1.getHandSize());
 
         //Play a card
-        Card playedCard = p1.playCard(0);
+        Card playedCard = p1.playCard(0, deck);
 
         //Test to see that there are 6 cards now in hand
         Assert.assertEquals(6, p1.getHandSize());
@@ -74,7 +75,7 @@ public class PlayerTest {
 
         //Play each of the cards in the hand, and check the number of cards in the hand
         for(int i=0; i < 6; i++){
-           p1.playCard(0);
+           p1.playCard(0, deck);
             Assert.assertEquals(5-i, p1.getHandSize());
         }
 
@@ -87,11 +88,11 @@ public class PlayerTest {
         Assert.assertEquals(7, p1.getHandSize());
 
         //Play a card
-        Card playedCard = p1.playCard(0);
+        Card playedCard = p1.playCard(0, deck);
 
         //Play each of the cards in the hand, and check the number of cards in the hand
         for(int i=0; i < 6; i++){
-            p1.playCard(0);
+            p1.playCard(0, deck);
             Assert.assertEquals(5-i, p1.getHandSize());
         }
 
@@ -109,7 +110,7 @@ public class PlayerTest {
 
         // Play all cards, there should not be nay cards left in the player's hand
         for(int i=0; i<7; i++){
-            p1.playCard(0);
+            p1.playCard(0, deck);
         }
 
         Assert.assertEquals("", p1.toString());
@@ -121,7 +122,7 @@ public class PlayerTest {
 
         // Play all cards, there should not be nay cards left in the player's hand
         for(int i=0; i<7; i++){
-            p1.playCard(0);
+            p1.playCard(0, deck);
         }
 
         Assert.assertFalse(p1.colourInHand(Card.Colour.RED));
@@ -130,11 +131,11 @@ public class PlayerTest {
     @Test
     public void testGetCard(){
         Card c = p1.getCard(0);
-        Assert.assertEquals(p1.playCard(0), c);
+        Assert.assertEquals(p1.playCard(0, deck), c);
         c = p1.getCard(0);
-        Assert.assertEquals(p1.playCard(0), c);
+        Assert.assertEquals(p1.playCard(0, deck), c);
         c = p1.getCard(0);
-        Assert.assertEquals(p1.playCard(0), c);
+        Assert.assertEquals(p1.playCard(0, deck), c);
         c = p1.getCard(0);
 
     }
@@ -146,13 +147,13 @@ public class PlayerTest {
 
         // Play all cards, there should not be nay cards left in the player's hand
         for(int i=0; i<7; i++){
-            p1.playCard(0);
+            p1.playCard(0, deck);
         }
         //Once playing all cards, score should be zero
         Assert.assertEquals(0, p1.getHandScore());
 
         //Add card to hand
-        p1.addCardToHand(1);
+        p1.addCardToHand(1, deck);
         assertNotEquals(0,p1.getHandScore());
     }
 
