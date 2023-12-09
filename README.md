@@ -24,7 +24,7 @@ UNO Flip is a variation of the traditional UNO card game with additional "Flip" 
 - Classic UNO gameplay with UNO Flip rules.
 - Interactive user interface.
 - Easily extensible and modifiable code for future enhancements.
-- Handles 2-12players
+- Handles 2-12 players
 - Players take turns playing cards, following the rules of matching colours or numbers.
 - Implements the special actions of Skip, Reverse, Skip Everyone, and Draw Five and other action cards.
 - Handles the Wild, Wild Draw Colour and Wild Draw Two cards, allowing players to choose a colour.
